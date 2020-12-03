@@ -27,17 +27,18 @@ Please avoid discussing your proposed solution.
 
 [design-proposal]: #design-proposal
 
-This is the technical portion of the RFC. Explain the design in sufficient
-detail that:
+This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
 
-- Its interaction with other features is clear
+- Its interaction with other parts of the system is clear
 - It is **reasonably clear how the contribution would be implemented**
 - Dependencies on libraries, tools, projects or work that isn't yet complete
+- New API routes that need to be created or modifications to the existing routes (if needed)
+- Any breaking changes and ways in which we can ensure backward compatibility.
 - Use Cases
 - Goals
 - Deliverables
 
-Ensure that you include examples, code-snippets etc. to allow the community to understand the proposed solution. 
+Ensure that you include examples, code-snippets etc. to allow the community to understand the proposed solution. **It would be best if the examples use naming conventions that you intend to use during the actual implementation so that changes can be suggested early on during the development.**
 
 ### Prior art
 
