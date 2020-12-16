@@ -40,6 +40,30 @@ A new API option will allow devs to keep backward compatibility.
 
 We should introduce a new env variable and HTTP header that will allow to change the response format. This variable & header will allow devs to enable a response object filter which will parse the Appwrite response to continue support for old Appwrite response formats without breaking or changing our developers apps when upgrading an appwrite version.
 
+### New ENV Var (_APP_SYSTEM_RESPONSE_FORMAT)
+
+Should be checked on server startup. If the value is not empty we should init the relevant filter. If not filter is avaliable we should throw an error using the Console::error method and stop the proccess with exit(1);. Make sure to add the new var to Appwrite docs page: https://appwrite.io/docs/environment-variables#system-settings
+
+### New Optional Header (X-Appwrite-Response-Format)
+
+Should be checked on each request (general.php / ->init() can be a good location). If the value is not empty we should init the relevant filter. If not filter is avaliable we should throw an 404 HTTP error with relevant error message.
+
+### Response Filters and Adapters
+
+Added 2 new method to Appwrite response class (src/Appwrite/Utopia/Response.php) called `static function setFilter(Filter $filter): self` and `static function getFilter(): Filter`. The new method will set and get the new filter to a static property called `self::$filter`. Add a method called `static function isFilter(): bool` to check if a filter has been set or is null. 
+
+### Create a Filter Interface
+
+Create a new Appwrite\Utopia\Response\Filter class (src/Appwrite/Utopia/Response/Filter.php). The interface should decalre an implemntation for the `parse(array $content): array` method. Each new filter will implement the interface and use the parse method to manipulate incoming data. Create our first filter (Appwrite\Utopia\Response\Filters\V06) to accept current version (v0.7) data and convert it to v0.6 data. For that we'll need to run both instances of Appwrite to manually convert data structures.
+
+### Run the Filter
+
+Add a piece of code in the response output stage, that will check if a filter is set and if it is will execute his `parse` method and alter the response output before it is returned to the client. A good location for this method to run might be: https://github.com/appwrite/appwrite/blob/0.7.x/src/Appwrite/Utopia/Response.php#L296
+
+### Tests
+
+Add unit-tests for the new methods in the Response class, and for our first filter using mock data as input.
+
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
 
@@ -93,6 +117,8 @@ Write your answer below.
 
 <!-- Write your answer below. -->
 
+In the future we might want to do something similar to the Request input in case we'll introduce any API signature breaking changes.
+
 ### Future possibilities
 
 [future-possibilities]: #future-possibilities
@@ -100,3 +126,5 @@ Write your answer below.
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
+
+None.
