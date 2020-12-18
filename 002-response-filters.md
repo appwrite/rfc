@@ -60,6 +60,89 @@ Create a new Appwrite\Utopia\Response\Filter class (src/Appwrite/Utopia/Response
 
 Add a piece of code in the response output stage, that will check if a filter is set and if it is will execute his `parse` method and alter the response output before it is returned to the client. A good location for this method to run might be: https://github.com/appwrite/appwrite/blob/0.7.x/src/Appwrite/Utopia/Response.php#L296
 
+### Examples
+
+**/v1/locale/countries?project=console**
+
+#### 0.6.2
+
+```json
+{
+"AF": "Afghanistan",
+"AL": "Albania",
+"DZ": "Algeria",
+"AD": "Andorra",
+"AO": "Angola",
+"AG": "Antigua and Barbuda",
+"AR": "Argentina",
+"AM": "Armenia",
+"AU": "Australia",
+"AT": "Austria",
+...
+```
+
+#### 0.7.0
+
+```json
+{
+  "sum": 194,
+  "countries": [
+    {
+      "name": "Afghanistan",
+      "code": "AF"
+    },
+    {
+      "name": "Albania",
+      "code": "AL"
+    },
+...
+```
+
+**/v1/teams?project=console**
+
+
+#### 0.6.2
+
+```json
+{
+  "sum": 25,
+  "teams": [
+    {
+      "$id": "5e5ea5d40c1b1",
+      "name": "New Project",
+      "dateCreated": 1583261140,
+      "sum": 1
+    },
+    {
+      "$id": "5e6081aca576c",
+      "name": "Project Y",
+      "dateCreated": 1583382956,
+      "sum": 1
+    },
+...
+```
+
+#### 0.7.0
+
+```json
+{
+	"sum": 1,
+	"teams": [{
+		"$id": "5fdca0529143a",
+		"$collection": "teams",
+		"$permissions": {
+			"read": ["team:{self}"],
+			"write": ["team:{self}\/owner"]
+		},
+		"name": "Project 1",
+		"sum": 1,
+		"dateCreated": 1608294482
+	}
+...
+```
+
+> In case the parse method is missing some data to properly construct the response, just use a reasonable default value of the same type and structure.
+
 ### Tests
 
 Add unit-tests for the new methods in the Response class, and for our first filter using mock data as input.
