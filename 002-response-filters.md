@@ -58,7 +58,7 @@ Create a new Appwrite\Utopia\Response\Filter class (src/Appwrite/Utopia/Response
 
 ### Run the Filter
 
-Add a piece of code in the response output stage, that will check if a filter is set and if it is will execute his `parse` method and alter the response output before it is returned to the client. A good location for this method to run might be: https://github.com/appwrite/appwrite/blob/0.7.x/src/Appwrite/Utopia/Response.php#L296
+Add a piece of code in the response output stage, that will check if a filter is set and will execute his `parse` method and alter the response output before it is returned to the client. A good location for this method to run might be: https://github.com/appwrite/appwrite/blob/0.7.x/src/Appwrite/Utopia/Response.php#L296
 
 ### Examples
 
