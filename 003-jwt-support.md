@@ -2,7 +2,7 @@
 
 - Implementation Owner: @eldadfux
 - Start Date: 26-12-2021
-- Target Date: Unkwnon
+- Target Date: Unknown
 - Appwrite Issue:
   https://github.com/appwrite/appwrite/issues/511
 
@@ -117,6 +117,8 @@ Write your answer below.
 
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
+Not sure what header name we should use for the new authentication method. I would probably go for `X-Appwrite-JWT`, although `Authorization', "Bearer $token"` seems to be the go to option doe most public APIs. The idea for the custom header is mainly because we have multiple authentication methods (api-key,session,jwt) and there is no common way to distinguish between them on the server-side, I would avoid making any wrong usage in a common header that will later force us to make breaking API changes.
+
 <!-- Write your answer below. -->
 
 ### Future possibilities
@@ -126,3 +128,5 @@ Write your answer below.
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
+
+This will create a lot new use-cases, and will probably force us to make the API even more flexible and new ideas come from the community.
