@@ -1,4 +1,4 @@
-# JWT Support for Authentication <!-- What do you want to call your `awesome_feature`? -->
+# JWT Support for Server API Authentication <!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: @eldadfux
 - Start Date: 26-12-2021
@@ -41,6 +41,22 @@ A new authentication method will be introduced to the Appwrite server API. The n
 ## Design proposal (Step 2)
 
 [design-proposal]: #design-proposal
+
+### Create a new API Endpoint
+
+Create a new API endpoint called 'createJWT' `POST /v1/account/jwt`. The new endpoint should be available to an authenticated user. The number of API calls should be limited and protected by the abuse object. We can use [adhocore/php-jwt](https://github.com/adhocore/php-jwt) for token creation and validation.
+
+### Allow New Auth Method
+
+Allow a new auth method using a header that will contain the JWT secret. If valid, the API will allow the server to perform all actions under the relevant user. The server will also grant access to any resources (files, documents, etc...) belonging to the user.
+
+### Update the Server SDKs
+
+Add all missing API that used to be relevant only for client integrations. Add a new method for attaching JWT secret to the SDK HTTP client. 
+
+### Update Documentation
+
+List all the new server endpoints that are now available on the server API. Add a JWT as a new authentication method for all the relevant API endpoints.
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
