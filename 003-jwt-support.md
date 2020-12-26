@@ -12,7 +12,7 @@
 
 <!-- Brief explanation of the proposed contribution. Write your answer below. -->
 
-JSON Web Tokens are an open, industry standard [RFC 7519](https://tools.ietf.org/html/rfc7519) method for representing claims securely between two parties. By adding support for JWT authentication, Appwrite developers will be able to use thier APIs in the user scope and not only as admins. APIs that are currently restricted to client-side only, could be useful on the server-side as well and will allow developers to create interesting new use-cases for Appwrite.
+JSON Web Tokens are an open, industry-standard [RFC 7519](https://tools.ietf.org/html/rfc7519) method for representing claims securely between two parties. By adding support for JWT authentication, Appwrite developers will be able to use their APIs in the user scope. APIs that are currently restricted to the client-side could be useful on the server-side as well. This will allow developers to create interesting new use-cases for Appwrite.
 
 ## Problem Statement (Step 1)
 
@@ -22,15 +22,19 @@ JSON Web Tokens are an open, industry standard [RFC 7519](https://tools.ietf.org
 
 <!-- Write your answer below. -->
 
-Appwrite Server API is limited and can't access the different services in the user scope and perform action on his/her behalf. The only current way to use the server API is in admin mode in combination with an API key that has relevant permissions scopes. This is limiting the usage in Account, Database, Storage and other Appwrite APIs.
+Appwrite Server API is limited and can't access the different services in the user scope and perform an action on his/her behalf. The only current way to use the server API is in admin mode combined with an API key that has relevant permissions scopes. This is limiting the usage in Account, Database, Storage, and other Appwrite APIs.
 
 **What is the context or background in which this problem exists?**
 
 <!-- Write your answer below. -->
 
+The current implementation of server API scopes functionality and flexibility is limited. The server API is especially limited when trying to integrate with a custom server or 3rd party databases.
+
 **Once the proposal is implemented, how will the system change?**
 
 <!-- Write your answer below. -->
+
+A new authentication method will be introduced to the Appwrite server API. The new authentication method will allow developers to act as a user from their own servers.
 
 <!-- Please avoid discussing your proposed solution. -->
 
