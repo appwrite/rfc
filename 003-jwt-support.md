@@ -62,6 +62,10 @@ Add all missing API that used to be relevant only for client integrations. Add a
 
 List all the new server endpoints that are now available on the server API. Add a JWT as a new authentication method for all the relevant API endpoints.
 
+### Tutorial
+
+Create a short tutorial that explains how to generate a new JWT token on the Web/Flutter/both. Create a server example for consuming the API (Node/Python/PHP/Ruby/Deno) and authenticating a user, and making actions on his behalf.
+
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
 
