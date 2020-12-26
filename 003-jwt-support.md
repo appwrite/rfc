@@ -117,7 +117,7 @@ Write your answer below.
 
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
-Not sure what header name we should use for the new authentication method. I would probably go for `X-Appwrite-JWT`, although `Authorization', "Bearer $token"` seems to be the go to option doe most public APIs. The idea for the custom header is mainly because we have multiple authentication methods (api-key,session,jwt) and there is no common way to distinguish between them on the server-side, I would avoid making any wrong usage in a common header that will later force us to make breaking API changes.
+Not sure what header name we should use for the new authentication method. I would probably go for X-Appwrite-JWT, although Authorization', "Bearer $token" seems to be the go-to option doe most public APIs. The idea to use a custom header is because we have multiple authentication methods (api-key,session,jwt). As far as I can tell there is no standard way to distinguish between them on the server-side. I would avoid making any wrong usage in a common header that will force us to make API breaking changes.
 
 <!-- Write your answer below. -->
 
@@ -129,4 +129,4 @@ Not sure what header name we should use for the new authentication method. I wou
 
 <!-- Write your answer below. -->
 
-This will create a lot new use-cases, and will probably force us to make the API even more flexible and new ideas come from the community.
+This feature will create a lot of new use-cases and will probably force us to make the API even more flexible, and new ideas come from the community.
