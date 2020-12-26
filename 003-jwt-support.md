@@ -46,6 +46,10 @@ A new authentication method will be introduced to the Appwrite server API. The n
 
 Create a new API endpoint called 'createJWT' `POST /v1/account/jwt`. The new endpoint should be available to an authenticated user. The number of API calls should be limited and protected by the abuse object. We can use [adhocore/php-jwt](https://github.com/adhocore/php-jwt) for token creation and validation.
 
+### Create a New JWT Model
+
+Create a new JWT response model to be returned by the new API endpoint. New model should be located at: `src/Appwrite/Utopia/Response/Model`.
+
 ### Allow New Auth Method
 
 Allow a new auth method using a header that will contain the JWT secret. If valid, the API will allow the server to perform all actions under the relevant user. The server will also grant access to any resources (files, documents, etc...) belonging to the user.
