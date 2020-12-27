@@ -46,7 +46,7 @@ A new authentication method will be introduced to the Appwrite server API. The n
 
 Create a new API endpoint called 'createJWT' `POST /v1/account/jwt`. The new endpoint should be available to an authenticated user. The number of API calls should be limited and protected by the abuse object. We can use [adhocore/php-jwt](https://github.com/adhocore/php-jwt) for token creation and validation. Include the UserID and SessionId as part of the JWT payload.
 
-According to [Hasura](https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/#:~:text=This%20is%20why%20JWTs%20have,JWTs%20don't%20get%20leaked.) the best practice for the expiry value of the JWT is around 15 minutes. This combined with the fact the JWT auth is depnedent on a valid auth session should give a good level of security for the Appwrite project users.
+According to [Hasura](https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/#:~:text=This%20is%20why%20JWTs%20have,JWTs%20don't%20get%20leaked.), the best practice for the expiry value of the JWT is around 15 minutes. This combined with the fact the JWT auth is depnedent on a valid auth session should give a good level of security for the Appwrite project users.
 
 ### Create a New JWT Model
 
