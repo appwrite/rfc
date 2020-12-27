@@ -44,7 +44,9 @@ A new authentication method will be introduced to the Appwrite server API. The n
 
 ### Create a new API Endpoint
 
-Create a new API endpoint called 'createJWT' `POST /v1/account/jwt`. The new endpoint should be available to an authenticated user. The number of API calls should be limited and protected by the abuse object. We can use [adhocore/php-jwt](https://github.com/adhocore/php-jwt) for token creation and validation.
+Create a new API endpoint called 'createJWT' `POST /v1/account/jwt`. The new endpoint should be available to an authenticated user. The number of API calls should be limited and protected by the abuse object. We can use [adhocore/php-jwt](https://github.com/adhocore/php-jwt) for token creation and validation. Include the UserID and SessionId as part of the JWT payload.
+
+According to [Hasura](https://hasura.io/blog/best-practices-of-using-jwt-with-graphql/#:~:text=This%20is%20why%20JWTs%20have,JWTs%20don't%20get%20leaked.) the best practice for the expiry value of the JWT is around 15 minutes. This combined with the fact the JWT auth is depnedent on a valid auth session should give a good level of security for the Appwrite project users.
 
 ### Create a New JWT Model
 
@@ -52,7 +54,7 @@ Create a new JWT response model to be returned by the new API endpoint. New mode
 
 ### Allow New Auth Method
 
-Allow a new auth method using a header that will contain the JWT secret. If valid, the API will allow the server to perform all actions under the relevant user. The server will also grant access to any resources (files, documents, etc...) belonging to the user.
+Allow a new auth method using a header that will contain the JWT secret. If valid, the API will allow the server to perform all actions under the relevant user. The server will also grant access to any resources (files, documents, etc...) belonging to the user. Verify the sessionId and userId are valid when verifing the JWT auth header.
 
 ### Update the Server SDKs
 
@@ -64,7 +66,7 @@ List all the new server endpoints that are now available on the server API. Add 
 
 ### Tutorial
 
-Create a short tutorial that explains how to generate a new JWT token on the Web/Flutter/both. Create a server example for consuming the API (Node/Python/PHP/Ruby/Deno) and authenticating a user, and making actions on his behalf.
+Create a short tutorial that explains how to generate a new JWT on the Web/Flutter/both. Create a server example for consuming the API (Node/Python/PHP/Ruby/Deno) and authenticating a user, and making actions on his behalf.
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
