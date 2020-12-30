@@ -46,7 +46,7 @@ No changes are expected to the Appwrite server or API. The new CLI will perform 
 
 ### Create a Prototype
 
-Build a working prototype of the SDK using the team common tools-stack. Once ready, integrate the mock into the Appwrite [SDK generator](https://github.com/appwrite/sdk-generator) for easy syncing with any future API changes and an automated release cycle. The new CLI tool should comply with all the Appwrite SDK generator requirements for consistency with other Appwrite SDKs.
+Build a working prototype of the SDK using the team common tools-stack. Once ready, integrate the mock into the Appwrite [SDK generator](https://github.com/appwrite/sdk-generator) for easy syncing with any future API changes and an automated release cycle. The new CLI tool should comply with all the Appwrite SDK generator [requirements](https://github.com/appwrite/sdk-generator/blob/master/CONTRIBUTING.md#sdk-checklist) for consistency with other Appwrite SDKs.
 
 #### Suggested file structure:
 
