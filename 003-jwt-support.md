@@ -1,7 +1,7 @@
 # JWT Support for Server API Authentication <!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: @eldadfux
-- Start Date: 26-12-2021
+- Start Date: 26-12-2020
 - Target Date: Unknown
 - Appwrite Issue:
   https://github.com/appwrite/appwrite/issues/511
