@@ -105,6 +105,10 @@ Write your answer below.
 Public GraphQL APIs:
 - [Shopify](https://shopify.dev/docs/admin-api/graphql/reference)
 - [GitHub](https://docs.github.com/en/free-pro-team@latest/graphql)
+
+**An Appwrite POC available on the `graphql` branch:**
+https://github.com/appwrite/appwrite/compare/0.7.x...graphql?expand=1
+
 <!--
 
 Discuss prior art, both the good and the bad, in relation to this proposal. A
