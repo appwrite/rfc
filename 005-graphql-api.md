@@ -4,8 +4,8 @@
 - Start Date: 10-01-2021
 - Target Date: Unknown
 - Appwrite Issue:
-  https://github.com/appwrite/appwrite/issues/272
-  https://github.com/appwrite/appwrite/issues/511
+  * https://github.com/appwrite/appwrite/issues/272
+  * https://github.com/appwrite/appwrite/issues/511
 
 ## Summary
 
