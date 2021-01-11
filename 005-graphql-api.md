@@ -69,6 +69,8 @@ Explorers:
 - https://shopify.dev/tools/graphiql-admin-api
 - https://developer.github.com/v4/explorer/
 - http://localhost:4000
+- https://tech.okcupid.com/the-shadow-request/
+- https://tech.okcupid.com/moving-okcupid-from-rest-to-graphql/
 
 ### Documentation
 
