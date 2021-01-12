@@ -47,9 +47,36 @@ Introduce a new environment variable to allow disabling usage stats.
 ### Use the environment variable
 Use the environment variable to disable collection and display of usage stats. Once disabled, the usage stats end points (project and functions) will only return other stats if any apart from those from influxdb/telegraf. Also, console dashboard will hide the usage stats graph.
 
+### Changes to be made
+Following changes will be required in order to support disabling usage stats
 
+1. functions usage endpoint : https://github.com/appwrite/appwrite/blob/d6df6b9fdc9e05b72fe0fb391e787a7dce9fc5b9/app/controllers/api/functions.php#L134
+  
+  Here, after making sure the function exists. Check if stats is disabled. If disabled skip calculations from line declaring $period - sending the response. Instead just send a dummy response in the same format with dummy data.
 
+2. projects usage endpoint : https://github.com/appwrite/appwrite/blob/055a7ef8eb56067484ec27c03e6210afc84c7244/app/controllers/api/projects.php#L155
 
+  Here, after making sure the project exists. Check if stats is disabled. If disabled skip calculations from line declaring $period - before getting users collection data. In the response if the stats is disabled send dummy data for `requests`, `network`, `functions` keys.
+
+3. Console home controller: https://github.com/appwrite/appwrite/blob/7fc7e0b93d8b0ae9bcbf5f775c73c59db5910af5/app/controllers/web/console.php#L116
+
+  Here, just pass the value of environment variable to the view.
+
+4. Home view : https://github.com/appwrite/appwrite/blob/881b1e71a3244b11d3e1eb064727791676636bc3/app/views/console/home/index.phtml#L64
+
+  Here, based on the value of environment variable, show / hide the charts inside project stats div.
+
+5. Functions controller : https://github.com/appwrite/appwrite/blob/7fc7e0b93d8b0ae9bcbf5f775c73c59db5910af5/app/controllers/web/console.php#L379
+
+  Here, pass the value of environment variable to the view.
+
+6. Functions view : https://github.com/appwrite/appwrite/blob/881b1e71a3244b11d3e1eb064727791676636bc3/app/views/console/functions/function.phtml#L243
+
+  Here based on the value of environment variable, show/hide the usage, monitor graph below line 243.
+
+7. App shutdown function : https://github.com/appwrite/appwrite/blob/9c421e2dfc64cc7c929f26e5a9193735e1b1c9c6/app/controllers/general.php#L320
+
+  Here, if stats disabled, stop sending the data to redis.
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
