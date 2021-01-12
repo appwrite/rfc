@@ -10,7 +10,7 @@
 [summary]: #summary
 
 <!-- Brief explanation of the proposed contribution. Write your answer below. -->
-Due to difficulty in deployment of influxdb and telegraf in services like Heroku, in the Appwrite lite version, usage stats has to be disabled. So, want to introduce a environment variable that will allow disabling usage stats completely there by influxdb and telegraf dependency will no longer be required.
+Due to difficulty in deployment of influxdb and telegraf in services like Heroku, in the Appwrite lite version, usage stats has to be disabled. So, want to introduce a environment variable that will allow disabling usage stats completely there by influxdb, telegraf and appwrite usage worker dependencies will no longer be required.
 
 ## Problem Statement (Step 1)
 
@@ -43,10 +43,6 @@ Users will be able to disable the usage stats feature completely. This will disa
 ### Introduce new environment variable
 Introduce a new environment variable to allow disabling usage stats.
     - _APP_USAGE_STATS = enabled | disabled
-    - _APP_STATS = enabled | disabled
-    - _APP_USAGE = enabled | disabled
-    - _APP_DISABLE_STATS = true | false
-    - _APP_ENABLE_STATS = true | false
 
 ### Use the environment variable
 Use the environment variable to disable collection and display of usage stats. Once disabled, the usage stats end points (project and functions) will only return other stats if any apart from those from influxdb/telegraf. Also, console dashboard will hide the usage stats graph.
