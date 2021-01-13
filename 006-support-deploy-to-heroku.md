@@ -61,6 +61,9 @@ Create a Heroku app configuration file (app.json) in the Appwrite Lite repo whic
 
 Redis and Mysql add-ons will have to be added in the config. The environment variables for Redis and Mysql connections will have to be updated accordingly in the Heroku docker configuration.
 
+### POC
+First create a POC of one click deploy to Heroku as it's current state. Even if no data in file system persists, we can use the same idea further once we add support to external storage services like S3.
+
 ---
 
 ### Introduce new environment variable to disable stats
