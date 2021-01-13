@@ -1,16 +1,19 @@
-# Adjusting Appwrite to support Heroku <!-- What do you want to call your `awesome_feature`? -->
+# One Click Deploy to Heroku <!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: @lohanidamodar
 - Start Date: 12-01-2021
 - Target Date: Unknown
 - Appwrite Issue:
-  https://github.com/appwrite/appwrite/issues/547
+  https://github.com/appwrite/appwrite/issues/461, https://github.com/appwrite/appwrite/issues/547
 
 ## Summary
 
 [summary]: #summary
 
 <!-- Brief explanation of the proposed contribution. Write your answer below. -->
+Supporting one click deploy to Heroku right from GitHub, with Appwrite Lite. Which will increase our adoption rate as anyone can click to deploy to Heroku for free and try Appwrite, or even use in in production with less resources.
+
+___ 
 
 Heroku and similar platforms are modern day standards for deploying applications. But deploying on such platforms requires certain fundamental architectural decisions made. Supporting these platforms will help make deploying and testing Appwrite easier for beginners. We can even support one click deployment right from Github.
 
@@ -21,6 +24,9 @@ Heroku and similar platforms are modern day standards for deploying applications
 **What problem are you trying to solve?**
 
 <!-- Write your answer below. -->
+Deploying to Heroku, with a deploy to Heroku button, right from GitHub readme of Appwrite Lite repo.
+
+___
 Heroku, deploys applications on an **ephemeral** storage called dynos, where data can be written to disk however those data will not persist after the application is restarted. This provides fundamental challenge to deploy Appwrite, as appwrite uses filesystem storaging and managing things like uploads, functions, config and cache.
 
 Next up, for services like database and redis, there are Heroku Add-ons that can be used, however there is no influxdb/telegraf Add-ons on Heroku.
