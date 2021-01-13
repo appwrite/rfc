@@ -48,7 +48,7 @@ The current implementation of storage and influxdb/telegraf prevents from deploy
 [design-proposal]: #design-proposal
 
 ### Introduce new environment variable to disable stats
-Should introduce a new environment variable _APP_STATS, default value is **enabled** and can be set to **disabled** to disable the stats, enabling user to completely drop influxdb/telegraph without any errors
+Should introduce a new environment variable _APP_USAGE_STATS, default value is **enabled** and can be set to **disabled** to disable the stats, enabling user to completely drop influxdb/telegraph without any errors. More on this is described in [Disable Usage Stats RFC](https://github.com/appwrite/rfc/blob/main/007-disable-usage-stats.md)
 
 ### Introduce external storage support
 Should introduce new environment variables for storage service config.
@@ -113,7 +113,6 @@ Write your answer below.
 
 <!-- Write your answer below. -->
 
-Not sure what completely disabling the stats mean for a end user, whether or not it's a good idea. Or if there are other ways we can provide such facility.
 
 ### Future possibilities
 
