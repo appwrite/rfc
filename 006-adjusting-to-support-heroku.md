@@ -47,6 +47,16 @@ The current implementation of storage and influxdb/telegraf prevents from deploy
 
 [design-proposal]: #design-proposal
 
+### Heroku docker configuration
+Need to create a Heroku docker configuration file in the Appwrite Lite repo, which will allow us to build and deploy Appwrite Lite docker image easily to Heroku. [Reference to heroku docker configuration](https://devcenter.heroku.com/articles/build-docker-images-heroku-yml).
+
+### Heroku app configuration
+Create a Heroku app configuration file (app.json) in the Appwrite Lite repo which will allow us to support one click deployment to Heroku right from GitHub. [Reference to app configuration ](https://devcenter.heroku.com/articles/app-json-schema).
+
+Redis and Mysql add-ons will have to be added in the config. The environment variables for Redis and Mysql connections will have to be updated accordingly in the Heroku docker configuration.
+
+---
+
 ### Introduce new environment variable to disable stats
 Should introduce a new environment variable _APP_USAGE_STATS, default value is **enabled** and can be set to **disabled** to disable the stats, enabling user to completely drop influxdb/telegraph without any errors. More on this is described in [Disable Usage Stats RFC](https://github.com/appwrite/rfc/blob/main/007-disable-usage-stats.md)
 
