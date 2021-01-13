@@ -1,6 +1,8 @@
-# Title <!-- What do you want to call your `awesome_feature`? -->
+# Migration
 
-- Implementation Owner: (your github @username)
+<!-- What do you want to call your `awesome_feature`? -->
+
+- Implementation Owner: @torstendittmann
 - Start Date: (today's date, dd-mm-yyyy)
 - Target Date: (expected date of completion, dd-mm-yyyy)
 - Appwrite Issue:
@@ -10,7 +12,7 @@
 
 [summary]: #summary
 
-<!-- Brief explanation of the proposed contribution. Write your answer below. -->
+Add a migration script to handle internal changes when upgrading to a new version with breaking changes.
 
 ## Problem Statement (Step 1)
 
@@ -18,41 +20,48 @@
 
 **What problem are you trying to solve?**
 
-<!-- Write your answer below. -->
+During development, internal breaking changes are often introduced, which must be incorporated when upgrading to a new version. Also, the current migration script is not ready for easy extension of upcoming versions.
 
 **What is the context or background in which this problem exists?**
 
-<!-- Write your answer below. -->
+Since Appwrite is still in early development, breaking change will most likely be introduced with each release. We will face a similar problem with major releases in the future.
 
 **Once the proposal is implemented, how will the system change?**
 
-<!-- Write your answer below. -->
-
-<!-- Please avoid discussing your proposed solution. -->
+Not much for the user, only for the developer. The concept of object-oriented programming is introduced to the migration script. Object Inheritance and Polymorphism via Interfaces will ensure easy and safe introduction of upcoming migrations of versions.
 
 ## Design proposal (Step 2)
 
 [design-proposal]: #design-proposal
 
-<!--
-This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
+Initial situation is as follows, the current migration script serves its purpose - but is very inflexible and offers little basis for upcoming additions. To improve this, a main parent class and an interface is to be created, which is extended and implemented by the individual migrations. Significant refactoring is performed for the previous migrations.
 
-- Its interaction with other parts of the system is clear
-- It is reasonably clear how the contribution would be implemented
-- Dependencies on libraries, tools, projects or work that isn't yet complete
-- New API routes that need to be created or modifications to the existing routes (if needed)
-- Any breaking changes and ways in which we can ensure backward compatibility.
-- Use Cases
-- Goals
-- Deliverables
-- Changes to documentation
-- Ways to scale the solution
+In addition, only one version is migrated at the moment and a migration of 2 versions should be possible. 
+If a version was skipped, 2 migrations are carried out. For example, if you want to migrate from 0.5 to 0.7, you will first migrate to 0.6 and then to 0.7. This is done automatically in a single operation.
 
-Ensure that you include examples, code-snippets etc. to allow the community to understand the proposed solution. **It would be best if the examples use naming conventions that you intend to use during the actual implementation so that changes can be suggested early on during the development.**
+### New class and interface
 
-Write your answer below.
+A new class will be introduced to `src/Appwrite/Migration`. The class will inherit instances (`$register`, `$projectDB` & co) and methods to the individual migrations, which are needed regardless of the version. Also, an interface is introduced which enforces certain methods from the migrations that have to be custom to the migration. The main class will not be instantiable.
 
--->
+It will look something like this:
+
+```php
+class Migration {
+    private function __construct() { }
+    
+    //...
+}
+
+interface Executable {
+    public function execute();
+    
+    //...
+}
+
+class V007 extends Migration implements Executable {
+	
+}
+```
 
 ### Prior art
 
