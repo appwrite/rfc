@@ -45,16 +45,25 @@ It will look something like this:
 ```php
 abstract class Migration {
   private function __construct() { }
+
+  public function setProject($project, $projectDB) { /* ... */ }
+  public function forEachDocument($callback) { /* ... */ }
   
   abstract protected function execute();
-  
-  //...
 }
 
 class V07 extends Migration {
-  //...
+    public function execute() { /* ... */ }
 }
 ```
+
+Following functions are gonna be added the the main `Appwrite\Migration\Migration` class:
+
+#### `setProject(Document $project, Database $projectDB)`
+Sets the current project for migration. Will be used by the migration script run from the CLI.
+
+#### `forEachDocument(callable $callback)`
+Iterates through every document. A method is passed that takes and returns a `Document`. The returned `Document` will be overwritten in the set project. This will be called by the individual migration class (childs of Appwrite\Migration\Migration) to adjust document structure.
 
 ### Prior art
 
