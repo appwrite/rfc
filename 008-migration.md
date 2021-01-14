@@ -1,10 +1,8 @@
 # Migration
 
-<!-- What do you want to call your `awesome_feature`? -->
-
 - Implementation Owner: @torstendittmann
-- Start Date: (today's date, dd-mm-yyyy)
-- Target Date: (expected date of completion, dd-mm-yyyy)
+- Start Date: (today's date, 13-01-2021)
+- Target Date: (expected date of completion, 13-01-2021)
 - Appwrite Issue:
   [Is this RFC inspired by an issue in appwrite](https://github.com/appwrite/appwrite/issues/)
 
@@ -68,27 +66,6 @@ Iterates through every document. A method is passed that takes and returns a `Do
 ### Prior art
 
 [prior-art]: #prior-art
-
-<!--
-
-Discuss prior art, both the good and the bad, in relation to this proposal. A
-few examples of what this can include are:
-
-- Does this functionality exist in other software and what experience has their
-  community had?
-- For other teams: What lessons can we learn from what other communities have
-  done here?
-- Papers: Are there any published papers or great posts that discuss this? If
-  you have some relevant papers to refer to, this can serve as a more detailed
-  theoretical background.
-
-This section is intended to encourage you as an author to think about the
-lessons from other software, provide readers of your RFC with a fuller picture.
-If there is no prior art, that is fine - your ideas are interesting to us
-whether they are brand new or if it is an adaptation from other software.
-
-Write your answer below.
--->
 
 ### Unresolved questions
 
