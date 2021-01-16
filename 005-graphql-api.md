@@ -62,8 +62,8 @@ Each Appwrite route has a label with its method name (`->label('sdk.method', 'ge
 **Query Example:**
 
 ```graphql
-query accountGet { // [serviceName][ActionName]
-  user { // Returned Model
+query accountGet { # [serviceName][ActionName]
+  user { # Returned Model
     name
     email
   }
@@ -73,8 +73,8 @@ query accountGet { // [serviceName][ActionName]
 **Mutation Example:**
 
 ```graphql
-mutation usersCreate { // [ServiceName][ActionName]
-  user { // Returned Model
+mutation usersCreate { # [ServiceName][ActionName]
+  user { # Returned Model
     name
     email
   }
@@ -83,14 +83,19 @@ mutation usersCreate { // [ServiceName][ActionName]
 
 ### Authentication
 
-We need to make sure authentication is enforced in the context of each specific API action. An endpoint that can only be used with an API key or can only be accessed by an authenticated user should act exactly the same for the GraphQL API.
+We need to make sure authentication is enforced in the context of each specific API action. An endpoint that can only be used with an API key or can only be accessed by an authenticated user should act exactly the same for the GraphQL API. Because the GraphQL endpoint is basically just another public HTTP endpoint as part of the Appwrite HTTP server it can grant access to all the different server actions and resources. To avoid this situation we need to enforce security with an additionl layer.
+
+### Error Handling
+
+TODO. Available resources:
+
+- https://xuorig.medium.com/a-guide-to-graphql-errors-bb9ba9f15f85
+
 
 **References**:
-
-Explorers:
 - https://shopify.dev/tools/graphiql-admin-api
 - https://developer.github.com/v4/explorer/
-- http://localhost:4000
+- http://localhost:9505 (Appwrite instance of GraphiQL available [here](https://github.com/appwrite/appwrite/blob/1349a1a8b594ff132ae6e9e9d246d856a949733d/docker-compose.yml#L493))
 - https://tech.okcupid.com/the-shadow-request/
 - https://tech.okcupid.com/moving-okcupid-from-rest-to-graphql/
 
@@ -100,7 +105,7 @@ Create a new dedicated documentation page for using the GraphQL API. List all th
 
 ### Tests
 
-To fully test the integration we would need to create a test suite for both Client and Server authentication methods similar to what we're doing in our REST API. We can use [mghoneimy/php-graphql-client](https://github.com/mghoneimy/php-graphql-client) as a **dev dependency** for sending GraphQL API calls.
+To fully test the integration we would need to create a test suite for both Client and Server authentication methods similar to what we're doing in our REST API. We can use [mghoneimy/php-graphql-client](https://github.com/mghoneimy/php-graphql-client) as a **dev dependency** for sending GraphQL API calls. Create some tests that are testing for system failure and authentication integritiy.
 
 ### Tutorial
 
