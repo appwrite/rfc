@@ -89,6 +89,9 @@ To avoid this situation, we need to enforce scopes based security with an additi
 
 ![Authentication Flow](https://raw.githubusercontent.com/appwrite/appwrite/1da4fa8168e9295282d8e8f0265f923c153b2a23/docs/specs/authentication.drawio.svg "Authentication Flow")
 
+This section handles the current socpes + roles based authentication:
+https://github.com/appwrite/appwrite/blob/f9afa2c95152b15eb079c1c65f249be4fe201c75/app/controllers/general.php#L164-L218
+
 ### Error Handling
 
 TODO. Available resources:
