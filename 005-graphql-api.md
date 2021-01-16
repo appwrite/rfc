@@ -59,6 +59,28 @@ Create a new route called POST /v1/graphql. The new endpoint will initialize the
 
 Each Appwrite route has a label with its method name (`->label('sdk.method', 'getPrefs')`). This label was used only to generate the REST API SDKs using the [SDK generator](https://github.com/appwrite/sdk-generator). We should preload all the routes and sort them in a hash where the method name is the key for fast routing between the different GraphQL API actions.
 
+**Query Example:**
+
+```graphql
+query accountGet { // [serviceName][ActionName]
+  user { // Returned Model
+    name
+    email
+  }
+}
+```
+
+**Mutation Example:**
+
+```graphql
+mutation usersCreate { // [ServiceName][ActionName]
+  user { // Returned Model
+    name
+    email
+  }
+}
+```
+
 ### Authentication
 
 We need to make sure authentication is enforced in the context of each specific API action. An endpoint that can only be used with an API key or can only be accessed by an authenticated user should act exactly the same for the GraphQL API.
@@ -75,6 +97,10 @@ Explorers:
 ### Documentation
 
 Create a new dedicated documentation page for using the GraphQL API. List all the different authentication methods, actions available, and response models.
+
+### Tests
+
+To fully test the integration we would need to create a test suite for both Client and Server authentication methods similar to what we're doing in our REST API. We can use [mghoneimy/php-graphql-client](https://github.com/mghoneimy/php-graphql-client) as a **dev dependency** for sending GraphQL API calls.
 
 ### Tutorial
 
