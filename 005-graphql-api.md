@@ -83,7 +83,11 @@ mutation usersCreate { # [ServiceName][ActionName]
 
 ### Authentication
 
-We need to make sure authentication is enforced in the context of each specific API action. An endpoint that can only be used with an API key or can only be accessed by an authenticated user should act exactly the same for the GraphQL API. Because the GraphQL endpoint is basically just another public HTTP endpoint as part of the Appwrite HTTP server it can grant access to all the different server actions and resources. To avoid this situation we need to enforce security with an additionl layer.
+We need to make sure authentication is enforced in the context of each specific GraphQL action. An endpoint that can only be used with an API key or can only be accessed by an authenticated user should act exactly the same for the GraphQL API. Because the GraphQL endpoint is basically just another public HTTP endpoint as part of the Appwrite HTTP server, it can grant access to all the different server actions.
+
+To avoid this situation, we need to enforce scopes based security with an additional layer that will be implemented inside the GraphQL controller.
+
+![Authentication Flow](https://raw.githubusercontent.com/appwrite/appwrite/1da4fa8168e9295282d8e8f0265f923c153b2a23/docs/specs/authentication.drawio.svg "Authentication Flow")
 
 ### Error Handling
 
