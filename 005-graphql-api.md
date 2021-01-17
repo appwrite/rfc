@@ -81,6 +81,9 @@ mutation usersCreate { # [ServiceName][ActionName]
 }
 ```
 
+### Load Routes, Models, and Collections
+
+Load all Appwrite relevant routes, models, and Database collections into the GraphQL parser library. Any `GET` routes should be loaded as GraphQL queries, any `POST`, `PUT`, `PATCH`, or `DELETE` methods should be loaded as mutations. Both Appwrite Models objects and Database collections should be loaded as GraphQL objects. All the data is available using existing Appwrite libraries. Make sure to also include models for error objects ([dev](https://github.com/appwrite/appwrite/blob/764672e15e8c3a4c0c3891d620d293e1ead9045c/src/Appwrite/Utopia/Response/Model/Error.php) & [non-dev](https://github.com/appwrite/appwrite/blob/764672e15e8c3a4c0c3891d620d293e1ead9045c/src/Appwrite/Utopia/Response/Model/ErrorDev.php)).
 ### Authentication
 
 We need to make sure authentication is enforced in the context of each specific GraphQL action. An endpoint that can only be used with an API key or can only be accessed by an authenticated user should act exactly the same for the GraphQL API. Because the GraphQL endpoint is basically just another public HTTP endpoint as part of the Appwrite HTTP server, it can grant access to all the different server actions.
