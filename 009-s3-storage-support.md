@@ -48,6 +48,44 @@ We need to implement new storage adapters.
 ### Add S3 adapter
 Add, S3 adapter that implements `Device` and its required functions. Also add more functions that is required for S3. We already have a barebones S3 adapter, where we need to implement the required functions
 
+### Upload file
+1. Need to generate authorization signature
+2. create url using bucket and region (<bucket>.s3.<region>.amazonaws.com)
+3. Create and execute the request in the following format
+
+```http
+PUT /my-image.jpg HTTP/1.1
+Host: myBucket.s3.<Region>.amazonaws.com
+Date: Wed, 12 Oct 2009 17:50:00 GMT
+Authorization: authorization string
+Content-Type: text/plain
+Content-Length: 11434
+x-amz-meta-author: Janet
+Expect: 100-continue
+[11434 bytes of object data]
+```
+**Ref**         
+- https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutObject.html
+- https://www.h3xed.com/programming/php-amazon-s3-file-upload-code-aws-signature-version-4
+
+
+### Delete file
+```http
+DELETE /Key+?versionId=VersionId HTTP/1.1
+Host: Bucket.s3.amazonaws.com
+x-amz-mfa: MFA
+x-amz-request-payer: RequestPayer
+x-amz-bypass-governance-retention: BypassGovernanceRetention
+x-amz-expected-bucket-owner: ExpectedBucketOwner
+```
+https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html#API_DeleteObject_RequestSyntax
+
+### Environment variables
+- AWS access key ID
+- AWS secret access key
+- Region
+- Bucket
+
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
 
