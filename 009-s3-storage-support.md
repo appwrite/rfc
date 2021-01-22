@@ -46,7 +46,7 @@ This will add S3 storage adapter as an alternative to Local storage adapter. Thi
 We need to implement new storage adapters.
 
 ### Add S3 adapter
-Add, S3 adapter that implements `Device` and its required functions. Also add more functions that is required for S3. We already have a barebones S3 adapter, where we need to implement the required functions
+Add, S3 adapter that implements `Device` and its required functions in [utopia-php/storage](https://github.com/utopia-php/storage) library. Also add more functions that is required for S3. We already have a barebones S3 adapter, where we need to implement the required functions
 
 ### Upload file
 1. Need to generate authorization signature
@@ -149,4 +149,4 @@ N/A
 
 <!-- Write your answer below. -->
 
-Once we have multiple adapters, we can allow support multiple storage adapters at once, later introduce features like storage bucket. So that Appwrite itself can be used as an interface to multiple storage platforms.
+With S3 adapter we can support other S3 compatible services like Digitalocean spaces. Also, Once we have multiple adapters, we can allow support multiple storage adapters at once, later introduce features like storage bucket. So that Appwrite itself can be used as an interface to multiple storage platforms.
