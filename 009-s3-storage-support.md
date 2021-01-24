@@ -4,7 +4,7 @@
 - Start Date: (22-01-2021)
 - Target Date: (N/A)
 - Appwrite Issue:
-  [Heroku Support](https://github.com/appwrite/appwrite/issues/461)
+  [Heroku Support](https://github.com/appwrite/appwrite/issues/461),
   [Appwrite Lite](https://github.com/appwrite/appwrite/issues/547)
 
 ## Summary
@@ -134,10 +134,11 @@ Content-Type: text/plain
 https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html#API_DeleteObject_RequestSyntax
 
 ### Environment variables
-- AWS_ACCESS_KEY: AWS access key ID
-- AWS_SECRET: AWS secret access key
-- AWS_REGION: Region
-- AWS_BUCKET: Bucket
+- _APP_STORAGE_DEVICE=local/s3, select default storage device
+- _APP_STORAGE_DEVICE_S3_ACCESS_KEY=AWS access key ID
+- _APP_STORAGE_DEVICE_S3_SECRET: AWS secret key
+- _APP_STORAGE_DEVICE_S3_REGION: S3 Region
+- _APP_STORAGE_DEVICE_S3_BUCKET: S3 bucket
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
