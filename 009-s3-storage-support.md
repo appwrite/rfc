@@ -48,8 +48,58 @@ We need to implement new storage adapters.
 ### Add S3 adapter
 Add, S3 adapter that implements `Device` and its required functions in [utopia-php/storage](https://github.com/utopia-php/storage) library. Also add more functions that is required for S3. We already have a barebones S3 adapter, where we need to implement the required functions
 
+### Generating Signature
+The authorization signature will have to be generated, for that we will need, Access Key, Secret, Bucket, Region, and Access Control List. The following sample code shows how we can generate AWS auth signature v4.
+
+```php
+$accessKeyId = 'YOUR_ACCESS_KEY_ID';
+$secretKey = 'YOUR_SECRET_KEY';
+$bucket = 'YOUR_BUCKET_NAME';
+$region = 'BUCKET_AMAZON_REGION'; // us-west-2, us-east-1, etc
+$acl = 'ACCESS_CONTROL_LIST'; // private, public-read, etc
+
+// VARIABLES
+// These are used throughout the request.
+$longDate = gmdate('Ymd\THis\Z');
+$shortDate = gmdate('Ymd');
+$credential = $accessKeyId . '/' . $shortDate . '/' . $region . '/s3/aws4_request';
+
+// POST POLICY
+// Amazon requires a base64-encoded POST policy written in JSON.
+// This tells Amazon what is acceptable for this request. For
+// simplicity, we set the expiration date to always be 24H in 
+// the future. The two "starts-with" fields are used to restrict
+// the content of "key" and "Content-Type", which are specified
+// later in the POST fields. Again for simplicity, we use blank
+// values ('') to not put any restrictions on those two fields.
+$policy = base64_encode(json_encode([
+    'expiration' => gmdate('Y-m-d\TH:i:s\Z', time() + 86400),
+    'conditions' => [
+        ['acl' => $acl],
+        ['bucket' => $bucket],
+        ['starts-with', '$Content-Type', ''],
+        ['starts-with', '$key', ''],
+        ['x-amz-algorithm' => 'AWS4-HMAC-SHA256'],
+        ['x-amz-credential' => $credential],
+        ['x-amz-date' => $longDate]
+    ]
+]));
+
+// SIGNATURE
+// A base64-encoded HMAC hashed signature with your secret key.
+// This is used so Amazon can verify your request, and will be
+// passed along in a POST field later.
+$signingKey = hash_hmac('sha256', $shortDate, 'AWS4' . $secretKey, true);
+$signingKey = hash_hmac('sha256', $region, $signingKey, true);
+$signingKey = hash_hmac('sha256', 's3', $signingKey, true);
+$signingKey = hash_hmac('sha256', 'aws4_request', $signingKey, true);
+$signature = hash_hmac('sha256', $policy, $signingKey);
+```
+**Ref**
+- https://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html
+
 ### Upload file
-1. Need to generate authorization signature
+1. Need to generate authorization signature using S3 key and secret. We will be using Signature V4 which is the latest at the moment
 2. create url using bucket and region (<bucket>.s3.<region>.amazonaws.com)
 3. Create and execute the request in the following format
 
@@ -70,21 +120,24 @@ Expect: 100-continue
 
 
 ### Delete file
+1. Need to generate authorization signature using S3 key and secret. We will be using Signature V4 which is the latest at the moment
+2. create url using bucket and region (<bucket>.s3.<region>.amazonaws.com)
+3. Create and execute the request in the following format
+
 ```http
-DELETE /Key+?versionId=VersionId HTTP/1.1
-Host: Bucket.s3.amazonaws.com
-x-amz-mfa: MFA
-x-amz-request-payer: RequestPayer
-x-amz-bypass-governance-retention: BypassGovernanceRetention
-x-amz-expected-bucket-owner: ExpectedBucketOwner
+DELETE /my-second-image.jpg HTTP/1.1
+Host: <bucket>.s3.<Region>.amazonaws.com
+Date: Wed, 12 Oct 2009 17:50:00 GMT
+Authorization: authorization string
+Content-Type: text/plain        
 ```
 https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteObject.html#API_DeleteObject_RequestSyntax
 
 ### Environment variables
-- AWS access key ID
-- AWS secret access key
-- Region
-- Bucket
+- AWS_ACCESS_KEY: AWS access key ID
+- AWS_SECRET: AWS secret access key
+- AWS_REGION: Region
+- AWS_BUCKET: Bucket
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
@@ -138,7 +191,9 @@ Write your answer below.
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 <!-- Write your answer below. -->
-N/A
+1. Do we support multiple buckets? If yes, how?
+2. There are options like dual-stack, file versioning, which is yet to be explored, and supporting all those features might be difficult without the SDK, will be much like implementing the whole S3 part of AWS SDK.
+3. How do we set Access control ACL
 
 
 ### Future possibilities
