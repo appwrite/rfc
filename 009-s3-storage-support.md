@@ -51,6 +51,8 @@ Add, S3 adapter that implements `Device` and its required functions in [utopia-p
 ### Generating Signature
 The authorization signature will have to be generated, for that we will need, Access Key, Secret, Bucket, Region, and Access Control List. The following sample code shows how we can generate AWS auth signature v4.
 
+We will use `private` ACL so that the files are only accessible via Appwrite.
+
 ```php
 $accessKeyId = 'YOUR_ACCESS_KEY_ID';
 $secretKey = 'YOUR_SECRET_KEY';
@@ -192,9 +194,7 @@ Write your answer below.
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 <!-- Write your answer below. -->
-1. Do we support multiple buckets? If yes, how?
-2. There are options like dual-stack, file versioning, which is yet to be explored, and supporting all those features might be difficult without the SDK, will be much like implementing the whole S3 part of AWS SDK.
-3. How do we set Access control ACL
+
 
 
 ### Future possibilities
@@ -205,4 +205,7 @@ Write your answer below.
 
 <!-- Write your answer below. -->
 
-With S3 adapter we can support other S3 compatible services like Digitalocean spaces. Also, Once we have multiple adapters, we can allow support multiple storage adapters at once, later introduce features like storage bucket. So that Appwrite itself can be used as an interface to multiple storage platforms.
+1. With S3 adapter we can support other S3 compatible services like Digitalocean spaces
+2. Once we have multiple adapters, we can allow support multiple storage adapters at once, later introduce features like storage bucket. So that Appwrite itself can be used as an interface to multiple storage platforms
+3. We can also support multiple buckets features with S3 and other compatible services
+4. We can also later support file versioning features of S3 and other compatible services
