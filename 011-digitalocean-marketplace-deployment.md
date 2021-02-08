@@ -1,4 +1,4 @@
-# Deployment to Digitalocean <!-- What do you want to call your `awesome_feature`? -->
+# Deployment to Digitalocean Marketplace <!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: @lohanidamodar
 - Start Date: 08-02-2021
