@@ -17,7 +17,7 @@ This RFC will introduce authentication of anonymous users in Appwrite. These tem
 
 **What problem are you trying to solve?**
 
-When you develop an application, there might be times when you want to let a user interact with pieces of Appwrite before they're signed in.
+When you develop an application, there might be times when you want to let a user interact with pieces of Appwrite before they're signed in. This also increases the converison rate of applications, since the hurdle of registering is very high.
 
 **What is the context or background in which this problem exists?**
 
