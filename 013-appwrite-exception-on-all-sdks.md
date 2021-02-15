@@ -70,6 +70,32 @@ In each SDK implement AppwriteException class that should provide following deta
 ## Handle Errors
 Every server call in Appwrite SDKs should handle error cases and throw AppwriteException with appropriate details.
 
+## Exception Information in Docs
+The information regarding exceptions thrown, should be in the Appwrite SDKs docs for each SDK. Most SDKs have doc comments where we could include these or can create separate DOCs that will be generated for the SDK. The Appwrite DOCs should also include information about these errors with details on what information are returned, like the response value in the docs. The DOCs should include
+* What exceptions can a method throw
+* What are possible error codes and error messages
+* What do they mean, and how to debug
+* The exception information should be like response information in the DOCs, should include what structure and fields are available
+
+## Error information in Swagger
+The error info in Swagger spec will be under responses and can look like this
+```json
+{
+  "responses": {
+    "200": {
+      "description":"This is success response"      
+    },
+    "400": {
+      "description": "Bad Request. User ID must be provided",
+      "schema": {
+        "$ref":"#definitions/bad_request"
+      }
+    }
+  }
+}
+```
+
+
 ### Prior art
 
 [prior-art]: #prior-art
