@@ -1,6 +1,6 @@
 # Anonymous Login
 
-- Implementation Owner: @torstendittmann
+- Implementation Owner: @TorstenDittmann
 - Start Date: 15-02-2021
 - Target Date: 16-02-2021
 - Appwrite Issue: https://github.com/appwrite/appwrite/discussions/907
