@@ -11,7 +11,7 @@
 
 This RFC will introduce authentication of anonymous users in Appwrite. These temporary anonymous users can be used to allow users who haven't yet signed up to an app to work with data protected by Appwrite's permission and security rules. If an anonymous user decides to sign up to an app, they can convert their account to an E-Mail or OAuth2 authenticated one, so that they can continue to work with their protected data in future sessions.
 
-## #Problem Statement (Step 1)
+## Problem Statement (Step 1)
 
 [problem-statement]: #problem-statement
 
@@ -45,8 +45,6 @@ The user can convert their account to one, that is authenticated via E-Mail or a
 
 The process for OAuth2 should be very simple, once a user has linked an OAuth2 authentification to an anonymous account - it will be converted.
 
-If there already exists a user with that E-Mail address - the anonymous account will be merged into the already existing one.
-
 For data consistency, the user should be provided the same ID at any point.
 
 ### Endpoints
@@ -63,9 +61,8 @@ This endpoint will be adapted, to behave different on an account that doesn't ha
   - If no account was found with provided E-Mail Adress:
     - Save E-Mail Adress
     - Save Password
-  - If account was found with the provided E-Mail Adress:
-    - Ditch user ID from the anonymous Account and migrate every reference in the Database to the old user ID.
-    - Update current Token to new user ID.
+  - If an account was found:
+    - Throws an error
 
 ### Prior art
 
@@ -78,6 +75,8 @@ Luckily we have a lot of resources and examples around the internet that we can 
 [unresolved-questions]: #unresolved-questions
 
 **What happens to unused anonymous accounts?**
+
+> As commented, this will remain untouched and is in the owners responsibility.
 
 Should we add a TTL for anonymous accounts? Let's say no login to an anonymous user happened in 90 days, we should probably delete that user. This option should be configurable.
 
