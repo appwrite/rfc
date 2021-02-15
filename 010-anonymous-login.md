@@ -95,6 +95,10 @@ Write your answer below.
 
 To be fair, I have no idea how to handle this properly. We could convert his data to his old account and also transfer all his stuff to the old user id. But this would break consistency, if there are any references in the database to the anonymous user id.
 
+**What happens to unused anonymous accounts?**
+
+Should we add a TTL for anonymous accounts? Let's say no login to an anonymous user happened in 90 days, we should probably delete that user. This option should be configurable.
+
 **If we add one more way of authentication - it will get messy!**
 
 As mentioned in our meeting before, we might want to decouple the user accounts from email authentication. Meaning, that an account can have multiple ways of authentication. This way we could also disable users from abusing the endpoint of creating an account with an E-Mail address if this is not wanted from the owner of an Appwrite project. 
