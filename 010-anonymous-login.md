@@ -44,11 +44,13 @@ The user can convert their account to one, that is authenticated via E-Mail or a
 
 The process for OAuth2 should be very simple, once a user has linked an OAuth2 authentification to an anonymous account - it will be converted.
 
+If there already exists a user with that E-Mail address - the anonymous account will be merged into the already existing one.
+
 For data consistency, the user should be provided the same ID at any point.
 
 ### Endpoints
 
-#### `GET: /v1/account/sessions/anonymous`
+#### `POST: /v1/account/sessions/anonymous`
 
 Allow a user to create and login to an anonymous user account.
 
@@ -66,7 +68,7 @@ This will have the same functionality as the `PUT/v1/account/verification` endpo
 
 Luckily we have a lot of resources and examples around the internet that we can take as an example. I don't think I need to name them here, since a simple Google search will satisfy everyone's curiosity.
 
-<!--
+<!-- 
 
 Discuss prior art, both the good and the bad, in relation to this proposal. A
 few examples of what this can include are:
@@ -91,10 +93,6 @@ Write your answer below.
 
 [unresolved-questions]: #unresolved-questions
 
-**What happens if the user wants to convert his anonymous account to his already existing user account?**
-
-To be fair, I have no idea how to handle this properly. We could convert his data to his old account and also transfer all his stuff to the old user id. But this would break consistency, if there are any references in the database to the anonymous user id.
-
 **What happens to unused anonymous accounts?**
 
 Should we add a TTL for anonymous accounts? Let's say no login to an anonymous user happened in 90 days, we should probably delete that user. This option should be configurable.
@@ -107,7 +105,7 @@ For example:
 
 I create a new project and in the settings I can choose what authentication methods I want to use. Let's say I want to use E-Mail and Google OAuth2. A user creates an account via the the `POST /v1/account/email` endpoint. This will create an user with that E-Mail and Password as one possible way of logging into this account. Now the user also wants to connect his Google Account via the `GET /v1/account/oauth2/{provider}` endpoint. This endpoint will recognize a already logged in user due to cookies and will add that authentication method to the account. Now all of a sudden the owner needs to add GitHub as an OAuth2 provider to attract more developers. This would also allow multiple E-Mail addresses for a single account.
 
-Also, if we disable E-Mail authentication - this way we can ensure users not creating such accounts over the REST API.
+Also, if we disable E-Mail authentication in a project - this way we can ensure users not creating such accounts over the REST API.
 
 ### Future possibilities
 
