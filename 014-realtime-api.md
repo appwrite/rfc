@@ -69,7 +69,7 @@ Write your answer below.
 
 We will implement the realtime API, using a new entrypoint for the Appwrite main container as demostrated at our POC branch. The new entrypoint will be called `realtime` and will server as the starting script for the new `appwrite-realtime` container.
 
-The source for the new entrypoint should be located at the same equilvent to our http entrypoint (`./app/http.php`) at: `/app/realtime.php`. We will use the Swoole implementation of Websocket for the implementation of our first realtime protocol.
+The source for the new entrypoint should be located at the same equilvent to our http entrypoint (`./app/http.php`) at: `/app/realtime.php`. We will use the Swoole implementation of Websocket for the implementation of our first realtime protocol. Like as with other Appwrite related process, we should create a bash alias for a pretty entrypoint that will start the server ([./bin/relatime](https://github.com/appwrite/appwrite/pull/692/files#diff-1fda6857c493bbcd53ac612bb2cc01763bdb2ce45fe3ab9973939ea433cf7e9f)).
 
 ### Loadbalancer
 
