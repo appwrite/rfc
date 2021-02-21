@@ -12,7 +12,9 @@
 [summary]: #summary
 
 <!-- Brief explanation of the proposed contribution. Write your answer below. -->
-Adding a realtime API for the Appwrite server which allow streaming and listening of all the Appwrite [system events](https://appwrite.io/docs/webhooks#events). The new realtime API will allow new and intresting use cases of building app with Appwrite form simple chat apps, multiplayer games, live collaboration to realtime dashboards and enhanced UIs.
+We are adding a real-time API for the Appwrite server, which allows streaming and listening of all the Appwrite [system events](https://appwrite.io/docs/webhooks#events). The new real-time API will allow new and interesting use cases of building an app with Appwrite from simple chat apps, multiplayer games, live collaboration to real-time dashboards and enhanced UIs.
+
+Unlike other BaaS products, Appwrite real-time should be completely cross-platform and work well from both client or backend. The new API should also be completely decoupled from the Appwrite database and transmit any supported system events that Appwrite produces, including storage, users, account events, and more.
 
 ## Problem Statement (Step 1)
 
