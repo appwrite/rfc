@@ -79,7 +79,11 @@ We should update appwrite Traefik loadbalancer to redirect all ws & wss traffic 
 
 An example configuration can also be found on the [POC branch](https://github.com/appwrite/appwrite/blob/081943ce0350e319c9cce5d287b1bd6f59c5574b/docker-compose.yml#L10-L158).
 
-### Protocols Support
+### Protocols
+
+As part of the Appwrite agenda of being cross-platform and tech agnostic, we should be able to design the new real-time API with multiple messaging protocols in mind. This does not mean we should support all of them, and for the scope of this RFC, we will only discuss the implementation of the Websockets protocol as the first protocol to support, while keeping in mind to avoid any coupling between the architecture and the resulting protocol.
+
+Possible protocols to take under future considiration:
 
 - Websocket support: https://www.swoole.co.uk/docs/modules/swoole-websocket-server
 - MQTT support: https://www.swoole.co.uk/docs/modules/swoole-mqtt-server
