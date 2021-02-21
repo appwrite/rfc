@@ -6,6 +6,8 @@
 - Appwrite Issue:
   [Is this RFC inspired by an issue in appwrite](https://github.com/appwrite/appwrite/issues/)
   - https://github.com/appwrite/appwrite/pull/692
+  - https://github.com/appwrite/appwrite/issues/265
+  - https://github.com/appwrite/appwrite/issues/509
 
 ## Summary
 
@@ -65,15 +67,27 @@ Write your answer below.
 -->
 ### Architecture
 
+We will implement the realtime API, using a new entrypoint for the Appwrite main container as demostrated at our POC branch. The new entrypoint will be called `realtime` and will server as the starting script for the new `appwrite-realtime` container.
+
+The source for the new entrypoint should be located at the same equilvent to our http entrypoint (`./app/http.php`) at: `/app/realtime.php`. We will use the Swoole implementation of Websocket for the implementation of our first realtime protocol.
+
+### Loadbalancer
+
+We should update appwrite Traefik loadbalancer to redirect all ws & wss traffic for `/v1/realtime` to the new `appwrite-realtime` container.
+
+An example configuration can also be found on the [POC branch](https://github.com/appwrite/appwrite/blob/081943ce0350e319c9cce5d287b1bd6f59c5574b/docker-compose.yml#L10-L158).
 
 ### Protocols Support
-
-
 
 - Websocket support: https://www.swoole.co.uk/docs/modules/swoole-websocket-server
 - MQTT support: https://www.swoole.co.uk/docs/modules/swoole-mqtt-server
 - SSE support: https://github.com/hhxsv5/php-sse
 - Socket.io support: https://github.com/shuixn/socket.io-swoole-server
+
+### Channels and Messages
+
+
+### Scalability
 
 ### Security
 
@@ -103,8 +117,7 @@ Debug mode logs:
 - Event received (stdout - using Console::log)
 - Message sent (stdout - using Console::log)
 
-### Scalability
-
+### Error Handling
 ### Prior art
 
 [prior-art]: #prior-art
