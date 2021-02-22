@@ -95,6 +95,11 @@ Possible protocols to take under future considiration:
 
 ### Scalability
 
+### Performance
+
+References:
+- List of Big-O for PHP functions: https://stackoverflow.com/a/2484455/2299554
+
 ### Security
 
 #### Abuse Control
@@ -115,7 +120,8 @@ We should add the following logs for easy debugging and monitoring of our realti
 
 - Server start (stdout - using Console::success)
 - Worker start  (stdout - using Console::success)
-- New connection (total connections per worker)
+- Connection Open (total connections per worker)
+- Connection Close (total connections per worker)
 - Errors (stderr - using Console::error)
 
 Debug mode logs:
