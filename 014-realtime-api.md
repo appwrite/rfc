@@ -104,9 +104,11 @@ References:
 
 #### Abuse Control
 
-x mesages per connection
+We should implement an abuse control check to prevent people from abusing the new connection action, which also acts as a validator for JWT tokens. This will completely prevent any large-scale attack from guessing tokens (that has a slim chance, to begin with) or abuse the server.
 
 #### CORS Validation
+
+On each new connection, we should validate that the client origin is valid similarly to what we do in the [REST API](https://github.com/appwrite/appwrite/blob/master/app/controllers/general.php#L131-L139). This is a good security practice to avoid project data being presented on un-authorized clients. This will force devs to list their platforms before using the real-time API.
 
 #### Limit payload size
 
