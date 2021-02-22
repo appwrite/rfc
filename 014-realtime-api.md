@@ -114,7 +114,7 @@ On each new connection, we should validate that the client origin is valid simil
 
 #### JWT Authentication (in path / or in message)
 
-Cookies support in webscoket and other protocols is limited.
+Cookies support in WebSocket and other protocols is limited. Using JWT authentication can be easier to implement and pass to the server and more secure as it is valid for 15 minutes.
 
 ### Logs
 
