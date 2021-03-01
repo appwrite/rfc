@@ -1,4 +1,4 @@
-# Add Appwrite Exceptions on All SDKs <!-- What do you want to call your `awesome_feature`? -->
+# Add Custom Exceptions on All SDKs <!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: @lohanidamodar
 - Start Date: 14-02-2021
