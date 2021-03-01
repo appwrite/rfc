@@ -60,6 +60,10 @@ Write your answer below.
 
 SDK templates should now should also consider the response object and response schema defined in the Swagger specification. We need to get those schemas and response definitions from Swagger to SDK templates and perpare a proper response model.
 
+1. Define models: Define model of all available response objects. From Schema, we should be able to get list of all the response objects, for each response object, in each SDK we should create models for each response objects.
+2. Return object instead of JSON: Once we have all the models, for each API end points based on the response definitions in the Swagger, we should convert the JSON to corresponding object and return.
+
+For each SDK the process of converting JSON to respective model might be different, so we should work accordingly.
 
 ### Prior art
 
@@ -85,6 +89,7 @@ whether they are brand new or if it is an adaptation from other software.
 
 Write your answer below.
 -->
+May popular SDKs for popular softwares, always return proper response objects instead of plain String or JSON. This improves developer experience a lot. A developer can easily understand, what object the API is returning, what methods and properties are available.
 
 ### Unresolved questions
 
