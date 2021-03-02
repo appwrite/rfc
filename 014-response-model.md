@@ -156,6 +156,10 @@ Write your answer below.
 -->
 May popular SDKs for popular softwares, always return proper response objects instead of plain String or JSON. This improves developer experience a lot. A developer can easily understand, what object the API is returning, what methods and properties are available.
 
+- Owlbot dart SDK - (https://pub.dev/packages/owlbot_dart) is one example where the SDK returns properly formatted response objects instead of plain JSON
+
+- GitHub unofficial dart SDK - (https://pub.dev/packages/github) is another example where SDK returns properly formatted response objects.
+
 ### Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
