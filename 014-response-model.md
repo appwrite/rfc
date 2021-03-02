@@ -65,6 +65,71 @@ SDK templates should now should also consider the response object and response s
 
 For each SDK the process of converting JSON to respective model might be different, so we should work accordingly.
 
+Below we will see an example from Dart/Flutter SDK. Let's look at create user endpoint. According to Swagger definitions, it returns User, so first we create user model as follows.
+
+```dart
+class User {
+    User({
+        this.id,
+        this.name,
+        this.registration,
+        this.status,
+        this.email,
+        this.emailVerification,
+        this.prefs,
+    });
+
+    String id;
+    String name;
+    int registration;
+    int status;
+    String email;
+    bool emailVerification;
+    String prefs;
+
+    factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["\$id"],
+        name: json["name"],
+        registration: json["registration"],
+        status: json["status"],
+        email: json["email"],
+        emailVerification: json["emailVerification"],
+        prefs: json["prefs"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "\$id": id,
+        "name": name,
+        "registration": registration,
+        "status": status,
+        "email": email,
+        "emailVerification": emailVerification,
+        "prefs": prefs,
+    };
+}
+```
+
+So now the `create` user function,
+
+```dart
+Future<User> create({@required String email, @required String password, String name = ''}) async {
+    final String path = '/users';
+
+    final Map<String, dynamic> params = {
+        'email': email,
+        'password': password,
+        'name': name,
+    };
+
+    final Map<String, String> headers = {
+        'content-type': 'application/json',
+    };
+
+    final res = client.call(HttpMethod.post, path: path, params: params, headers: headers);
+    return User.fromJson(res.data);
+}
+```
+
 ### Prior art
 
 [prior-art]: #prior-art
@@ -98,6 +163,7 @@ May popular SDKs for popular softwares, always return proper response objects in
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 <!-- Write your answer below. -->
+1. What to do with response objects that contain dynamic fields like documents, user prefs etc
 
 ### Future possibilities
 
