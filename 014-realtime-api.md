@@ -105,8 +105,8 @@ Possible protocols to take under future considiration:
 | files.[ID]                 | Any update/delete/create events to a given file where user has read access |
 | functions                  | Any execution for functions where user has read access       |
 | functions.[ID]             | Any execution event to a given function where user has read access |
-| functions.executions       | Any update to executions where user has read access          |
-| functions.executions.[ID]  | Any update to a given function execution where user has read access |
+| executions                 | Any update to executions where user has read access          |
+| executions.[ID]            | Any update to a given function execution where user has read access |
 
 ### Messages
 
@@ -181,7 +181,7 @@ On HTTP Handshakes, cookies are usually sent along, which we can use for authent
 
 #### JWT Authentication (in path / or in message)
 
-Using JWT authentication can be easier to implement and pass to the server and more secure as it is valid for 15 minutes.
+Using JWT authentication can be easier to implement and pass to the server.
 
 ### Logs
 
