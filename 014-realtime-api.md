@@ -114,9 +114,10 @@ The message from the server to the clients should be a JSON string and reflect t
 
 | Property  | Description                                                  |
 | --------- | ------------------------------------------------------------ |
-| event     | The name of the event equivalent to the subscribed to channel name. |
+| event     | The name of the event equivalent to the system event. |
+| channels  | An array of channels that can receive this message. |
 | timestamp | To ensure consistency across all client platforms and real-time technologies, the event timestamp is included. |
-| payload   | Payload contains the data equal to the response model.       |
+| payload   | Payload contains the data equal to the response model. |
 
 ### Subscriptions
 
