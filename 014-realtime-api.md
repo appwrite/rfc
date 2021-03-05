@@ -133,13 +133,12 @@ Or as SDK call in JavaScript:
 let sdk = new Appwrite();
 
 sdk
-    .setHostname('appwrite.test')
+    .setEndpoint('https://appwrite.test') // Will also guess the WebSocket Endpoint by replacing protocols
+    .setEndpointRealtime('wss://appwrite.test') // Optional: Realtime Endpoint
     .setProject('5df5acd0d48c2') // Your project ID
-    .setVersion('v1') // Optional and v1 by default
-    .setSecureProtocol(true) // Optional and true by default - will use https/wss or http/ws
 ;
 
-sdk.realtime.subscribe('account', response => {
+sdk.subscribe('account', response => {
   console.log(response); // Callback will be executed on account event.
 });
 
@@ -150,11 +149,13 @@ const documentsUnsubscribe = sdk.realtime.subscribe('documents.XXXXXX', response
 documentsUnsubscribe(); // the subscribe() method will return a method to unsubscribe, invalidate the callback and remove the channel
 ```
 
-As seen, the initialization of the client SDK changes a lot. Instead of specifying the WebSocket URI, we can work much more flexibly via the hostname and customize the to be used protocols in the future without another breaking change on the client SDKs.
+Setting the Endpoint will also guess the Realtime Endpoint by replacing the http/https Protocol with the WebSocket equivalent. Alternatively you can set the Realtime Endpoint explicitly.
 
 The client SDK will maintain a single connection and will maintain all the channels, if a channel is added or removed - a new connection will be established with given channels.
 
 ### Scalability
+
+The realtime container can easily be duplicated with Traefik load-balancing it.
 
 ### Performance
 
