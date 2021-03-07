@@ -225,27 +225,27 @@ CREATE TABLE IF NOT EXISTS `documents_[NAME]_authorization` (
 
 **Collections**
 
-POST /v1/database/collections (create collection)
-GET /v1/database/collections (list collections)
-GET /v1/database/collections/:id (get collection)
-PUT /v1/database/collections/:id (update collection)
-DELETE /v1/database/collections/:id (delete collection)
+* POST /v1/database/collections (create collection)
+* GET /v1/database/collections (list collections)
+* GET /v1/database/collections/:id (get collection)
+* PUT /v1/database/collections/:id (update collection)
+* DELETE /v1/database/collections/:id (delete collection)
 
 **Collection Attributes** (no delete)
 
-POST /v1/database/collections/:id/attributes (create attribute)
-GET /v1/database/collections/:id/attributes/:attribute (list attributes)
-GET /v1/database/collections/:id/attributes/:attribute (get attribute)
-DELETE /v1/database/collections/:id/attributes/:attribute (delete attribute)
+* POST /v1/database/collections/:id/attributes (create attribute)
+* GET /v1/database/collections/:id/attributes/:attribute (list attributes)
+* GET /v1/database/collections/:id/attributes/:attribute (get attribute)
+* DELETE /v1/database/collections/:id/attributes/:attribute (delete attribute)
 
 **Collection Indices/Indexes** (no delete)
 
-POST /v1/database/collections/:id/indexes (create index)
-GET /v1/database/collections/:id/indexes/:index (list indices)
-GET /v1/database/collections/:id/indexes/:index (get index)
-DELETE /v1/database/collections/:id/indexes/:index (delete index)
+* POST /v1/database/collections/:id/indexes (create index)
+* GET /v1/database/collections/:id/indexes/:index (list indices)
+* GET /v1/database/collections/:id/indexes/:index (get index)
+* DELETE /v1/database/collections/:id/indexes/:index (delete index)
 
-> Probably going to use index and indexes for naming conventions, as its is more consistent.
+> We'll probably going to use index and indexes for naming conventions, as its is more consistent.
 
 ### Database Worker
 
