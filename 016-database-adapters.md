@@ -141,27 +141,29 @@ Method for quering data:
 * Is Empty
 * Is Not Empty
 
-### Joins / Relationships
+##### Joins / Relationships
 
-## Paging
+#### Paging
 
-Each database adapter should support two methods for paging. The first method is the classic `Limit and Offset`. The second method is `After` paging, which allows better performance at a larger scale.
+Each database adapter should support two methods for paging. The first method is the classic `Limit and Offset`. The second method is `Limit and After` paging, which allows better performance at a larger scale.
 
-## Orders
+#### Orders
 
-Multi-column support, order type, use native types
+Support multi-column orders, multiple order type (ASC, DESC). We should leverage native casting for all types and avoid any manual casting of the data.
 
-## Features
+#### More Features
 
 > Each database collection should hold parallel tables (if needed) with row-level metadata, used to abstract features that are not enabled in all the adapters.
 
-### Row-level Security
+##### Row-level Security
 
-### GEO Queries
+Each database collection will hold metadata information containing all the read and write permissions data for each document in the collection. In SQL based adapters this data can be left joind using a dedicated table postfixed with the name `_permissions`. Row level security could be disabled when accessing the data using admin credentials for improved performance. Security credentials should be indexed by default on every new collection.
 
-### Free Search
+##### GEO Queries
 
-### Filters
+##### Free Search
+
+##### Filters
 
 Allow to apply custom filters on specific pre-chosen fields. Avaliable filters:
 
@@ -169,11 +171,11 @@ Allow to apply custom filters on specific pre-chosen fields. Avaliable filters:
 * JSON (might be redundent with object support)
 * Hashing (md5,bcrypt)
 
-## Caching
+##### Caching
 
 The library should support memory caching using internal or external memory devices for all read operations. Write operations should actively clean or update the cache.
 
-## Encoding
+##### Encoding
 
 All database adapters should support UTF-8 encoding and accept emoji characters.
 
@@ -259,16 +261,22 @@ CREATE TABLE IF NOT EXISTS `documents_[NAME]_authorization` (
 
 ### Documentation
 
+Below is a list of some of the main topics we should cover as part of the database documnetation. This is in addition to the auto-generated API spec.
+
+* Overview (concept, architecture)
 * Data Types
-* Operations
+* Permissions
+* Operations (queries + examples)
+* Attributes (rules) and indexes
 * Security
 * Benchmarks
 * Performance Tips
 * Known Limitations
 
-### Optimization Tools
+### Resources
 
-https://www.eversql.com/
+* SQL Optimization - https://www.eversql.com/
+* Function syntax parsing https://gist.github.com/lamberta/3768814
 
 ### Prior art
 
