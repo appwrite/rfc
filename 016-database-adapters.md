@@ -231,21 +231,29 @@ CREATE TABLE IF NOT EXISTS `documents_[NAME]_authorization` (
 * PUT /v1/database/collections/:id (update collection)
 * DELETE /v1/database/collections/:id (delete collection)
 
-**Collection Attributes** (no delete)
+**Collection Attributes** (no update)
 
 * POST /v1/database/collections/:id/attributes (create attribute)
 * GET /v1/database/collections/:id/attributes/:attribute (list attributes)
 * GET /v1/database/collections/:id/attributes/:attribute (get attribute)
 * DELETE /v1/database/collections/:id/attributes/:attribute (delete attribute)
 
-**Collection Indices/Indexes** (no delete)
+**Collection Indices/Indexes** (no update)
 
 * POST /v1/database/collections/:id/indexes (create index)
 * GET /v1/database/collections/:id/indexes/:index (list indices)
 * GET /v1/database/collections/:id/indexes/:index (get index)
 * DELETE /v1/database/collections/:id/indexes/:index (delete index)
 
-> We'll probably going to use index and indexes for naming conventions, as its is more consistent.
+**Collection Documents**
+
+* POST /v1/database/collections/:id/documents (create document)
+* GET /v1/database/collections/:id/documents/:document (list documents)
+* GET /v1/database/collections/:id/documents/:document (get document)
+* PUT /v1/database/collections/:id/documents/:document (update document)
+* DELETE /v1/database/collections/:id/documents/:document (delete document)
+
+> We'll use index and indexes for naming conventions, as its is more consistent than indexs vs indices.
 
 ### Database Worker
 
