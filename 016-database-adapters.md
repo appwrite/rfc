@@ -4,7 +4,10 @@
 - Start Date: 07-03-2021
 - Target Date: Unknown
 - Appwrite Issue:
-  [Is this RFC inspired by an issue in appwrite](https://github.com/appwrite/appwrite/issues/)
+  [New database rule types #395](https://github.com/appwrite/appwrite/issues/395)
+  [Optimize default DB indices #506](https://github.com/appwrite/appwrite/issues/506)
+  [Add Fields param in ListDocument and GetDocument APIs #499](https://github.com/appwrite/appwrite/issues/499)
+  [MongoDB in Appwrite #909](https://github.com/appwrite/appwrite/issues/909)
 
 ## Summary
 
