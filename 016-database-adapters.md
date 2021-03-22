@@ -4,7 +4,10 @@
 - Start Date: 07-03-2021
 - Target Date: Unknown
 - Appwrite Issue:
-  [Is this RFC inspired by an issue in appwrite](https://github.com/appwrite/appwrite/issues/)
+  [New database rule types #395](https://github.com/appwrite/appwrite/issues/395)
+  [Optimize default DB indices #506](https://github.com/appwrite/appwrite/issues/506)
+  [Add Fields param in ListDocument and GetDocument APIs #499](https://github.com/appwrite/appwrite/issues/499)
+  [MongoDB in Appwrite #909](https://github.com/appwrite/appwrite/issues/909)
 
 ## Summary
 
@@ -12,7 +15,7 @@
 
 <!-- Brief explanation of the proposed contribution. Write your answer below. -->
 
-Appwrite database don't allow a built-in way to customize your DB indices, or under the hood adapters. The idea in this RFC is to make both options available directly from the database dashboard.
+Appwrite's database doesn't have a built-in way to customize DB indexes or under the hood adapters. The idea in this RFC is to make both options available directly from the database dashboard.
 
 ## Problem Statement (Step 1)
 
@@ -22,15 +25,15 @@ Appwrite database don't allow a built-in way to customize your DB indices, or un
 
 <!-- Write your answer below. -->
 
-The current implementation of the Appwrite database is very good and quick to get started easily, but doesn't allow enough flexibilty when your data set grow or when you need to implement more advanced use-cases.
+The current implementation of the Appwrite database is very good and quick to get started easily, but doesn't allow enough flexibility for when your data set grows or when you need to implement more advanced use-cases.
 
 **What is the context or background in which this problem exists?**
 
-Larger data set and more complex projects, requrie more flexibility and transparency regarding the database inner staructure and performance capabilities.
+Larger data set and more complex projects, require more flexibility and transparency regarding the database inner structure and performance capabilities.
 
 **Once the proposal is implemented, how will the system change?**
 
-We will implement simplified data structures that could be manipulated from both the Appwrite dashboard and directly on from the relevant connected DB. We will also add new endpoint to easily add, delete, and view collection rules and indices.
+We will implement simplified data structures that could be manipulated from both the Appwrite dashboard and directly from the relevant connected DB. We will also add new endpoints to easily add, delete, and view collection rules and indexes.
 
 <!-- Write your answer below. -->
 
@@ -93,7 +96,7 @@ This library will support storing and fetching of all common JSON simple and com
 
 #### Persistency
 
-Each database adapter should support the following action for fast storing and retrieval of collections of documents.
+Each database adapter should support the following actions for fast storing and retrieval of collections of documents.
 
 **Databases** (Schemas for SQL)
 * create
@@ -107,7 +110,7 @@ Each database adapter should support the following action for fast storing and r
 * createAttribute(string $collection, string $name, string $type)
 * deleteAttribute(string $collection, string $name)
 
-**Indices** (Table indices for SQL)
+**Indexes** (Table indexes for SQL)
 * createIndex(string $collection, string $name, string $type)
 * deleteIndex(string $collection, string $name, string $type)
 
@@ -119,9 +122,9 @@ Each database adapter should support the following action for fast storing and r
 
 #### Queries
 
-Each database adapter should allow querying simple and advanced queries in consideration of underline limitations.
+Each database adapter should allow for simple and advanced queries in consideration of underlying limitations.
 
-Method for quering data:
+Method for querying data:
 * find(string $collection, $filters)
 * findFirst(string $collection, $filters) (extending `find`)
 * findLast(string $collection, $filters) (extending `find`)
@@ -134,8 +137,8 @@ Method for quering data:
 * Less or equal (<=)
 * Bigger Than (>)
 * Bigger or equal (>=)
-* Containes / In
-* Not Containes / Not In
+* Contains / In
+* Not Contains / Not In
 * Is Null
 * Is Not Null
 * Is Empty
@@ -145,7 +148,7 @@ Method for quering data:
 
 #### Paging
 
-Each database adapter should support two methods for paging. The first method is the classic `Limit and Offset`. The second method is `Limit and After` paging, which allows better performance at a larger scale.
+Each database adapter should support two methods for paging. The first method is the classic `Limit and Offset`. The second method is `Limit and After` paging, which allows for better performance at a larger scale.
 
 #### Orders
 
@@ -157,7 +160,7 @@ Support multi-column orders, multiple order type (ASC, DESC). We should leverage
 
 ##### Row-level Security
 
-Each database collection will hold metadata information containing all the read and write permissions data for each document in the collection. In SQL based adapters this data can be left joind using a dedicated table postfixed with the name `_permissions`. Row level security could be disabled when accessing the data using admin credentials for improved performance. Security credentials should be indexed by default on every new collection.
+Each database collection will hold metadata information containing all the read and write permissions data for each document in the collection. In SQL based adapters this data can be left joined using a dedicated table postfixed with the name `_permissions`. Row level security could be disabled when accessing the data using admin credentials for improved performance. Security credentials should be indexed by default on every new collection.
 
 ##### GEO Queries
 
@@ -165,10 +168,10 @@ Each database collection will hold metadata information containing all the read 
 
 ##### Filters
 
-Allow to apply custom filters on specific pre-chosen fields. Avaliable filters:
+Allow to apply custom filters on specific pre-chosen fields. Available filters:
 
 * Encryption
-* JSON (might be redundent with object support)
+* JSON (might be redundant with object support)
 * Hashing (md5,bcrypt)
 
 ##### Caching
@@ -240,10 +243,10 @@ CREATE TABLE IF NOT EXISTS `documents_[NAME]_authorization` (
 * GET /v1/database/collections/:id/attributes/:attribute (get attribute)
 * DELETE /v1/database/collections/:id/attributes/:attribute (delete attribute)
 
-**Collection Indices/Indexes** (no update)
+**Collection Indexes** (no update)
 
 * POST /v1/database/collections/:id/indexes (create index)
-* GET /v1/database/collections/:id/indexes/:index (list indices)
+* GET /v1/database/collections/:id/indexes/:index (list indexes)
 * GET /v1/database/collections/:id/indexes/:index (get index)
 * DELETE /v1/database/collections/:id/indexes/:index (delete index)
 
@@ -261,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `documents_[NAME]_authorization` (
 
 ### Documentation
 
-Below is a list of some of the main topics we should cover as part of the database documnetation. This is in addition to the auto-generated API spec.
+Below is a list of some of the main topics we should cover as part of the database documentation. This is in addition to the auto-generated API spec.
 
 * Overview (concept, architecture)
 * Data Types
@@ -313,7 +316,7 @@ Write your answer below.
 
 #### Query Syntax for Filter
 
-Our current query syntax is limted and don't allows us to detect given value types, or to use operators like `OR` and `AND`.
+Our current query syntax is limited and doesn't allow us to detect given value types, or to use operators like `OR` and `AND`.
 
 **Current**:
 
