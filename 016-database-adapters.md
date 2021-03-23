@@ -239,21 +239,21 @@ CREATE TABLE IF NOT EXISTS `documents_[NAME]_authorization` (
 **Collection Attributes** (no update)
 
 * POST /v1/database/collections/:id/attributes (create attribute)
-* GET /v1/database/collections/:id/attributes/:attribute (list attributes)
+* GET /v1/database/collections/:id/attributes (list attributes)
 * GET /v1/database/collections/:id/attributes/:attribute (get attribute)
 * DELETE /v1/database/collections/:id/attributes/:attribute (delete attribute)
 
 **Collection Indexes** (no update)
 
 * POST /v1/database/collections/:id/indexes (create index)
-* GET /v1/database/collections/:id/indexes/:index (list indexes)
+* GET /v1/database/collections/:id/indexes (list indexes)
 * GET /v1/database/collections/:id/indexes/:index (get index)
 * DELETE /v1/database/collections/:id/indexes/:index (delete index)
 
 **Collection Documents**
 
 * POST /v1/database/collections/:id/documents (create document)
-* GET /v1/database/collections/:id/documents/:document (list documents)
+* GET /v1/database/collections/:id/documents (list documents)
 * GET /v1/database/collections/:id/documents/:document (get document)
 * PUT /v1/database/collections/:id/documents/:document (update document)
 * DELETE /v1/database/collections/:id/documents/:document (delete document)
