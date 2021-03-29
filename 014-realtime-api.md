@@ -103,10 +103,9 @@ Possible protocols to take under future considiration:
 | documents.[ID]             | Any update/delete/create events to a given document where user has read access |
 | files                      | Any update/delete/create events to file where user has read access |
 | files.[ID]                 | Any update/delete/create events to a given file where user has read access |
-| functions                  | Any execution for functions where user has read access       |
-| functions.[ID]             | Any execution event to a given function where user has read access |
 | executions                 | Any update to executions where user has read access          |
 | executions.[ID]            | Any update to a given function execution where user has read access |
+| functions.[ID]             | Any execution event to a given function where user has read access |
 
 ### Messages
 
