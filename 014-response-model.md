@@ -60,12 +60,15 @@ Write your answer below.
 
 SDK templates should now should also consider the response object and response schema defined in the Swagger specification. We need to get those schemas and response definitions from Swagger to SDK templates and perpare a proper response model.
 
-1. Define models: Define model of all available response objects. From Schema, we should be able to get list of all the response objects, for each response object, in each SDK we should create models for each response objects.
-2. Return object instead of JSON: Once we have all the models, for each API end points based on the response definitions in the Swagger, we should convert the JSON to corresponding object and return.
+## 1. Define models
+Define model of all available response objects. From Swagger spec, we can get the list of all the available response objects in `definitions` object where each response object is `key=>value` paired where key is the name of the response object and value the definition of all the fields. For each of these response object, in each SDK we should create models.
+
+## 2. Return object instead of JSON
+Once we have all the models, for each API end points based on the response definitions (available in `responses` object under `schema`) in the Swagger, we should convert the JSON to corresponding object and return.
 
 For each SDK the process of converting JSON to respective model might be different, so we should work accordingly.
 
-Below we will see an example from Dart/Flutter SDK. Let's look at create user endpoint. According to Swagger definitions, it returns User, so first we create user model as follows.
+Below we will see an example from Dart/Flutter SDK. Let's look at create user endpoint. According to Swagger definitions, it returns User on successful request, so first we create user model as follows.
 
 ```dart
 class User {
@@ -125,7 +128,7 @@ Future<User> create({@required String email, @required String password, String n
         'content-type': 'application/json',
     };
 
-    final res = client.call(HttpMethod.post, path: path, params: params, headers: headers);
+    final res = await client.call(HttpMethod.post, path: path, params: params, headers: headers);
     return User.fromJson(res.data);
 }
 ```
@@ -167,7 +170,8 @@ May popular SDKs for popular softwares, always return proper response objects in
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 <!-- Write your answer below. -->
-1. What to do with response objects that contain dynamic fields like documents, user prefs etc
+1. What to do with response objects that contain dynamic fields like documents (defined as any in the swagger spec), user prefs etc
+2. Handling serialization and dserialization in each SDKs by keeping things similar between SDKs as well as keeping the native feel of the SDKs as it is.
 
 ### Future possibilities
 
@@ -176,3 +180,7 @@ May popular SDKs for popular softwares, always return proper response objects in
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
+
+1. how to handle object properties
+2. Display response objects on the appwrite docs
+3. Fromjson/tojson methods (serialization/dserialization)
