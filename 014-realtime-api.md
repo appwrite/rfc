@@ -107,7 +107,7 @@ Possible protocols to take under future considiration:
 | executions.[ID]            | Any update to a given function execution where user has read access |
 | functions.[ID]             | Any execution event to a given function where user has read access |
 
-### Messages
+#### Message
 
 The message from the server to the clients should be a JSON string and reflect the following object:
 
@@ -117,6 +117,15 @@ The message from the server to the clients should be a JSON string and reflect t
 | channels  | An array of channels that can receive this message. |
 | timestamp | To ensure consistency across all client platforms and real-time technologies, the event timestamp is included. |
 | payload   | Payload contains the data equal to the response model. |
+
+#### Error Message
+
+This will be sent to the user if there was a invalid connection established, for eample providing a wrong project id:
+
+| Property | Description                                                  |
+| -------- | ------------------------------------------------------------ |
+| code     | A code that imitate the [Websocket close codes](https://github.com/Luka967/websocket-close-codes). |
+| message  | Related error message. |
 
 ### Subscriptions
 
@@ -173,7 +182,7 @@ On each new connection, we should validate that the client origin is valid simil
 
 #### Limit payload size
 
-Since we will not support 2-way communication now - we shouldn't allow/handle receiving messages at all for now. Which makes the payload size not a concern for now.
+Since we will not support 2-way communication now - we shouldn't allow/handle receiving messages at all for now. Which makes the payload size not a concern for now. 
 
 #### Cookie Authentication
 
@@ -198,7 +207,6 @@ Debug mode logs:
 - Event received (stdout - using `Console::log`)
 - Message sent (stdout - using `Console::log`)
 
-### Error Handling
 ### Prior art
 
 [prior-art]: #prior-art
