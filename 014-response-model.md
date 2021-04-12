@@ -133,6 +133,20 @@ Future<User> create({@required String email, @required String password, String n
 }
 ```
 
+For things loke Documents, Permissions we create base Models. For example
+
+```dart
+abstract class Document {
+    String id;
+}
+
+abstract class Permissions {
+    List<String> read;
+    List<String> write;
+}
+
+```
+
 ### Prior art
 
 [prior-art]: #prior-art
@@ -170,8 +184,11 @@ May popular SDKs for popular softwares, always return proper response objects in
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 <!-- Write your answer below. -->
-1. What to do with response objects that contain dynamic fields like documents (defined as any in the swagger spec), user prefs etc
-2. Handling serialization and dserialization in each SDKs by keeping things similar between SDKs as well as keeping the native feel of the SDKs as it is.
+1. Handling serialization and dserialization in each SDKs by keeping things similar between SDKs as well as keeping the native feel of the SDKs as it is.
+2. Properly displaying the response Objects for each SDKs on the Docs
+3. For base models, whether to use `interface` or `abstract class`. Interface would force user to add Appwrite specific properties.
+4. Do we create a Base response model that we return from every methods instead of returning the object itself. For example the user create method above instead of returning `Future<User>` would return `Future<Response<User>>`. This will make it similar accross services.
+5. What do we do with conflicting model names as `Locale` model and `Locale` service would conflict. Do we define all models as `AppwriteLocale`, `AppwriteUser`. Which I think is better approach. In Flutter it was conflicting as all is defined in the same library. We could try to separate the namespace. But would it be possible for every SDK and would it be simple enough?
 
 ### Future possibilities
 
@@ -180,7 +197,3 @@ May popular SDKs for popular softwares, always return proper response objects in
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
-
-1. how to handle object properties
-2. Display response objects on the appwrite docs
-3. Fromjson/tojson methods (serialization/dserialization)
