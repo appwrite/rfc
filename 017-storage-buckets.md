@@ -50,7 +50,7 @@ Ensure that you include examples, code-snippets etc. to allow the community to u
 Write your answer below.
 
 -->
-You can use buckets to organize your storage and control access to your files, but unlike directories and folders, you cannot nest buckets.
+You can use buckets to organize your storage and control access to your files, but unlike directories and folders (which are not part of the Storage API anyway), you cannot nest buckets.
 
 In the Storage Service, Buckets are going to act like a folder that will add logic to how the API responds. A Bucket has following configurations available:
 - **Enabled**
