@@ -50,11 +50,13 @@ Ensure that you include examples, code-snippets etc. to allow the community to u
 Write your answer below.
 
 -->
+You can use buckets to organize your storage and control access to your files, but unlike directories and folders, you cannot nest buckets.
+
 In the Storage Service, Buckets are going to act like a folder that will add logic to how the API responds. A Bucket has following configurations available:
 - **Enabled**
   - This setting decides if a Bucket is enabled and is accessible.
 - **Adapter**
-  - This decides to what Storage Adapter the files will be uploaded to. Possible options are Local, S3, DigitaOcean Spaces, etc.
+  - This decides to what Storage Adapter the files will be uploaded to. Possible options are Local, S3, DigitaOcean Spaces, etc. This is not allowed to be changed after a file has been added to the bucket.
 - **Maximum File Size Limit**
   - This setting decides the maximum single file size that can be uploaded.
 - **Maximum Number of Files**
@@ -62,15 +64,15 @@ In the Storage Service, Buckets are going to act like a folder that will add log
 - **Accepted File Extensions**
   - This setting decides what file extensions can be uploaded.
 - **Encryption**
-  - This setting decides if files are encrypted. This will come into play, when encrypting large files causes too much load.
+  - This setting decides if files are encrypted. This will come into play, when encrypting large files causes too much load. This is not allowed to be changed after a file has been added to the bucket.
 - **Virus Scan**
   - This setting decides if files are scanned by ClamAV after upload. Same reasoning ass **Encryption**.
 - **TTL**
-  - This setting decides how long a file is supposed to alive. Files are going to be deleted automatically.
+  - This setting decides how long a file is supposed to alive. Files are going to be deleted automatically. This is not allowed to be changed after a file has been added to the bucket.
 - **Permission**
   - This setting decides what permission role is allowed to upload files to the bucket. Read and Write permissions will still exist for each file and be the source of permission check.
 
-A Bucket will have following Model:
+A Bucket will have following Model in our internal Database:
 ```typescript
 {
   $id: string;
@@ -202,7 +204,7 @@ Write your answer below.
 
 To prevent a huge breaking change in the Storage Services API's - we are allowing users to use the current Storage implementation as well. Now there is the problem of offering a consistent API pattern across the services.
 
-Let's take a look at the `GET: /v1/storage/files/{fileId}` endpoint. This will result into retrieving a file from the current Storage service. Now if file is inside a Bucket - the endpoint would have to look like `GET: /v1/storage/files/{bucketId}/{fileId}`. This becomes problematic, since right now it is not possible to allow optional Parameters in the Path with the same Controller/SDK Method and would require refactoring in all SDKs, Utopia and Appwrite.
+Let's take a look at the `GET: /v1/storage/files/{fileId}` endpoint. This will result into retrieving a file from the current Storage service. Now if a file is inside a Bucket - the endpoint would have to look like `GET: /v1/storage/files/{bucketId}/{fileId}`. This becomes problematic, since right now it is not possible to allow optional Parameters in the Path with the same Controller/SDK Method and would require refactoring in all SDKs, Utopia and Appwrite.
 
 Possible solutions can be the following:
 
