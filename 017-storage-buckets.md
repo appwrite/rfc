@@ -193,6 +193,9 @@ whether they are brand new or if it is an adaptation from other software.
 
 Write your answer below.
 -->
+- [About Storage Buckets](https://docs.uipath.com/orchestrator/docs/about-storage-buckets)
+- [Google Cloud Storage](https://cloud.google.com/storage/docs/json_api/v1/buckets)
+- [Google Cloud Storage - Key Terms](https://cloud.google.com/storage/docs/key-terms)
 
 ### Unresolved questions
 
@@ -222,4 +225,6 @@ Possible solutions can be the following:
 
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
-<!-- Write your answer below. -->
+- The ability to switch to a different Adapter with existing files - meaning all files will be transfered.
+- The ability to move files between Buckets
+- The ability to change the encryption setting with existing files - meaning all files can be converted.
