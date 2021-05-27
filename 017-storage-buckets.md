@@ -77,7 +77,7 @@ A Bucket will have following Model:
   $write: string[];
   name: string;
   enabled: boolean;
-  adapter: 'local'|'s3'
+  adapter: 'local'|'s3'|'etc'
   encrypted: boolean;
   antivirus: boolean;
   adapterConfig?: object;
@@ -157,7 +157,14 @@ Since the first release of Buckets will not introduce a breaking change - the Bu
 
 #### `POST: /v1/storage/files`
 
-This endpoint creates a new file. This endpoint will have a 4th optional argument added called `bucket`. 
+This endpoint creates a new file. This endpoint will have a 4th optional argument added called `bucket`.
+
+#### `GET: /v1/storage/files/{fileId}`
+#### `GET: /v1/storage/files/{fileId}/preview`
+#### `GET: /v1/storage/files/{fileId}/download`
+#### `GET: /v1/storage/files/{fileId}/view`
+
+These endpoints gets a file by its unique ID. These endpoints will a optional argument added called `bucket`.
 
 
 ### Prior art
@@ -191,7 +198,19 @@ Write your answer below.
 
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
-<!-- Write your answer below. -->
+#### Prevent Breaking Changes
+
+To prevent a huge breaking change in the Storage Services API's - we are allowing users to use the current Storage implementation as well. Now there is the problem of offering a consistent API pattern across the services.
+
+Let's take a look at the `GET: /v1/storage/files/{fileId}` endpoint. This will result into retrieving a file from the current Storage service. Now if file is inside a Bucket - the endpoint would have to look like `GET: /v1/storage/files/{bucketId}/{fileId}`. This becomes problematic, since right now it is not possible to allow optional Parameters in the Path with the same Controller/SDK Method and would require refactoring in all SDKs, Utopia and Appwrite.
+
+Possible solutions can be the following:
+
+- Adding a keyword passing to the Bucket parameter that falls back to the default Storage `GET: /v1/storage/files/default/{fileId}`.
+  - This can be done without introducing any breaking changes to the SDK usage
+- Allowing to do calls to `GET: /v1/storage/files/YYYY/XXXX` and `GET: /v1/storage/files//XXXX`
+  - Not a 100% sure this is compliant with any REST Standards
+- Having 2 separate endpoints for each, the default Storage and Storage Buckets, with its own SDK methods
 
 ### Future possibilities
 
