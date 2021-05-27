@@ -208,6 +208,8 @@ Let's take a look at the `GET: /v1/storage/files/{fileId}` endpoint. This will r
 
 Possible solutions can be the following:
 
+- Add the targeted Bucket as a query param to `GET: /v1/storage/files/default/{fileId}?bucket={bucketId}`.
+  - This breaks our API Standards - but could be a good tradeoff in terms of the migration for develoeprs, since there will be no breaking change.
 - Adding a keyword passing to the Bucket parameter that falls back to the default Storage `GET: /v1/storage/files/default/{fileId}`.
   - This can be done without introducing any breaking changes to the SDK usage
 - Allowing to do calls to `GET: /v1/storage/files/YYYY/XXXX` and `GET: /v1/storage/files//XXXX`
