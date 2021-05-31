@@ -82,7 +82,6 @@ A Bucket will have following Model in our internal Database:
   adapter: 'local'|'s3'|'etc'
   encrypted: boolean;
   antivirus: boolean;
-  adapterConfig?: object;
   ttl?: number;
   maximumFiles?: number;
   maximumFileSize?: number;
@@ -90,11 +89,13 @@ A Bucket will have following Model in our internal Database:
 }
 ```
 
+In terms of a storage adapter except `Local`, additional values will be present like configurations for S3.
+
 ### New Endpoints
 
 In this section I will explain all necessary endpoints for integratting Storge Buckets.
 
-#### `GET: /v1/storage/bucket/`
+#### `GET: /v1/storage/buckets/`
 
 This endpoint lists all Buckets. *Server*
 
@@ -103,11 +104,11 @@ Payload:
 - **limit = 25** Maximum number of Buckets to return.
 - **offset = 0** Offset value.
 
-#### `GET: /v1/storage/bucket/{bucketId}`
+#### `GET: /v1/storage/buckets/{bucketId}`
 
 This endpoint returns a single Bucket by its unique ID. *Server*
 
-#### `GET: /v1/storage/bucket/{bucketId}/files`
+#### `GET: /v1/storage/buckets/{bucketId}/files`
 
 This endpoint returns a list of all Files in a specific Bucket. *Server & Client*
 
@@ -117,7 +118,7 @@ Payload:
 - **offset = 0** Offset value.
 - **search = ''** Search query.
 
-#### `POST: /v1/storage/bucket`
+#### `POST: /v1/storage/buckets/{adapter}`
 
 This endpoint creates a new Bucket. *Server*
 
@@ -126,14 +127,22 @@ Payload:
 - **write** An array of strings with write permissions.
 - **encrypted = true** Enable Encryption.
 - **antivirus = true** Enable Anti Virus.
-- **adapter = 'local'** Adapter to use.
-- **adapterConfig = null** Adapter Config.
-- **ttl = null** TTL for files.
+- **ttl = false** Enables TTL for files.
 - **maximumFiles = null** Maximum amount of files.
 - **maximumFileSize = null** Maximum file size.
 - **allowedFileExtensions = null** Allowed File extensions.
 
-#### `PUT: /v1/storage/bucket/{bucketId}`
+Additional Payload for **Local** (`/v1/storage/buckets/local`):
+- *none*
+
+Additional Payload for **S3** (`/v1/storage/buckets/s3`):
+- **adapterAccessKeyId** S3 Access Key ID.
+- **adapterSecretKey** S3 Secret Key.
+- **adapterBucket** S3 Bucket Name.
+- **adapterRegion** S3 Region.
+- **adapterAcl** S3 Access Control List.
+
+#### `PUT: /v1/storage/buckets/{bucketId}`
 
 This endpoint updates a Bucket by its unique ID. *Server*
 
@@ -144,29 +153,30 @@ Payload:
 - **antivirus = null** Enable Anti Virus.
 - **adapter = null** Adapter to use.
 - **adapterConfig = null** Adapter Config.
-- **ttl = null** TTL for files.
+- **ttl = null** TTL in seconds for files created.
 - **maximumFiles = null** Maximum amount of files.
 - **maximumFileSize = null** Maximum file size.
 - **allowedFileExtensions = null** Allowed File extensions.
 
-#### `DELETE: /v1/storage/bucket/{bucketId}`
+#### `DELETE: /v1/storage/buckets/{bucketId}`
 
 This endpoint deletes a Bucket by its unique ID. *Server*
 
-### Changes to existing Endpoints
+> This endpoint should trigger a background delete of all files in the bucket from both db and storage.
 
-Since the first release of Buckets will not introduce a breaking change - the Buckets will be implement aside the current Storage service. Meaning the Buckets will be an additional feature to the existing API.
+#### `POST: /v1/storage/buckets/{bucketId}/files`
 
-#### `POST: /v1/storage/files`
+This endpoint creates a new file. This endpoints will be equal to the already existing one - but will act in a Buckets scope.
 
-This endpoint creates a new file. This endpoint will have a 4th optional argument added called `bucket`.
+Additional Payload:
+- **ttl = null** This parameter will be the TTL of the file in seconds.
 
-#### `GET: /v1/storage/files/{fileId}`
-#### `GET: /v1/storage/files/{fileId}/preview`
-#### `GET: /v1/storage/files/{fileId}/download`
-#### `GET: /v1/storage/files/{fileId}/view`
+#### `GET: /v1/storage/buckets/{bucketId}/files/{fileId}`
+#### `GET: /v1/storage/buckets/{bucketId}/files/{fileId}/preview`
+#### `GET: /v1/storage/buckets/{bucketId}/files/{fileId}/download`
+#### `GET: /v1/storage/buckets/{bucketId}/files/{fileId}/view`
 
-These endpoints gets a file by its unique ID. These endpoints will a optional argument added called `bucket`.
+These endpoints gets a file by its unique ID. These endpoints will be equal to the already existing ones - but will act in a Buckets scope.
 
 
 ### Prior art
@@ -217,7 +227,7 @@ Possible solutions can be the following:
   - This can be done without introducing any breaking changes to the SDK usage
 - Allowing to do calls to `GET: /v1/storage/files/YYYY/XXXX` and `GET: /v1/storage/files//XXXX`
   - Not a 100% sure this is compliant with any REST Standards
-- Having 2 separate endpoints for each, the default Storage and Storage Buckets, with its own SDK methods
+- Having 2 separate endpoints for each, the default Storage and Storage Buckets, with its own SDK methods. **This is the currently implemented solution for this RFC**
 
 ### Future possibilities
 
