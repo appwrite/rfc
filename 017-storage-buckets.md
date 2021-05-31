@@ -66,7 +66,7 @@ In the Storage Service, Buckets are going to act like a folder that will add log
 - **Encryption**
   - This setting decides if files are encrypted. This will come into play, when encrypting large files causes too much load. This is not allowed to be changed after a file has been added to the bucket.
 - **Virus Scan**
-  - This setting decides if files are scanned by ClamAV after upload. Same reasoning ass **Encryption**.
+  - This setting decides if files are scanned by ClamAV after upload. Same reasoning as **Encryption**.
 - **TTL**
   - This setting decides how long a file is supposed to alive. Files are going to be deleted automatically. This is not allowed to be changed after a file has been added to the bucket.
 - **Permission**
