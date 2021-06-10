@@ -128,9 +128,9 @@ Payload:
 - **encrypted = true** Enable Encryption.
 - **antivirus = true** Enable Anti Virus.
 - **ttl = false** Enables TTL for files.
-- **maximumFiles = null** Maximum amount of files.
-- **maximumFileSize = null** Maximum file size.
-- **allowedFileExtensions = null** Allowed File extensions.
+- **maxFiles = null** Maximum amount of files.
+- **maxFileSize = null** Maximum file size.
+- **fileExtensions = null** Allowed File extensions. Leave empty to allow any extension.
 
 Additional Payload for **Local** (`/v1/storage/buckets/local`):
 - *none*
