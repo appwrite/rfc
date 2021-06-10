@@ -136,11 +136,11 @@ Additional Payload for **Local** (`/v1/storage/buckets/local`):
 - *none*
 
 Additional Payload for **S3** (`/v1/storage/buckets/s3`):
-- **adapterAccessKeyId** S3 Access Key ID.
-- **adapterSecretKey** S3 Secret Key.
-- **adapterBucket** S3 Bucket Name.
-- **adapterRegion** S3 Region.
-- **adapterAcl** S3 Access Control List.
+- **accessKeyId** S3 Access Key ID.
+- **secretKey** S3 Secret Key.
+- **bucket** S3 Bucket Name.
+- **region** S3 Region.
+- **acl** S3 Access Control List.
 
 #### `PUT: /v1/storage/buckets/{bucketId}`
 
