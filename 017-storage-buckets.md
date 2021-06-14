@@ -178,6 +178,11 @@ Additional Payload:
 
 These endpoints gets a file by its unique ID. These endpoints will be equal to the already existing ones - but will act in a Buckets scope.
 
+### Initial implementation
+
+The first implementation will not contain following features:
+- TTL
+- Maximum Number of files
 
 ### Prior art
 
