@@ -62,7 +62,7 @@ Resources that can have Custom IDs
 - Tasks
 - Webhooks
 
-The create resource endpoints for above resources will have an optional **id** parameter where users can send their custom id following the guidelines for validation. In every endpont, if the **id** parameter is empty, Appwrite will still generate the ids as it is already doing.
+The create resource endpoints for above resources will have a first required **id** parameter where users can send their custom id following the guidelines for validation. In every endpont, if the **id** parameter is received empty (required for backward compatibility with existing SDKs) or pre defined string, Appwrite will still generate the ids as it is already doing.
 
 We can use the existing key validator to validate the custom id as well.
 
@@ -119,7 +119,7 @@ How to make SDKs look pretty when people don’t want custom **id** and want App
 
 #### Backward Compabilities
 
-As **id** being an optional parameter, existing SDKs and apps should work as they are without any issues generating custom ids.
+Even though **id** will be a required parameter, existing SDKs and apps should work as they are without any issues generating custom ids.
 
 ### Future possibilities
 
