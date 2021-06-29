@@ -73,12 +73,6 @@ We can use the existing key validator to validate the custom id as well.
 - Can contain `_` but not at the begining of the id
 - Cannot contain any other special characters
 
-### Initial implementation
-
-The first implementation will not contain following features:
-- TTL
-- Maximum Number of files
-
 ### Prior art
 
 [prior-art]: #prior-art
