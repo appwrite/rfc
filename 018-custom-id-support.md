@@ -68,7 +68,7 @@ We can use the existing key validator to validate the custom id as well.
 
 ### Some guidelines for custom ids
 
-- Can be at most 32 characters
+- Can be at most 36 characters
 - Can be Alphanumeric
 - Can contain `_` but not at the begining of the id
 - Cannot contain any other special characters
@@ -107,7 +107,7 @@ Projects and Users being sensitive may be we can exclude them with custom ids.
 
 #### SDKs
 How to make SDKs look pretty when people don’t want custom **id** and want Appwrite to generate 
-- We could pass predefined String "uid()" -> `database.createCollection("uid()", "Avatars")`
+- We could pass predefined String "uid()" or "unique()" -> `database.createCollection("uid()", "Avatars")` or `database.createCollection("unique()", "Avatars")`
 - We could pass empty string ->  `database.createCollection("", "Movies")`
 - We could create a separate class -> `database.createCollection(new Uid(), "Movies")` and if want to pass custom id  it could be `database.createCollection(new Uid("movies"), "Movies")`
 
