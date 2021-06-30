@@ -1,4 +1,4 @@
-# Cross System Realtime API <!-- What do you want to call your `awesome_feature`? -->
+# Cross System Realtime API
 
 - Implementation Owner: @eldadfux @TorstenDittmann
 - Start Date: 21-02-2021
@@ -40,7 +40,7 @@ Allowing new use-cases for Appwrite, and giving more flexibily for end-developer
 
 <!-- Write your answer below. -->
 
-We will intorduce a new server entrypoint, allowing any end-platform to connect and subscrive for Appwrite system event in realtime.
+We will intorduce a new server entrypoint, allowing any end-platform to connect and subscribe for Appwrite system events in realtime. Likewise, a new service will be provided in the client SDKs, which will allow developers to access these endpoints in a user-friendly way.
 
 <!-- Please avoid discussing your proposed solution. -->
 
@@ -67,6 +67,7 @@ Ensure that you include examples, code-snippets etc. to allow the community to u
 Write your answer below.
 
 -->
+
 ### Architecture
 
 We will implement the realtime API, using a new entrypoint for the Appwrite main container as demostrated at our POC branch. The new entrypoint will be called `realtime` and will server as the starting script for the new `appwrite-realtime` container.
@@ -90,10 +91,79 @@ Possible protocols to take under future considiration:
 - SSE support: https://github.com/hhxsv5/php-sse
 - Socket.io support: https://github.com/shuixn/socket.io-swoole-server
 
-### Channels and Messages
+### Channels
 
+| Channel                    | Description                                                  |
+| -------------------------- | ------------------------------------------------------------ |
+| account                    | All account related events (session create, name update...)  |
+| collections                | Any update/delete/create events for collections where user has read access |
+| collections.[ID]           | Any update/delete/create events to a given collection where user has read access |
+| collections.[ID].documents | Any update/delete/create events to any document in a given collection where user has read access |
+| documents                  | Any update/delete/create events to documents where user has read access |
+| documents.[ID]             | Any update/delete/create events to a given document where user has read access |
+| files                      | Any update/delete/create events to file where user has read access |
+| files.[ID]                 | Any update/delete/create events to a given file where user has read access |
+| executions                 | Any update to executions where user has read access          |
+| executions.[ID]            | Any update to a given function execution where user has read access |
+| functions.[ID]             | Any execution event to a given function where user has read access |
+
+#### Message
+
+The message from the server to the clients should be a JSON string and reflect the following object:
+
+| Property  | Description                                                  |
+| --------- | ------------------------------------------------------------ |
+| event     | The name of the event equivalent to the system event. |
+| channels  | An array of channels that can receive this message. |
+| timestamp | To ensure consistency across all client platforms and real-time technologies, the event timestamp is included. |
+| payload   | Payload contains the data equal to the response model. |
+
+#### Error Message
+
+This will be sent to the user if there was a invalid connection established, for eample providing a wrong project id:
+
+| Property | Description                                                  |
+| -------- | ------------------------------------------------------------ |
+| code     | A code that imitate the [Websocket close codes](https://github.com/Luka967/websocket-close-codes). |
+| message  | Related error message. |
+
+### Subscriptions
+
+#### Websocket
+
+Subscriptions can be bound to channels and are passed as query parameters and part of the websocket URL. An example looks like this:
+
+`wss://appwrite.test/v1/realtime?project=XXXXXX&channels[]=account&channels=documents.XXXXXX`
+
+Or as SDK call in JavaScript:
+
+```js
+let sdk = new Appwrite();
+
+sdk
+    .setEndpoint('https://appwrite.test') // Will also guess the WebSocket Endpoint by replacing protocols
+    .setEndpointRealtime('wss://appwrite.test') // Optional: Realtime Endpoint
+    .setProject('5df5acd0d48c2') // Your project ID
+;
+
+sdk.subscribe('account', response => {
+  console.log(response); // Callback will be executed on account event.
+});
+
+const documentsUnsubscribe = sdk.realtime.subscribe('documents.XXXXXX', response => {
+  console.log(response); // Callback will be executed on documents.XXXXXX event
+});
+
+documentsUnsubscribe(); // the subscribe() method will return a method to unsubscribe, invalidate the callback and remove the channel
+```
+
+Setting the Endpoint will also guess the Realtime Endpoint by replacing the http/https Protocol with the WebSocket equivalent. Alternatively you can set the Realtime Endpoint explicitly.
+
+The client SDK will maintain a single connection and will maintain all the channels, if a channel is added or removed - a new connection will be established with given channels.
 
 ### Scalability
+
+The realtime container can easily be duplicated with Traefik load-balancing it.
 
 ### Performance
 
@@ -112,26 +182,31 @@ On each new connection, we should validate that the client origin is valid simil
 
 #### Limit payload size
 
+Since we will not support 2-way communication now - we shouldn't allow/handle receiving messages at all for now. Which makes the payload size not a concern for now. 
+
+#### Cookie Authentication
+
+On HTTP Handshakes, cookies are usually sent along, which we can use for authentication. If a technology does not provide a native handshake - we can imitate this functionality to handle passing authentication tokens to the endpoint.
+
 #### JWT Authentication (in path / or in message)
 
-Cookies support in WebSocket and other protocols is limited. Using JWT authentication can be easier to implement and pass to the server and more secure as it is valid for 15 minutes.
+Using JWT authentication can be easier to implement and pass to the server.
 
 ### Logs
 
 We should add the following logs for easy debugging and monitoring of our realtime server. Below is a list of some of the logs we could initialy add:
 
-- Server start (stdout - using Console::success)
-- Worker start  (stdout - using Console::success)
+- Server start (stdout - using `Console::success`)
+- Worker start  (stdout - using `Console::success`)
 - Connection Open (total connections per worker)
 - Connection Close (total connections per worker)
-- Errors (stderr - using Console::error)
+- Errors (stderr - using `Console::error`)
 
 Debug mode logs:
 
-- Event received (stdout - using Console::log)
-- Message sent (stdout - using Console::log)
+- Event received (stdout - using `Console::log`)
+- Message sent (stdout - using `Console::log`)
 
-### Error Handling
 ### Prior art
 
 [prior-art]: #prior-art
