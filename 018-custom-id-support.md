@@ -61,6 +61,14 @@ Resources that can have Custom IDs
 - Function tags
 - Tasks
 - Webhooks
+- Functions
+- Teams
+- Memberships
+- Sessions
+- Executions
+- and more
+
+Basically all the resources in Appwrite that has a Create endpoint and all future similar resources will support Custom ID.
 
 The create resource endpoints for above resources will have a first required **id** parameter where users can send their custom id following the guidelines for validation. In every endpont, if the **id** parameter is received empty (required for backward compatibility with existing SDKs) or pre defined string, Appwrite will still generate the ids as it is already doing.
 
@@ -72,6 +80,7 @@ We can use the existing key validator to validate the custom id as well.
 - Can be Alphanumeric
 - Can contain `_` but not at the begining of the id
 - Cannot contain any other special characters
+- If ID already exists, it will throw an error
 
 ### Prior art
 
@@ -103,7 +112,6 @@ Write your answer below.
 [unresolved-questions]: #unresolved-questions
 
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
-Projects and Users being sensitive may be we can exclude them with custom ids.
 
 #### SDKs
 How to make SDKs look pretty when people don’t want custom **id** and want Appwrite to generate 
@@ -113,7 +121,7 @@ How to make SDKs look pretty when people don’t want custom **id** and want App
 
 #### Backward Compabilities
 
-Even though **id** will be a required parameter, existing SDKs and apps should work as they are without any issues generating custom ids.
+Even though **id** will be a required parameter, existing SDKs and apps should work as they are without any issues generating custom ids. Having a default Value which allows generating the ID in the controllers should make this possible.
 
 ### Future possibilities
 
