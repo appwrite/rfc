@@ -82,6 +82,28 @@ We can use the existing key validator to validate the custom id as well.
 - Cannot contain any other special characters
 - If ID already exists, it will throw an error
 
+### UI Changes
+
+With support for Custom ID, certain services that already have Name becomes confusing and not so useful. So we suggest following changes.
+
+Services that have names where we are depricating name field and use ID instead. Where ID will not be set to auto generate, but can choose to auto generate
+
+1. Project
+2. Platform
+3. Function
+4. Collection
+5. API Key
+6. Webhook
+7. Team
+
+Services where we are deciding to set ID field to auto generate as default
+1. Users
+2. File
+3. Membership
+4. Execution
+
+While deciding where to set auto generation by default, we have considered the volume of data that might be inserted as well as the importance and use cases of id. For example, Projects, platforms, Functions, etc, will be few in numbers and their IDs will be used extensively in APIs so are not set to auto generate by default. However, services like Users, File, Execution will be huge in numbers and IDs are not use extensively, are set to auto generate by default.
+
 ### Prior art
 
 [prior-art]: #prior-art
