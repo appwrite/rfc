@@ -5,7 +5,7 @@
 3. entry file name / for some, entry function - set default main() - entry() - execute()
 4. A signature for web server, that has request/response model
 5. Wildcard endpoint, that accepts request to any endpoint
-6. Handle dependencies of the function
+6. Handle dependencies of the function - Build step for every runtime (avoid uploading dependencies), handling conflicts
 7. Prevent code execution outside of the controller endpoint
 
 - The function should export the callback that runtime can import and pass as callback to the request
