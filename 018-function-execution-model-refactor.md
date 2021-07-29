@@ -75,6 +75,9 @@ https://docs.fission.io/docs/architecture/
 
  - Scaling this solution even more
  - Using things such as [Amazon Firecracker](https://firecracker-microvm.github.io/)
+ - Will the executor handle load balencing itself or will we use another service to deal with it?
+ - More technical indepth discussion is needed for figuring out API's
+ - We will need to determine how much of a performance hit this will make to asyncronous functions
 
 ### Future possibilities
 
