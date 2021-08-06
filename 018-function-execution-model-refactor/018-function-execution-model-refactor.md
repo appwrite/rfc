@@ -79,6 +79,10 @@ with the code running in the runtime. It will also stop attempting to restart it
 Watchdog will also deal with cleaning up runtimes that haven't recieve a request in a set amount of time in order to save on resources, aswell as removing
 runtimes that are no longer needed.
 
+#### Flowchart Visualisation:
+
+![Flowchart Visualisation](flowchart.png)
+
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
 
