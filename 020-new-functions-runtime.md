@@ -7,6 +7,8 @@
 5. Wildcard endpoint, that accepts request to any endpoint
 6. Handle dependencies of the function - Build step for every runtime (avoid uploading dependencies), handling conflicts
 7. Prevent code execution outside of the controller endpoint
+8. For statically typed langugage, as dynamic import is not possible, user code volume must be predefined and signature must be predefined
+9. Timeout handling from executor, canceling Request from executor so that web server takes care of the rest
 
 - The function should export the callback that runtime can import and pass as callback to the request
 
@@ -28,7 +30,7 @@ callback(req, res);
    1. send  - accept string
    2. status
 
-1. Some kind of dependencies for each cloud functions language that has the type definitions for auto completion and type safety
+3. Some kind of dependencies for each cloud functions language that has the type definitions for auto completion and type safety
 
 Stage 1:
 ## Node JS
