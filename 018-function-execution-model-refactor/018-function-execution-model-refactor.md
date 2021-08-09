@@ -38,7 +38,9 @@ The executor will have multiple tasks but the main one is to spin up runtimes wh
 
 The executor will also act like a router itself, when API Requests that are for functions are received it will be the executor's job to correlate them to the relevant runtimes and forward them for processing. When the Runtime's web server is done processing the request and returns a response the executor will return the response to whatever client requested it.
 
-The executor will be built using a Swoole HTTP Server and will be stored in the file: `app/executor.php`. The executor will need to be on the same network as appwrite so the two can communicate.
+The executor will be built using a Swoole HTTP Server and will be stored in the file: `app/executor.php`. The executor will need to be on the same network as appwrite so the two can communicate. When a API call for the executor is recieve by appwrite it will simply forward it to the executor.
+
+The functions worker will also be able to directly make API Calls to the executor server itself due to being on the same network.
 
 #### API Endpoints
 This rewrite will add functionality to the API endpoints that are currently used by the functions worker. The executor will take over these endpoints while the rest will stay underneath the functions worker.
