@@ -45,19 +45,17 @@ This rewrite will add functionality to the API endpoints that are currently used
 
 `POST /v1/functions/{id}/executions/` - Execute function API endpoint
 
-The standard execution endpoint for functions will have functionality added for syncronous executions aswell as a new parameter in the JSON body to determine if this execution will be syncronous or asyncronous, this parameter will be called `isSync` and will be a boolean.
 This Endpoint will not change for normal async executions and will stay relatively the same (using the queue system).
 
-If it's syncronous then it will execute the functions directly using the executor and return the response, returning
-a error with a non 200 http code if anything goes wrong.
+If the tag is syncronous then it will execute the functions directly using the executor and return the response, returning an error with a non 200 http code if anything goes wrong.
 
 `PATCH /v1/functions/{id}/tag` - Update function tag API endpoint
-The tag update endpoint will also recieve a small rewrite for the request moving it into the executor.
+
+The update tag endpoint for functions will have a new parameter in the JSON body to determine if the execution will be syncronous or asyncronous, this parameter will be called `isSync` and will be a boolean this variable will be stored with the in the tag on the database for future reference by the execute function endpoint.
 
 It will act like so:
 1. Extract the code tarball into the enviroment.
-2. also check if the runtime exists, if it doesn't then create the runtime.
-3. Map the new code into the runtime environment using a volume
+2. Map the new code into the runtime environment using a volume
 
 #### Flowchart Visualisation:
 
