@@ -63,39 +63,47 @@ Write your answer below.
 
 -->
 
+The new Functions runtime will be developed as a web server. A web server that will receive a POST request to execute a code, then executes the code from requested path and returns the result. Being a web server, the request and response can happen synchronously, so that we can achieve Synchronous function execution.
 
+### How will the Runtime look
+
+Runtime will be have a web server, that will execute the functions. The functions during execution will receive a request and a response object as defined below.
+
+#### Request Object
+
+Request object will have,
+1. Headers - A key value pairs of headers
+2. Payload - A key value pairs of Payload data
+3. Env - A key value pairs of Environment vairables that are available to the functions
+
+#### Response Object
+
+Response object will have,
+   1. send method - will accept a string data and integer status code
+   2. json method - will accept json data and integer status code
+
+The response object will be used the user's functions to send back the response data.
+
+### How will execution occur
+
+The executor will load the user function to a specified volume inside the runtime volume then start the web server. For languages that support dynamic import or requiring codes the executor can send the path to the code folder and name of the entry file to execute.
+Some languages like dart (mostly statically typed languages, that don't support dynamic loading of code), the runtime will have a pre-defined directory where user code have to be loaded. Both the entry file name and entry function will have to be pre-defined. By default the runtime will contain stub code in order for runtime not to fail if no user code is provided in proper directory.
+
+User function should either contain the pre-defined function signature for the runtime as defined by the runtime or it should export a callback function with proper signature that runtime can import and execute.
+
+The user function will always receive request and response object. Request object will contain any values that is available to the function's execution. And users can use response object to send response back.
 
 1. It will require web server
 2. It receives path to extracted execution code files
-3. entry file name / for some, entry function - set default main() - entry() - execute()
-4. A signature for web server, that has request/response model
-5. Wildcard endpoint, that accepts request to any endpoint
-6. Handle dependencies of the function - Build step for every runtime (avoid uploading dependencies), handling conflicts
-7. Prevent code execution outside of the controller endpoint
-8. For statically typed langugage, as dynamic import is not possible, user code volume must be predefined and signature must be predefined
-9. Timeout handling from executor, canceling Request from executor so that web server takes care of the rest
+3.  entry file name / for some, entry function - set default main() - entry() - execute()
+4.  A signature for web server, that has request/response model
+5.  Wildcard endpoint, that accepts request to any endpoint
+6.  Handle dependencies of the function - Build step for every runtime (avoid uploading dependencies), handling conflicts
+7.  Prevent code execution outside of the controller endpoint
+8.  Timeout handling from executor, canceling Request from executor so that web server takes care of the rest
 
-- The function should export the callback that runtime can import and pass as callback to the request
 
-```js
-on('/', callback) {
-    //callback is what cloud functions should provide
-}
-
-//callback signature
-callback(req, res);
-```
-1. Make sure request object is same in every language
-   1. Headers
-   2. Cookies
-   3. Payload
-   4. Environment variables
-   5. Query Params
-2. Make sure response object is same in every language
-   1. send  - accept string
-   2. status
-
-3. Some kind of dependencies for each cloud functions language that has the type definitions for auto completion and type safety
+1. Some kind of dependencies for each cloud functions language that has the type definitions for auto completion and type safety
 
 Stage 1:
 ## Node JS
