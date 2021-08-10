@@ -1,10 +1,10 @@
 # Phone Authentication <!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: @torstendittmann
-- Start Date: (today's date, dd-mm-yyyy)
+- Start Date: 10-08-2021
 - Target Date: (expected date of completion, dd-mm-yyyy)
 - Appwrite Issue:
-  [Is this RFC inspired by an issue in appwrite](https://github.com/appwrite/appwrite/issues/)
+  - https://github.com/appwrite/appwrite/issues/1068
 
 ## Summary
 
@@ -34,7 +34,7 @@ This implementation will pave the way for any future 2 step authentication.
 
 First of all, this implementation will require a third party provider like [Twilio](https://twilio.com/) or [MessageBird](https://messagebird.com/) for sending the actual SMS to a phone. Also this implementation will be the first authentication method requiring 2 steps on the client side, **Initialization** and **Completion**, to authenticate a user.
 
-Right now the only unique value to identify a user is the E-Mail address. Since phone authentication should work without an e-mail address - this implementation will need to add another collection, that will contain all the connected providers to an account. The data structure can look like this:
+Right now the only unique value to identify a user is the E-Mail address. Since phone authentication should work without an e-mail address - this implementation will need to add another collection, that will contain all the connected providers to an account. The data structure on a user would look like this:
 
 ```json
 {
@@ -49,6 +49,8 @@ Right now the only unique value to identify a user is the E-Mail address. Since 
 ```
 
 Notice the missing `email` attribute, which will now reside in a `providers` attribute. This allows multiple providers while maintaining unique identifiers per provider. The key will be in a `PROVIDER:UID` syntax with a boolean value hinting if the provider is verified or not.
+
+This syntax is required to query the data more efficient.
 
 > This is a big change, but required in my opinion. I have suggested this before when working on the sessions refactor - but we decided to drop it.
 ### Initialization
@@ -68,21 +70,48 @@ This step will compare the token's `$id` and `secret` created in the initializat
 
 The payload must contain the `$id` of the Token and the 6 digit number send to the phone representing the Token's `secret`. If both values are valid, this endpoint will either login an existing user or create a new one if the phone number isn't present on any of the user provider attribute.
 
-### Adapters
+### Flow
 
-This section will cover implmenting multiple adapters. For this we usually need following attributes and methods:
+┌────────────────┐
+│                │
+│     Start      │
+│                │
+└───────┬────────┘
+        │
+ ┌──────▼───────┐         Send SMS
+ │Initialization├───────────┐
+ └──────────────┘           │
+                    ┌───────▼─────────┐
+                    │    Provider     │
+                    └───────┬─────────┘
+                            │
+ ┌──────────────┐           │
+ │  Completion  ◄───────────┘
+ └──────┬───────┘    User enters secret
+        │
+        │
+ ┌──────▼───────┐ No   ┌─────────────┐
+ │  Is valid?   ├──────► Throw error │
+ └──────┬───────┘      └─────────────┘
+        │ Yes
+ ┌──────▼───────┐ No   ┌─────────────┐
+ │ User exists? ├──────► Create user │
+ └──────┬───────┘      └──────┬──────┘
+        │ Yes                 │
+        │◄────────────────────┘
+        │
+ ┌──────▼───────┐
+ │Create session│
+ └──────┬───────┘
+        │
+        │
+┌───────▼────────┐
+│                │
+│      End       │
+│                │
+└────────────────┘
 
-#### Attributes
-- `provider` - Provider
-- `endpoint` - API Endpoint
-- `secret` - API Secret
-
-#### Methods
-- `send(number, text)` - Send SMS
-
-Possible providers for Adapters are [Twilio](https://twilio.com/) or [MessageBird](https://messagebird.com/).
-
-### Providers
+### Providers Endpoints
 
 This addition also needs to have more endpoints, which are needed to see which providers are linked to which account and also delete a provider from a user.
 
@@ -100,6 +129,20 @@ This endpoint returns a single provider from a user.
 #### `DELTE: /v1/users/{ID}/providers/{PROVIDER}/{UID}`
 
 This endpoint removes single provider from a user. This will only work if there will always be a provider left after deletion.
+
+### Adapters
+
+This section will cover implmenting multiple adapters. For this we usually need following attributes and methods:
+
+#### Attributes
+- `provider` - Provider
+- `endpoint` - API Endpoint
+- `secret` - API Secret
+
+#### Methods
+- `send(number, text)` - Send SMS
+
+Possible providers for Adapters are [Twilio](https://twilio.com/) or [MessageBird](https://messagebird.com/).
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
@@ -156,6 +199,8 @@ Write your answer below.
 
 [unresolved-questions]: #unresolved-questions
 
+#### How to extend this implementation with something like OTP or Magic URL?
+
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 #### Are the required credentials consitent across multiple Third Party Providers?
@@ -166,4 +211,4 @@ Write your answer below.
 
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
-<!-- Write your answer below. -->
+This implementation will allow more implementation in the future and also decouple the user account from an E-Mail address.
