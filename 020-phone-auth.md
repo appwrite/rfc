@@ -140,6 +140,8 @@ This section will cover implmenting multiple adapters. For this we usually need 
 
 Possible providers for Adapters are [Twilio](https://twilio.com/) or [MessageBird](https://messagebird.com/).
 
+The implementation itself will be quite simple, since the API we are using usually only needs a single API call using an API key.
+
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
 
