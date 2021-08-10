@@ -71,7 +71,7 @@ This step will compare the token's `$id` and `secret` created in the initializat
 The payload must contain the `$id` of the Token and the 6 digit number send to the phone representing the Token's `secret`. If both values are valid, this endpoint will either login an existing user or create a new one if the phone number isn't present on any of the user provider attribute.
 
 ### Flow
-
+```
 ┌────────────────┐
 │                │
 │     Start      │
@@ -106,6 +106,7 @@ The payload must contain the `$id` of the Token and the 6 digit number send to t
 │      End       │
 │                │
 └────────────────┘
+```
 
 ### Providers Endpoints
 
