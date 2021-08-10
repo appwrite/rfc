@@ -1,6 +1,6 @@
-# Title <!-- What do you want to call your `awesome_feature`? -->
+# Phone Authentication <!-- What do you want to call your `awesome_feature`? -->
 
-- Implementation Owner: (your github @username)
+- Implementation Owner: @torstendittmann
 - Start Date: (today's date, dd-mm-yyyy)
 - Target Date: (expected date of completion, dd-mm-yyyy)
 - Appwrite Issue:
@@ -18,21 +18,88 @@
 
 **What problem are you trying to solve?**
 
-<!-- Write your answer below. -->
+As of now we are not offering a way to authenticated via a phone number using SMS.
 
 **What is the context or background in which this problem exists?**
 
-<!-- Write your answer below. -->
+Depending on an applciation target audience, authenticating via a mobile number might be required.
 
 **Once the proposal is implemented, how will the system change?**
 
-<!-- Write your answer below. -->
-
-<!-- Please avoid discussing your proposed solution. -->
+This implementation will pave the way for any future 2 step authentication.
 
 ## Design proposal (Step 2)
 
 [design-proposal]: #design-proposal
+
+First of all, this implementation will require a third party provider like [Twilio](https://twilio.com/) or [MessageBird](https://messagebird.com/) for sending the actual SMS to a phone. Also this implementation will be the first authentication method requiring 2 steps on the client side, **Initialization** and **Completion**, to authenticate a user.
+
+Right now the only unique value to identify a user is the E-Mail address. Since phone authentication should work without an e-mail address - this implementation will need to add another collection, that will contain all the connected providers to an account. The data structure can look like this:
+
+```json
+{
+  "$id": "some_id",
+  "name": "Lorem Ipsum",
+  "providers": {
+    "email:lorem@gmail.com": false,
+    "google:lorem@ipsum.com": true,
+    "phone:0049123456789": true
+  }
+}
+```
+
+Notice the missing `email` attribute, which will now reside in a `providers` attribute. This allows multiple providers while maintaining unique identifiers per provider. The key will be in a `PROVIDER:UID` syntax with a boolean value hinting if the provider is verified or not.
+
+> This is a big change, but required in my opinion. I have suggested this before when working on the sessions refactor - but we decided to drop it.
+### Initialization
+
+This step will initialize the authentication using a phone number as the unique identifier for a user. For phone, this will be a phone number.
+
+#### `POST: /v1/account/sessions/phone`
+
+The payload must contain the phone number, where the SMS is gonna be send to. This will create a random 6 digit secret number, save it as a `Token` in the database and send this number to the related phone number using the configured Third Party provider. This endpoint can be requested again to re-send the SMS.
+
+This endpoint will return the token `$id`, which will be used in the completion step. The user would need to manage this `$id` and have it available in the next step.
+
+### Completion
+
+This step will compare the token's `$id` and `secret` created in the initialization step. 
+#### `POST: /v1/account/sessions/phone/complete`
+
+The payload must contain the `$id` of the Token and the 6 digit number send to the phone representing the Token's `secret`. If both values are valid, this endpoint will either login an existing user or create a new one if the phone number isn't present on any of the user provider attribute.
+
+### Adapters
+
+This section will cover implmenting multiple adapters. For this we usually need following attributes and methods:
+
+#### Attributes
+- `provider` - Provider
+- `endpoint` - API Endpoint
+- `secret` - API Secret
+
+#### Methods
+- `send(number, text)` - Send SMS
+
+Possible providers for Adapters are [Twilio](https://twilio.com/) or [MessageBird](https://messagebird.com/).
+
+### Providers
+
+This addition also needs to have more endpoints, which are needed to see which providers are linked to which account and also delete a provider from a user.
+
+#### `GET: /v1/account/providers`
+#### `GET: /v1/users/{ID}/providers`
+
+This endpoint will return all providers linked to a user.
+
+#### `GET: /v1/account/providers/{PROVIDER}/{UID}`
+#### `GET: /v1/users/{ID}/providers/{PROVIDER}/{UID}`
+
+This endpoint returns a single provider from a user.
+
+#### `DELETE: /v1/account/providers/{PROVIDER}/{UID}`
+#### `DELTE: /v1/users/{ID}/providers/{PROVIDER}/{UID}`
+
+This endpoint removes single provider from a user. This will only work if there will always be a provider left after deletion.
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
@@ -57,6 +124,12 @@ Write your answer below.
 ### Prior art
 
 [prior-art]: #prior-art
+
+The change regarding the providers on the user object, will change the way how sessions will be created. Since now we need to parse the whole `providers` attribute for an E-Mail address instead of a single `email` attribute.
+
+But this will allow user to be completely de-attached from an e-mail address.
+
+This would also require a refactor on how anonymous accounts are created.
 
 <!--
 
@@ -85,7 +158,7 @@ Write your answer below.
 
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
-<!-- Write your answer below. -->
+#### Are the required credentials consitent across multiple Third Party Providers?
 
 ### Future possibilities
 
