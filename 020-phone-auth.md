@@ -89,7 +89,6 @@ The payload must contain the `$id` of the Token and the 6 digit number send to t
  │  Completion  ◄───────────┘
  └──────┬───────┘    User enters secret
         │
-        │
  ┌──────▼───────┐ No   ┌─────────────┐
  │  Is valid?   ├──────► Throw error │
  └──────┬───────┘      └─────────────┘
@@ -99,7 +98,6 @@ The payload must contain the `$id` of the Token and the 6 digit number send to t
  └──────┬───────┘      └──────┬──────┘
         │ Yes                 │
         │◄────────────────────┘
-        │
  ┌──────▼───────┐
  │Create session│
  └──────┬───────┘
