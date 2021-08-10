@@ -84,7 +84,6 @@ The payload must contain the `$id` of the Token and the 6 digit number send to t
                     ┌───────▼─────────┐
                     │    Provider     │
                     └───────┬─────────┘
-                            │
  ┌──────────────┐           │
  │  Completion  ◄───────────┘
  └──────┬───────┘    User enters secret
@@ -101,7 +100,6 @@ The payload must contain the `$id` of the Token and the 6 digit number send to t
  ┌──────▼───────┐
  │Create session│
  └──────┬───────┘
-        │
         │
 ┌───────▼────────┐
 │                │
@@ -197,11 +195,13 @@ Write your answer below.
 
 [unresolved-questions]: #unresolved-questions
 
-#### How to extend this implementation with something like OTP or Magic URL?
-
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 #### Are the required credentials consitent across multiple Third Party Providers?
+
+#### How de we add new providers to a user?
+
+This could potentially be solved with the already existing authentication methods, but when a user is already logged in - will append the used provider to the current user.
 
 ### Future possibilities
 
