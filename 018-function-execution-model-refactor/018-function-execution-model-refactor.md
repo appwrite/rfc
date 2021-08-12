@@ -61,7 +61,7 @@ It will act like so:
 
 #### Flowchart Visualisation:
 
-![Flowchart Visualisation](flowchart.png)
+![Flowchart Visualisation](flowchart.svg)
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
