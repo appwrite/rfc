@@ -212,4 +212,4 @@ This could potentially be solved with the already existing authentication method
 
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
-This implementation will allow more implementation in the future and also decouple the user account from an E-Mail address.
+This implementation will allow more providers implementation in the future and also decouple the user account from an E-Mail address.
