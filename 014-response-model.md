@@ -147,6 +147,54 @@ abstract class Permissions {
 
 ```
 
+### Examples on other SDKs
+
+#### Kotlin
+
+```kotlin
+data class UserList(
+    val users: List<User>,
+    val sum: Int
+)
+
+data class User(
+    @SerializedName("\$id")
+    val id: String,
+    val name: String,
+    val registration: Int,
+    val status: Int,
+    val passwordUpdate: Int,
+    val email: String,
+    val emailVerification: Boolean,
+    val prefs: Preferences
+)
+
+data class Preferences(
+    val data: MutableMap<String, Any>
+)
+
+class Test {
+    fun main(context: Context) {
+        val client = Client(context)
+        val account = Account(client)
+        val users = Users(client)
+
+        GlobalScope.launch {
+            // User
+            val accountResponse: Response = account.get()
+            val accountBody: String = accountResponse.body!!.string()
+            val user: User = accountBody.jsonCast<User>()
+            
+            // UserList
+            val usersResponse: Response = users.list()
+            val usersBody: String = usersResponse.body!!.string()
+            val userList: UserList = usersBody.jsonCast<UserList>()
+        }
+    }
+}
+```
+
+
 ### Prior art
 
 [prior-art]: #prior-art
