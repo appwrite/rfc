@@ -70,7 +70,7 @@ Resources that can have Custom IDs
 
 Basically all the resources in Appwrite that has a Create endpoint and all future similar resources will support Custom ID.
 
-The create resource endpoints for above resources will have a first required **id** parameter where users can send their custom id following the guidelines for validation. In every endpont, if the **id** parameter is received empty (required for backward compatibility with existing SDKs) or pre defined string, Appwrite will still generate the ids as it is already doing.
+The create resource endpoints for above resources will have a first required **id** parameter where users can send their custom id following the guidelines for validation. In every endpoint, if the **id** parameter is received empty (required for backward compatibility with existing SDKs) or pre defined string, Appwrite will still generate the ids as it is already doing.
 
 We can use the existing key validator to validate the custom id as well.
 
@@ -78,7 +78,7 @@ We can use the existing key validator to validate the custom id as well.
 
 - Can be at most 36 characters
 - Can be Alphanumeric
-- Can contain `_` but not at the begining of the id
+- Can contain `_` but not at the beginning of the id
 - Cannot contain any other special characters
 - If ID already exists, it will throw an error
 
@@ -141,7 +141,7 @@ How to make SDKs look pretty when people don’t want custom **id** and want App
 - We could pass empty string ->  `database.createCollection("", "Movies")`
 - We could create a separate class -> `database.createCollection(new Uid(), "Movies")` and if want to pass custom id  it could be `database.createCollection(new Uid("movies"), "Movies")`
 
-#### Backward Compabilities
+#### Backward Compatibilities
 
 Even though **id** will be a required parameter, existing SDKs and apps should work as they are without any issues generating custom ids. Having a default Value which allows generating the ID in the controllers should make this possible.
 
