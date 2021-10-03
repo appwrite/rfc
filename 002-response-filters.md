@@ -42,11 +42,11 @@ We should introduce a new env variable and HTTP header that will allow to change
 
 ### New ENV Var (_APP_SYSTEM_RESPONSE_FORMAT)
 
-Should be checked on server startup. If the value is not empty we should init the relevant filter. If not filter is avaliable we should throw an error using the Console::error method and stop the proccess with exit(1);. Make sure to add the new var to Appwrite docs page: https://appwrite.io/docs/environment-variables#system-settings
+Should be checked on server startup. If the value is not empty we should init the relevant filter. If not filter is available we should throw an error using the Console::error method and stop the process with exit(1);. Make sure to add the new var to Appwrite docs page: https://appwrite.io/docs/environment-variables#system-settings
 
 ### New Optional Header (X-Appwrite-Response-Format)
 
-Should be checked on each request (general.php / ->init() can be a good location). If the value is not empty we should init the relevant filter. If not filter is avaliable we should throw an 404 HTTP error with relevant error message.
+Should be checked on each request (general.php / ->init() can be a good location). If the value is not empty we should init the relevant filter. If not filter is available we should throw an 404 HTTP error with relevant error message.
 
 ### Response Filters and Adapters
 
@@ -54,7 +54,7 @@ Added 2 new method to Appwrite response class (src/Appwrite/Utopia/Response.php)
 
 ### Create a Filter Interface
 
-Create a new Appwrite\Utopia\Response\Filter class (src/Appwrite/Utopia/Response/Filter.php). The interface should decalre an implemntation for the `parse(array $content): array` method. Each new filter will implement the interface and use the parse method to manipulate incoming data. Create our first filter (Appwrite\Utopia\Response\Filters\V06) to accept current version (v0.7) data and convert it to v0.6 data. For that we'll need to run both instances of Appwrite to manually convert data structures.
+Create a new Appwrite\Utopia\Response\Filter class (src/Appwrite/Utopia/Response/Filter.php). The interface should declare an implementation for the `parse(array $content): array` method. Each new filter will implement the interface and use the parse method to manipulate incoming data. Create our first filter (Appwrite\Utopia\Response\Filters\V06) to accept current version (v0.7) data and convert it to v0.6 data. For that we'll need to run both instances of Appwrite to manually convert data structures.
 
 ### Run the Filter
 
