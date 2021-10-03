@@ -26,7 +26,7 @@ Making Appwrite lite version easily deployable to 1 click deployment platforms l
 
 <!-- Write your answer below. -->
 
-Supporting one click deployments to free tiers of platforms like Heroku, will help a lot in Appwrite adoption. This will allow any beginners to easily instiantiate an Appwrite paltform and see it in action, even use it in production in an envorinment with less resources.
+Supporting one click deployments to free tiers of platforms like Heroku, will help a lot in Appwrite adoption. This will allow any beginners to easily instantiate an Appwrite platform and see it in action, even use it in production in an environment with less resources.
 
 **Once the proposal is implemented, how will the system change?**
 
