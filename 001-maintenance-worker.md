@@ -43,7 +43,7 @@ The worker don't need to execute the tasks itself but rather pass them through t
 
 **Code Structure**
 
-The worker script should be located at: `./app/tasks` and use the cli framework to be consistent with other CLI tasks Appwrite executes. The Console class should also be used for different logs. We might want to add a `loop` function to the Console class, but this should be disccused separately.
+The worker script should be located at: `./app/tasks` and use the cli framework to be consistent with other CLI tasks Appwrite executes. The Console class should also be used for different logs. We might want to add a `loop` function to the Console class, but this should be discussed separately.
 
 Add a simple bash script names `maintenance` on `./bin` to allow the entry point to have a nice simple command, the same file should also have relevant references in the main Dockerfile to make it work.
 
@@ -53,7 +53,7 @@ The maintenance tasks that should be included in day 1 are:
 
 * Delete all system logs older then `X days` (add a new method to [Audit lib](https://github.com/utopia-php/audit))
 * Delete all abuse logs older then `X days` (add a new method to [Abuse lib](https://github.com/utopia-php/abuse))
-* Delete all [functions executions](https://github.com/appwrite/appwrite/blob/swoole-and-functions/app/config/collections.php#L1492) older then `X days` (delete using exisiting document deletion method available at the [delete worker](https://github.com/appwrite/appwrite/blob/d0f7558ddf1c58ecaeffa9503ac84d0ccc11daee/app%2Fworkers%2Fdeletes.php))
+* Delete all [functions executions](https://github.com/appwrite/appwrite/blob/swoole-and-functions/app/config/collections.php#L1492) older then `X days` (delete using existing document deletion method available at the [delete worker](https://github.com/appwrite/appwrite/blob/d0f7558ddf1c58ecaeffa9503ac84d0ccc11daee/app%2Fworkers%2Fdeletes.php))
 
 **New Env Vars**
 
@@ -61,7 +61,7 @@ Add a new env variable to determine the amount of `X days` for data deletion. De
 
 **Docs**
 
-Add the new env varibale option to https://appwrite.io/docs/environment-variables under `System Settings`.
+Add the new env variable option to https://appwrite.io/docs/environment-variables under `System Settings`.
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
