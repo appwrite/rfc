@@ -23,7 +23,7 @@ This is next step in supporting multiple storage adapters to make Appwrite Stora
 
 <!-- Write your answer below. -->
 
-This feature is in process to make Appwrite Storage platform agnostic. This will allow adding AWS S3 as an storage option wih Appwrite, this will in turn allow appwrite to be delopyed in the modern platforms like Heroku, without loosing data.
+This feature is in process to make Appwrite Storage platform agnostic. This will allow adding AWS S3 as an storage option wih Appwrite, this will in turn allow appwrite to be deployed in the modern platforms like Heroku, without loosing data.
 
 
 **What is the context or background in which this problem exists?**
