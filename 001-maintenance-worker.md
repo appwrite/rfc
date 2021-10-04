@@ -53,7 +53,7 @@ The maintenance tasks that should be included in day 1 are:
 
 * Delete all system logs older then `X days` (add a new method to [Audit lib](https://github.com/utopia-php/audit))
 * Delete all abuse logs older then `X days` (add a new method to [Abuse lib](https://github.com/utopia-php/abuse))
-* Delete all [functions executions](https://github.com/appwrite/appwrite/blob/swoole-and-functions/app/config/collections.php#L1492) older then `X days` (delete using exisiting document deletion method available at the [delete worker](https://github.com/appwrite/appwrite/blob/d0f7558ddf1c58ecaeffa9503ac84d0ccc11daee/app%2Fworkers%2Fdeletes.php))
+* Delete all [functions executions (SYSTEM_COLLECTION_EXECUTIONS)](https://github.com/appwrite/appwrite/blob/master/app/config/collections.php#L1619) older then `X days` (delete using exisiting document deletion method available at the [delete worker](https://github.com/appwrite/appwrite/blob/d0f7558ddf1c58ecaeffa9503ac84d0ccc11daee/app%2Fworkers%2Fdeletes.php))
 
 **New Env Vars**
 
