@@ -54,6 +54,36 @@ Write your answer below.
 
 -->
 
+### API Endpoints
+
+### Data Structure
+
+### Supporting Libraries
+
+### Breaking Changes
+
+### Relaibility (Tests & Benchmarks)
+
+#### Scaling
+
+#### Benchmarks
+
+#### Tests (UI, Unit, E2E)
+
+### Documentatation & Content
+
+<!--
+
+Documentation is vital for making this new feature a success for both developers using Appwrite and the Appwrite maintainers.
+Please answer the following questions:
+
+1. What **docs** would support this feature?
+2. Do we need to update the **contribution guide** with a new section or a supporting tutorial?
+3. What **tutorials** (text/video) might help developers understand this feature scope, capabilities and possible use-cases?
+4. What **demo applications** can help us demostarte this feature APIs and capabilities? 
+
+-->
+
 ### Prior art
 
 [prior-art]: #prior-art
