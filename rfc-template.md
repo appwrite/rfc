@@ -18,17 +18,10 @@
 
 **What problem are you trying to solve?**
 
-<!-- Write your answer below. -->
-
-**What is the context or background in which this problem exists?**
-
-<!-- Write your answer below. -->
-
-**Once the proposal is implemented, how will the system change?**
-
-<!-- Write your answer below. -->
-
-<!-- Please avoid discussing your proposed solution. -->
+<!--
+What problem are you trying to solve? Explain the context or background in which this problem exists.
+Please avoid discussing your proposed solution.
+-->
 
 ## Design proposal (Step 2)
 
@@ -56,7 +49,25 @@ Write your answer below.
 
 ### API Endpoints
 
+<!--
+List the new API routes or endpoint that we might need to add for supporting the new feature.
+Keep in mind to stay very stict to the API protocol, and method whether you're new
+changes are for the REST, WebSocket or any other API protocol Appwrite supports.
+
+For example:
+
+**POST /v1/coffee ** - an endpoint for creating coffee.
+**DELETE /v1/coffee ** - an endpoint for deleting coffee.
+-->
+
 ### Data Structure
+
+<!--
+What kind of changes or additions are required for the Appwrite base collections
+to support this feature. Explain which entities should be added or updated, what new attributes they
+need to have and why. Please think well about the naming convetions and how well they play with other
+Appwrite convetions. Try and stay as consistent with exsiting patterns as much as possible.
+-->
 
 ### Supporting Libraries
 
