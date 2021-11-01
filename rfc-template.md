@@ -28,11 +28,11 @@ Please avoid discussing your proposed solution.
 [design-proposal]: #design-proposal
 
 <!--
-This is the technical portion of the RFC. Explain the design in sufficient detail keeping in mind the following:
+This is the technical portion of the RFC. Explain the design in sufficient detail, keeping in mind the following:
 
 - Its interaction with other parts of the system is clear
 - It is reasonably clear how the contribution would be implemented
-- Dependencies on libraries, tools, projects or work that isn't yet complete
+- Dependencies on libraries, tools, projects, or work that isn't yet complete
 - New API routes that need to be created or modifications to the existing routes (if needed)
 - Any breaking changes and ways in which we can ensure backward compatibility.
 - Use Cases
@@ -41,7 +41,7 @@ This is the technical portion of the RFC. Explain the design in sufficient detai
 - Changes to documentation
 - Ways to scale the solution
 
-Ensure that you include examples, code-snippets etc. to allow the community to understand the proposed solution. **It would be best if the examples use naming conventions that you intend to use during the actual implementation so that changes can be suggested early on during the development.**
+Ensure that you include examples and code snippets to allow the community to understand the proposed solution. **It would be best if the examples use naming conventions that you intend to use during the actual implementation to suggest changes early on during the development.**
 
 Write your answer below.
 
@@ -50,8 +50,8 @@ Write your answer below.
 ### API Endpoints
 
 <!--
-List the new API routes or endpoint that we might need to add for supporting the new feature.
-Keep in mind to stay very stict to the API protocol, and method whether you're new
+List the new API routes or endpoints that we might need to add for supporting the new feature.
+Keep in mind to stay very strict to the API protocol and method, whether your new
 changes are for the REST, WebSocket or any other API protocol Appwrite supports.
 
 For example:
@@ -65,14 +65,15 @@ For example:
 <!--
 What kind of changes or additions are required for the Appwrite base collections
 to support this feature. Explain which entities should be added or updated, what new attributes they
-need to have and why. Please think well about the naming convetions and how well they play with other
-Appwrite convetions. Try and stay as consistent with exsiting patterns as much as possible.
+need to have and why. Please think well about the naming conventions and how well they play with other
+Appwrite conventions. Try and stay as consistent with existing patterns as much as possible.
 -->
 
 ### Supporting Libraries
 
 <!--
-Which different libraries do we need to support the new features? Please describe the new libraries potential API.
+Which different libraries do we need to support the new features?
+Please describe the new library's potential API?
 Avoid using 3rd party libraries when possible, if required - explain why.
 -->
 
@@ -80,22 +81,22 @@ Avoid using 3rd party libraries when possible, if required - explain why.
 
 <!--
 Do we break any API or SDK backward compatibility?
-If possible, explain what actions can we make to avoid that.
+If possible, explain what actions we can take to avoid that.
 -->
 
 ### Relaibility (Tests & Benchmarks)
 
 #### Scaling
 
-<!-- Explain how will we scale this new feature. -->
+<!-- Explain how we will scale this new feature. -->
 
 #### Benchmarks
 
-<!-- Explain how will we benchmark the new feature. -->
+<!-- Explain how we will benchmark the new feature. -->
 
 #### Tests (UI, Unit, E2E)
 
-<!-- Explain how will we test the new feature. -->
+<!-- Explain how we will test the new feature. -->
 
 ### Documentatation & Content
 
@@ -106,8 +107,8 @@ Please answer the following questions:
 
 1. What **docs** would support this feature?
 2. Do we need to update the **contribution guide** with a new section or a supporting tutorial?
-3. What **tutorials** (text/video) might help developers understand this feature scope, capabilities and possible use-cases?
-4. What **demo applications** can help us demostarte this feature APIs and capabilities? 
+3. What **tutorials** (text/video) might help developers understand this feature scope, capabilities, and possible use-cases?
+4. What **demo applications** can help us demonstrate this feature APIs and capabilities? 
 
 -->
 
@@ -117,21 +118,16 @@ Please answer the following questions:
 
 <!--
 
-Discuss prior art, both the good and the bad, in relation to this proposal. A
-few examples of what this can include are:
+Discuss prior art, both the good and the bad, in relation to this proposal.
+A few examples of what this can include are:
 
-- Does this functionality exist in other software and what experience has their
-  community had?
-- For other teams: What lessons can we learn from what other communities have
-  done here?
-- Papers: Are there any published papers or great posts that discuss this? If
-  you have some relevant papers to refer to, this can serve as a more detailed
-  theoretical background.
+- Does this functionality exist in other software, and what experience has their community had?
+- For other teams: What lessons can we learn from what other communities have done here?
+- Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
 
 This section is intended to encourage you as an author to think about the
 lessons from other software, provide readers of your RFC with a fuller picture.
-If there is no prior art, that is fine - your ideas are interesting to us
-whether they are brand new or if it is an adaptation from other software.
+If there is no prior art, that is fine - your ideas are interesting to us, whether they are brand new or an adaptation from other software.
 
 Write your answer below.
 -->
@@ -148,6 +144,6 @@ Write your answer below.
 
 [future-possibilities]: #future-possibilities
 
-<!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
+<!-- This is also a good place to "dump ideas" if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
