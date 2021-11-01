@@ -71,15 +71,31 @@ Appwrite convetions. Try and stay as consistent with exsiting patterns as much a
 
 ### Supporting Libraries
 
+<!--
+Which different libraries do we need to support the new features? Please describe the new libraries potential API.
+Avoid using 3rd party libraries when possible, if required - explain why.
+-->
+
 ### Breaking Changes
+
+<!--
+Do we break any API or SDK backward compatibility?
+If possible, explain what actions can we make to avoid that.
+-->
 
 ### Relaibility (Tests & Benchmarks)
 
 #### Scaling
 
+<!-- Explain how will we scale this new feature. -->
+
 #### Benchmarks
 
+<!-- Explain how will we benchmark the new feature. -->
+
 #### Tests (UI, Unit, E2E)
+
+<!-- Explain how will we test the new feature. -->
 
 ### Documentatation & Content
 
