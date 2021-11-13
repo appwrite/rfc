@@ -84,7 +84,7 @@ Do we break any API or SDK backward compatibility?
 If possible, explain what actions we can take to avoid that.
 -->
 
-### Relaibility (Tests & Benchmarks)
+### Reliability (Tests & Benchmarks)
 
 #### Scaling
 
