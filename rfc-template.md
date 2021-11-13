@@ -96,7 +96,10 @@ If possible, explain what actions we can take to avoid that.
 
 #### Tests (UI, Unit, E2E)
 
-<!-- Explain how we will test the new feature. -->
+<!-- 
+Explain how we will test the new feature. 
+You can use "N/A" if this section is not relevant to your proposal.
+-->
 
 ### Documentation & Content
 
