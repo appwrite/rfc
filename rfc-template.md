@@ -98,7 +98,7 @@ If possible, explain what actions we can take to avoid that.
 
 <!-- Explain how we will test the new feature. -->
 
-### Documentatation & Content
+### Documentation & Content
 
 <!--
 
