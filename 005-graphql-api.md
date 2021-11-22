@@ -90,7 +90,7 @@ For example:
 **DELETE /v1/coffee ** - an endpoint for deleting coffee.
 -->
 
-**POST /v1/graphql** - an endpoint for querying and mutating Appwrite data with GraphQL. We should use Utopia PHP routes' object callbacks and metadata to init GraphQL queries and mutations.
+**POST /v1/graphql** - an endpoint for querying and mutating Appwrite data with GraphQL. We will use Utopia PHP routes' object callbacks and metadata to init GraphQL queries and mutations.
 
 ### Data Structure
 
@@ -282,6 +282,37 @@ https://github.com/appwrite/appwrite/compare/0.7.x...graphql?expand=1
 <!-- Write your answer below. -->
 
 We should find an alternative way to handle the custom JSON object that we currently use in the REST API. One example is the user prefs key-value object, which doesn't have a predefined structure. Another is the Function objects `vars` attribute that can hold a custom key-value object.
+
+A possible solution here is to provide root level create, get, update, delete and find query and mutations as follows:
+
+- Create:
+  - Class Name: Name of the type to create
+  - Fields: The objects fields
+
+- Get:
+  - Class Name: Name of the type to fetch
+  - ID: ID of the object
+  - Fields: The fields of the class to return
+
+- Update:
+  - Class Name: Name of the type to update
+  - ID: ID of the object
+  - Fields: The fields to update as an object
+
+- Delete:
+  - Class Name: Name of the type to delete
+  - ID: ID of the object
+
+- Find:
+  - Class Name: defaultGraphQLTypes.CLASS_NAME_ATT,
+  - Where: Raw where query,
+  - Order: Sort order
+  - Skip: Skip first x items
+  - Limit: Limit ot x items
+
+In this method, the GraphQL service will need to query the database directly instead of delegating to the existing REST API.
+
+If we are able to access the database schema, we can iterate tables and create the corresponding GraphQL types. This would be preferable as we would be able to provide more concise syntax for accessing `additionalProperties` on objects like user preferences.
 
 ### Future possibilities
 
