@@ -1,4 +1,4 @@
-# Title <!-- What do you want to call your `awesome_feature`? -->
+# New Functions Runtime for Refactored Execution Model <!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: @lohanidamodar
 - Start Date: 10-08-2021
@@ -63,7 +63,7 @@ Write your answer below.
 
 -->
 
-The new Functions runtime will be developed as a web server. A web server that will receive a POST request to execute a code, then executes the code from requested path and returns the result. Being a web server, the request and response can happen synchronously, so that we can achieve Synchronous function execution.
+The new Functions runtime will be developed as a web server. A web server that will receive a POST request to execute a code, then executes user code and returns the result. Being a web server, the request and response can happen synchronously, so that we can achieve Synchronous function execution.
 
 ### How will the Runtime look
 
@@ -86,63 +86,42 @@ The response object will be used the user's functions to send back the response 
 
 ### How will execution occur
 
-The executor will load the user function to a specified volume inside the runtime volume then start the web server. For languages that support dynamic import or requiring codes the executor can send the path to the code folder and name of the entry file to execute.
-Some languages like dart (mostly statically typed languages, that don't support dynamic loading of code), the runtime will have a pre-defined directory where user code have to be loaded. Both the entry file name and entry function will have to be pre-defined. By default the runtime will contain stub code in order for runtime not to fail if no user code is provided in proper directory.
+The executor will build runtimes servers along with user code using some pre defined build scripts for each tag that gets activated and save the information regarding the container that is built for the tag. The executor will using another launch script to launch the build user code using the runtime container.
+
+For languages that are compiled like Rust and Dart, the plain alpine or Ubuntu runtime will be used to launch the runtime server once it's built. 
+
+For languages that don't build like Python and Javascript, same container is used to build and launch the user's code. The build and launch script has to be pre-defined for each language-runtime we support.
 
 User function should either contain the pre-defined function signature for the runtime as defined by the runtime or it should export a callback function with proper signature that runtime can import and execute.
 
 The user function will always receive request and response object. Request object will contain any values that is available to the function's execution. And users can use response object to send response back.
 
-1. It will require web server
-2. It receives path to extracted execution code files
-3.  entry file name / for some, entry function - set default main() - entry() - execute()
-4.  A signature for web server, that has request/response model
-5.  Wildcard endpoint, that accepts request to any endpoint
-6.  Handle dependencies of the function - Build step for every runtime (avoid uploading dependencies), handling conflicts
-7.  Prevent code execution outside of the controller endpoint
-8.  Timeout handling from executor, canceling Request from executor so that web server takes care of the rest
+### How will the Runtime Web Server Look
 
+The runtime web server will be a simple HTTP server running on port 3000, that accepts POST request with some pre-defined header in order to validate the request is from authorized source. Upon receiving the request, it executes the users code passing the received request object as well as newly formed response object with the structure defined above. Once executed it should receive response from users code otherwise it will throw an error.
+The Runtime server will not be exposed publicly, the executor will use the docker internal DNS to send request to runtime servers.
 
-1. Some kind of dependencies for each cloud functions language that has the type definitions for auto completion and type safety
+Some languages like Dart, will require a package that defines the types for request and response that we will be using on our runtimes so that user's writing the Dart functions will be able to import it for better IDE support and better error handling.
 
-Stage 1:
-## Node JS
-- micro/express/fastify
+### Building Runtimes for Various Languages
 
-## Deno
-- Native HTTP server
-
-## Dart
-- Shelf package
-
-Stage 2:
-## PHP
-- swoole with utopia
-
-## Python
-- Flask
-
-## Ruby
-- https://dev.to/leandronsp/web-basics-a-simple-http-server-in-ruby-2jj4
-
-Stage 3:
-## Kotlin
-- Spring
-- Compiled
-
-## .Net
-- compiled
-
----
-
-## Rust
-- Compiled
-
-## Swift
-- Compiled
-
-## GO
-- native web server
+1. NodeJS
+   - use micro, express or fastify to implement the server
+2. Deno
+   - Use the native HTTP server
+3. Dart
+   - Use the shelf package
+4. PHP
+   - use swoole
+5. Rust
+6. Python
+   - use flask
+7. Ruby
+   - https://dev.to/leandronsp/web-basics-a-simple-http-server-in-ruby-2jj4
+8. Kotlin
+9.  .Net
+10. Swift
+11. Go
 
 ### Prior art
 
@@ -169,6 +148,8 @@ whether they are brand new or if it is an adaptation from other software.
 Write your answer below.
 -->
 
+Fission functions are already using similar technology in order to build their runtimes for their Functions As a Service product. We can check out their runtimes at their [GitHub repository](- https://github.com/fission/environments)
+
 ### Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
@@ -184,8 +165,3 @@ Write your answer below.
 <!-- This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
-
-## Ref
-
-- ![Runtime Execution](2021-07-27-14-05-42.png)
-- https://github.com/fission/environments
