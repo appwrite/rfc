@@ -8,7 +8,7 @@
 [summary]: #summary
 
 <!-- Brief explanation of the proposed contribution. Write your answer below. -->
-This RFC contains a proposal for rewriting Cloud Functions in a way that will enable us to perform synchronous executions. This will introduce a new server into Appwrite specifically for dealing with executions called the "executor". The executor will deal with spinning up docker containers for runtimes that are required as well as updating containers with new code when needed. When API requests for functions are received the executor will forward them to the relevant runtime which will then handle it.
+This RFC contains a proposal for rewriting Cloud Functions in a way that will enable us to perform synchronous executions. This will introduce a new server into Appwrite specifically for dealing with executions called the "executor". The executor will deal with spinning up docker containers for runtimes that are required. When API requests for functions are received the executor will forward them to the relevant runtime which will then handle it.
 
 ## Problem Statement (Step 1)
 
@@ -27,6 +27,7 @@ Cloud Functions are currently a bit limited, this new design idea will allow for
 - A new process will be introduced to execute functions
 - All current runtimes will be updated to use a web server as it's core
 - The Functions worker will be stripped of all direct docker interactions and will instead call the executor
+- Functions will now have a build stage which will allow for dependencies for user functions to be fetched and for compiled languages to be supported.
 
 ## Design proposal (Step 2)
 
@@ -34,30 +35,47 @@ Cloud Functions are currently a bit limited, this new design idea will allow for
 
 With this redesign of how cloud functions work the functions worker will no longer have to deal with spinning up docker containers but will instead use the executor server. Which will handle spinning up containers on behalf of the functions worker.
 
-The executor will have multiple tasks but the main one is to spin up runtimes when they are needed and to update their code whenever functions are updated. Runtimes will now be web servers based of their relevant languages and when code is added it will be added to the Runtime web server's router.
+The executor will have multiple tasks but the main one is to spin up runtimes when they are needed. Runtimes will now be web servers based of their relevant languages. A new runtime will be launched for each tag that is executed.
 
-The executor will also act like a router itself, when API Requests that are for functions are received it will be the executor's job to correlate them to the relevant runtimes and forward them for processing. When the Runtime's web server is done processing the request and returns a response the executor will return the response to whatever client requested it.
-
-The executor will be built using a Swoole HTTP Server and will be stored in the file: `app/executor.php`. The executor will need to be on the same network as appwrite so the two can communicate. When a API call for the executor is recieve by appwrite it will simply forward it to the executor.
+The executor will be built using a Swoole HTTP Server and will be stored in the file: `app/executor.php`. The executor will need to be on the same network as appwrite so the two can communicate. When a API call for the executor is recieved by appwrite it will simply forward it to the executor.
 
 The functions worker will also be able to directly make API Calls to the executor server itself due to being on the same network.
 
 #### API Endpoints
-This rewrite will add functionality to the API endpoints that are currently used by the functions worker. The executor will take over these endpoints while the rest will stay underneath the functions worker.
+Most API endpoints externally will stay the same apart from adding a `async` parameter to the `Create Execution` endpoint.
 
-`POST /v1/functions/{id}/executions/` - Execute function API endpoint
+The `async` parameter will be by default set to `1`. If it is set to `0` the request will not be forwarded to the functions worker but will instead be directly communicated from appwrite to the executor. The result of the function will be returned directly as a result of the request in the following schema:
+```json
+{
+    "status": "completed",
+    "response": "Hello World!",
+    "time": 0.0001890380324243
+}
+```
 
-This Endpoint will not change for normal async executions and will stay relatively the same (using the queue system).
+The Create Function Tag endpoint will also be updated to change the `command` parameter to be called `entrypoint` to better show that the user will no longer be putting the entire launch command for a function but instead only the file name of their custom function.
 
-If the tag is syncronous then it will execute the functions directly using the executor and return the response, returning an error with a non 200 http code if anything goes wrong.
+Internally however the executor has 5 different endpoints.
+These endpoints are as follows:
 
-`PATCH /v1/functions/{id}/tag` - Update function tag API endpoint
+`/v1/execute` - This is the main endpoint used to execute functions. It replaces the execute() function in the functions worker instead making it a HTTP Call.
 
-The update tag endpoint for functions will have a new parameter in the JSON body to determine if the execution will be syncronous or asyncronous, this parameter will be called `isSync` and will be a boolean this variable will be stored with the in the tag on the database for future reference by the execute function endpoint.
+`/v1/cleanup/function` - This endpoint is used internally by appwrite mainly when a function is deleted. It will cleanup all runtimes and tags associated with the function.
 
-It will act like so:
-1. Extract the code tarball into the enviroment.
-2. Map the new code into the runtime environment using a volume
+`/v1/cleanup/tag` - This endpoint does the same thing as `/v1/cleanup/function` but only cleans up that one tag.
+
+`/v1/tag` - This gets called when a tag is selected. It will build a tag and launch it's runtime ready for execution.
+
+`/v1/healthz` - A basic sanity check for the executor. Not currently used within appwrite but useful for debugging and testing.
+
+#### Security
+As an added security precaustion to prevent runtimes from communicating with other runtimes each runtime is given a secret that is stored within a swoole table on the executor. This secret is also known to the runtimes themselves using the `APPWRITE_INTERNAL_RUNTIME_KEY` environment variable. This secret is passed to all requests from the executor to the runtimes using a header called `x-internal-challenge` this is verified by the runtime. If the secret is not correct a 401 will be returned and the function will not execute.
+
+Communication between appwrite and the executor is also protected using a environment variable key similarly to the runtimes however this environment variable key is set by the user. This is to prevent runtimes from accessing the executor directly and requesting executions that way.
+
+#### Signal Handler
+The executor also listens for the Unix `SIGINT`, `SIGQUIT`, `SIGKILL` and `SIGTERM` signals. If recieved the executor will remove all runtime containers, fail all executions with a message saying that the executor was shutdown during execution and cleanly exit.
+
 
 #### Flowchart Visualisation:
 
@@ -85,6 +103,7 @@ Write your answer below.
 
 #### Documentation
 Documentation will need to be updated to explain how syncronous execution works and how to use it.
+Documentation will also need to be updated to explain the unique quirks of each language since each of them have different ways of handling dependencies for example or how the code should be exported.
 
 ### Prior art
 
@@ -99,7 +118,6 @@ https://docs.fission.io/docs/architecture/
  - Discuss monitoring health of containers
  - Discuss horizontal scaling of containers
  - Using things such as [Amazon Firecracker](https://firecracker-microvm.github.io/)
- - Will the executor handle load balencing itself or will we use another service to deal with it?
 
 ### Future possibilities
 
