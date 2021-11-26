@@ -90,7 +90,7 @@ For example:
 **DELETE /v1/coffee ** - an endpoint for deleting coffee.
 -->
 
-**POST /v1/graphql** - an endpoint for querying and mutating Appwrite data with GraphQL. We will use Utopia PHP routes' object callbacks and metadata to init GraphQL queries and mutations.
+**POST /v1/graphql** - an endpoint for querying and mutating Appwrite data with GraphQL. We will use Utopia PHP routes' object callbacks and metadata to init GraphQL queries and mutations. Per request, we will load the related projects collections and extend the schema built from internal models.
 
 ### Data Structure
 
@@ -118,6 +118,17 @@ query accountGet { # [serviceName][ActionName]
 
 ```graphql
 mutation usersCreate { # [ServiceName][ActionName]
+  user { # Returned Model
+    name
+    email
+  }
+}
+```
+
+**Subscription Example:**
+
+```graphql
+subscription usersCreate { # [ServiceName][ActionName]
   user { # Returned Model
     name
     email
@@ -281,38 +292,44 @@ https://github.com/appwrite/appwrite/compare/0.7.x...graphql?expand=1
 
 <!-- Write your answer below. -->
 
-We should find an alternative way to handle the custom JSON object that we currently use in the REST API. One example is the user prefs key-value object, which doesn't have a predefined structure. Another is the Function objects `vars` attribute that can hold a custom key-value object.
+- Async Queries:
+  - Webonyx support async query resolvers using a Promises A+ implementation
+  - Replace `executeQuery` calls with `promiseToExecute`
+  - https://github.com/webonyx/graphql-php/blob/master/docs/data-fetching.md#async-php
+  - https://github.com/streamcommon/promise
+  
+- Query depth:
+  - Unlimited by default
+  - Queries that are too deep should return invalid query
+  - Sangria: 7 levels https://sangria-graphql.github.io/learn/#limiting-query-depth
+  - Webonyx: 10 levels https://github.com/webonyx/graphql-php/blob/master/docs/security.md#limiting-query-depth
+  - Spring-boot: 10 levels https://github.com/graphql-java-kickstart/graphql-spring-boot/issues/569
+  - GitHub are limiting based on calculated complexity, not depth: https://docs.github.com/en/graphql/overview/resource-limitations#node-limit
+  - More on other security methods: https://www.howtographql.com/advanced/4-security/
 
-A possible solution here is to provide root level create, get, update, delete and find query and mutations as follows:
+- File uploads:
+  - Possible with a middleware approach, following a specific spec
+  - https://github.com/Ecodev/graphql-upload
+  - https://github.com/jaydenseric/graphql-multipart-request-spec
 
-- Create:
-  - Class Name: Name of the type to create
-  - Fields: The objects fields
+- Subscriptions:
+  - Read-only
+  - Can be provided via WebSockets
+  - Suggested lifecycle:
+    - Send GQL_CONN_INIT -> Recv GQL_CONN_ACK
+    - Send GQL_START -> Recv GQL_DATA | GQL_ERROR
+    - Send GQL_DATA -> Recv GQL_DATA | GQL_ERROR
+    - Send GQL_STOP -> Disconnect
+    - https://github.com/apollographql/subscriptions-transport-ws/blob/master/src/message-types.ts
+  - Build a subscription type for each possible realtime event
+  - Create a subscription resolver function that accepts a realtime callback and returns a graphql response
+  - Subscribe to realtime passing resolver function as callback
+  - https://siler.leocavalcante.dev/graphql#graphql-subscriptions
+  - https://github.com/leocavalcante/siler
 
-- Get:
-  - Class Name: Name of the type to fetch
-  - ID: ID of the object
-  - Fields: The fields of the class to return
-
-- Update:
-  - Class Name: Name of the type to update
-  - ID: ID of the object
-  - Fields: The fields to update as an object
-
-- Delete:
-  - Class Name: Name of the type to delete
-  - ID: ID of the object
-
-- Find:
-  - Class Name: defaultGraphQLTypes.CLASS_NAME_ATT,
-  - Where: Raw where query,
-  - Order: Sort order
-  - Skip: Skip first x items
-  - Limit: Limit ot x items
-
-In this method, the GraphQL service will need to query the database directly instead of delegating to the existing REST API.
-
-If we are able to access the database schema, we can iterate tables and create the corresponding GraphQL types. This would be preferable as we would be able to provide more concise syntax for accessing `additionalProperties` on objects like user preferences.
+- Notes:
+  - Lazy loading types: https://github.com/webonyx/graphql-php/blob/master/docs/schema-definition.md#lazy-loading-of-types
+  - Resolver per type instead of field: https://github.com/webonyx/graphql-php/blob/master/docs/data-fetching.md#default-field-resolver-per-type
 
 ### Future possibilities
 
