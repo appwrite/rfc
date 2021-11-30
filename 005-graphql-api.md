@@ -13,7 +13,7 @@
 
 <!-- Brief explanation of the proposed contribution. Write your answer below. -->
 
-GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. GraphQL consumes a complete and understandable description of the data in your API, then gives clients the power to ask for **exactly** what they need from each model and nothing more. This means app developers can control the volume of data coming into their applications, and server developers have an easier time expanding their products.
+GraphQL is a query language for APIs and a runtime for fulfilling those queries with your existing data. GraphQL consumes a complete and understandable description of the models in your API, then gives clients the power to ask for **exactly** what they need from each model and nothing more. This means app developers can control the volume of data coming into their applications, and server developers have an easier time expanding their products.
 
 ### GraphQL vs REST API
 
@@ -68,10 +68,10 @@ A new container will be added to the Appwrite network as `appwrite-graphql`.
 
 ### Entrypoints
 
-Per convention there will be a new php entrypoint and a bash wrapper.
+Per convention there will be a new php entrypoint and a shell wrapper.
 
 - php: `./app/graphql.php`
-- bash: `./bin/graphql`
+- shell: `./bin/graphql`
 
 ### Routing
 
@@ -101,7 +101,7 @@ need to have and why. Please think well about the naming conventions and how wel
 Appwrite conventions. Try and stay as consistent with existing patterns as much as possible.
 -->
 
-Each Appwrite route has a label with its method name (`->label('sdk.method', 'getPrefs')`). This label was used only to generate the REST API SDKs using the [SDK generator](https://github.com/appwrite/sdk-generator). We should preload all the routes and sort them in a hash where the method name is the key for fast routing between the different GraphQL API actions.
+Each Appwrite route has a label with its method name (`->label('sdk.method', 'getPrefs')`). This label is being used to generate the REST API SDKs using the [SDK generator](https://github.com/appwrite/sdk-generator). We will preload all the routes' types, queries and mutations and sort them in a hash where the method name is the key for fast routing between the different GraphQL API actions.
 
 **Query Example:**
 
@@ -117,7 +117,7 @@ query accountGet { # [serviceName][ActionName]
 **Mutation Example:**
 
 ```graphql
-mutation usersCreate { # [ServiceName][ActionName]
+mutation accountSessionCreate($email: string, $password: string) { # [ServiceName][ActionName]
   user { # Returned Model
     name
     email
@@ -136,7 +136,30 @@ subscription usersCreate { # [ServiceName][ActionName]
 }
 ```
 
-Load all Appwrite relevant routes, models, and Database collections into the Utopia GraphQL adapter. Any `GET` routes should be loaded as GraphQL queries, any `POST`, `PUT`, `PATCH`, or `DELETE` methods should be loaded as mutations. Both Appwrite Models objects and Database collections should be loaded as GraphQL objects. All the data is available using existing Appwrite libraries. Make sure to also include models for error objects ([dev](https://github.com/appwrite/appwrite/blob/764672e15e8c3a4c0c3891d620d293e1ead9045c/src/Appwrite/Utopia/Response/Model/Error.php) & [non-dev](https://github.com/appwrite/appwrite/blob/764672e15e8c3a4c0c3891d620d293e1ead9045c/src/Appwrite/Utopia/Response/Model/ErrorDev.php)).
+### Async Queries
+
+We can support async query resolvers using a [Promises/A+](https://github.com/promises-aplus/promises-spec) implementation. We provide an implementation of the required interface that leverages Swoole coroutines.
+
+References
+  - https://github.com/webonyx/graphql-php/blob/master/docs/data-fetching.md#async-php
+  - https://github.com/streamcommon/promise
+  
+### Query Depth
+
+Query depth is unlimited by default but this could introduce performance issues for complex requests. We will limit queries to a maximum depth of 10. By analyzing the query document’s abstract syntax tree (AST), the GraphQL server can reject or accept a request based on its depth.
+
+Examples:
+- Sangria: 7 levels https://sangria-graphql.github.io/learn/#limiting-query-depth
+- Webonyx: 10 levels https://github.com/webonyx/graphql-php/blob/master/docs/security.md#limiting-query-depth
+- Spring-boot: 10 levels https://github.com/graphql-java-kickstart/graphql-spring-boot/issues/569
+
+### File Uploads
+
+File uploads can be achieved by creating a middleware that allows requests with header `multipart/form-data` following a predefined spec to attach files to the request payload.
+
+References
+- https://github.com/Ecodev/graphql-upload
+- https://github.com/jaydenseric/graphql-multipart-request-spec
 
 ### Error Handling
 
@@ -175,8 +198,9 @@ Avoid using 3rd party libraries when possible, if required - explain why.
 -->
 
 - [utopia-php/graphql](https://github.com/utopia-php/graphql) - To be completed
+  - [webonyx/graphql-php](https://github.com/webonyx/graphql-php)
 
-Utopia GraphQL library provides an abstraction layer around GraphQL PHP parser/executors. Currently [webonyx/graphql-php](https://github.com/webonyx/graphql-php) is the only supported adapter.
+Utopia GraphQL library will provide an abstraction layer around GraphQL parser/executors. Currently [webonyx/graphql-php](https://github.com/webonyx/graphql-php) would be the only supported adapter.
 
 ### Security
 
@@ -196,16 +220,6 @@ On HTTP Handshakes, cookies are usually sent along, which we can use for authent
 
 Using JWT authentication can be easier to implement and pass to the server.
 
-Reference: https://webonyx.github.io/graphql-php/error-handling/
-
-### Breaking Changes
-
-<!--
-Do we break any API or SDK backward compatibility?
-If possible, explain what actions we can take to avoid that.
--->
-
-No breaking changes.
 
 #### Scaling
 
@@ -241,9 +255,12 @@ Please answer the following questions:
 4. What **demo applications** can help us demonstrate this feature APIs and capabilities? 
 
 -->
-app
+
 - Create a new dedicated documentation page for using the GraphQL service. List all the different authentication methods, actions available, and response models.
 - Create a short tutorial that explains how to use the new service in common use-cases.
+- Create an in-depth tutorial that explains how to use the new service.
+- Create an article that discusses GraphQL and REST
+- Create demo client applications
 
 ### Prior art
 
@@ -292,34 +309,18 @@ https://github.com/appwrite/appwrite/compare/0.7.x...graphql?expand=1
 
 <!-- Write your answer below. -->
 
-- Async Queries:
-  - Webonyx support async query resolvers using a Promises A+ implementation
-  - Replace `executeQuery` calls with `promiseToExecute`
-  - https://github.com/webonyx/graphql-php/blob/master/docs/data-fetching.md#async-php
-  - https://github.com/streamcommon/promise
+### SDK Use
+
+How should the SDK's allow GraohQL use? 
   
-- Query depth:
-  - Unlimited by default
-  - Queries that are too deep should return invalid query
-  - Sangria: 7 levels https://sangria-graphql.github.io/learn/#limiting-query-depth
-  - Webonyx: 10 levels https://github.com/webonyx/graphql-php/blob/master/docs/security.md#limiting-query-depth
-  - Spring-boot: 10 levels https://github.com/graphql-java-kickstart/graphql-spring-boot/issues/569
-  - GitHub are limiting based on calculated complexity, not depth: https://docs.github.com/en/graphql/overview/resource-limitations#node-limit
-  - More on other security methods: https://www.howtographql.com/advanced/4-security/
+Options
+- Global `UseGraphQL` flag
+- Per service request flag
 
-- File uploads:
-  - Possible with a middleware approach, following a specific spec
-  - https://github.com/Ecodev/graphql-upload
-  - https://github.com/jaydenseric/graphql-multipart-request-spec
-
-- Subscriptions:
+### Subscriptions:
   - Read-only
   - Can be provided via WebSockets
   - Suggested lifecycle:
-    - Send GQL_CONN_INIT -> Recv GQL_CONN_ACK
-    - Send GQL_START -> Recv GQL_DATA | GQL_ERROR
-    - Send GQL_DATA -> Recv GQL_DATA | GQL_ERROR
-    - Send GQL_STOP -> Disconnect
     - https://github.com/apollographql/subscriptions-transport-ws/blob/master/src/message-types.ts
   - Build a subscription type for each possible realtime event
   - Create a subscription resolver function that accepts a realtime callback and returns a graphql response
