@@ -309,14 +309,6 @@ https://github.com/appwrite/appwrite/compare/0.7.x...graphql?expand=1
 
 <!-- Write your answer below. -->
 
-### SDK Use
-
-How should the SDK's allow GraohQL use? 
-  
-Options
-- Global `UseGraphQL` flag
-- Per service request flag
-
 ### Subscriptions:
   - Read-only
   - Can be provided via WebSockets
