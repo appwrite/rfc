@@ -220,7 +220,6 @@ On HTTP Handshakes, cookies are usually sent along, which we can use for authent
 
 Using JWT authentication can be easier to implement and pass to the server.
 
-
 #### Scaling
 
 <!-- Explain how we will scale this new feature. -->
@@ -308,6 +307,94 @@ https://github.com/appwrite/appwrite/compare/0.7.x...graphql?expand=1
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 <!-- Write your answer below. -->
+
+
+#### New API Controller or Container?
+
+For single container:
+- The GraphQL API should be a separate concern and do one job well.
+- Having a separate container gives users an easier way to turn off the functionality
+  
+For API controller:
+- No additional container configuration required
+
+#### Ability for Utopia callback actions to execute concurrently (to support async queries) 
+
+
+#### Limiting Query Complexity
+
+Complexity analysis is a separate validation rule which calculates query complexity score before execution. Every field in the query gets a default score 1 (including the enclosing ObjectType nodes). Total complexity of the query is the sum of all field scores.
+
+For example, the following query would have a compltexity score of 6.
+
+```gql
+query Test {
+  droid(id: "1000") {
+    id
+    serialNumber
+  }
+
+  pet {
+    name
+    age
+  }
+}
+```
+
+If this score exceeds a threshold, a query is not executed and an error is returned instead.
+
+A global complexity threshold can be set:
+
+```php
+$rule = new QueryComplexity($maxQueryComplexity = 100);
+DocumentValidator::addRule($rule);
+```
+
+Or per query:
+
+```php
+$myValiationRules = array_merge(
+    GraphQL::getStandardValidationRules(),
+    [
+        new Rules\QueryComplexity(100)
+    ]
+);
+
+$result = GraphQL::executeQuery(
+    ...
+    $myValiationRules // <-- This will override global validation rules for this request
+);
+```
+
+We can override complexity resolvers per type: (perfect for list types, where complexity should be (child complexity * sum)
+
+$type = new ObjectType([
+    'name' => 'MyType',
+    'fields' => [
+        'someList' => [
+            'type' => Type::listOf(Type::string()),
+            'args' => [
+                'limit' => [
+                    'type' => Type::int(),
+                    'defaultValue' => 10
+                ]
+            ],
+            'complexity' => function($childrenComplexity, $args) {
+                return $childrenComplexity * $args['limit'];
+            }
+        ]
+    ]
+]);
+
+#### How will usage stats integrate
+
+#### Can we load only the request related user defined collections into the schema
+
+#### Abuse Control
+
+- GraphQL endpoint limited to 128 requests per IP per minute
+- Environment variable to set maximum query complexity
+- Environment variable to set maximum query depth
 
 ### Subscriptions:
   - Read-only
