@@ -64,7 +64,7 @@ Write your answer below.
 
 ### Containers
 
-A new container will be added to the Appwrite network as `appwrite-graphql`.
+A new container could be added to the Appwrite network as `appwrite-graphql`. A new container could be used to keep the concern (and scalability) of the GraphQL API separate to the REST API. This would give users more control over their Appwrite stack.
 
 ### Entrypoints
 
@@ -75,7 +75,7 @@ Per convention there will be a new php entrypoint and a shell wrapper.
 
 ### Routing
 
-Traefik will be used to route all requests with a path prefix `/v1/graphql` to the new GraphQL container.
+Traefik will be used to route all requests with a path prefix `/v1/graphql` to the new GraphQL container, as well as scaling and load balancing each container instance.
 
 ### API Endpoints
 
@@ -103,46 +103,61 @@ Appwrite conventions. Try and stay as consistent with existing patterns as much 
 
 Each Appwrite route has a label with its method name (`->label('sdk.method', 'getPrefs')`). This label is being used to generate the REST API SDKs using the [SDK generator](https://github.com/appwrite/sdk-generator). We will preload all the routes' types, queries and mutations and sort them in a hash where the method name is the key for fast routing between the different GraphQL API actions.
 
-**Query Example:**
+Additionally, we can read the collections collection to determine if there are used defined types that would need to be included in the schema. This could be done in two places. Once at boot to preload any existing types, then again per request. Each new type loaded will be cached. When loading types per request, user defined types related to the given project ID only will be loaded into the schema.
+
+User defined types could be used to build CRUD queries and mutations. For example, for a user collection `Movies` we could generate:
+
+- 1 queries: 
+  - `moviesGet`
+- 3 mutations:
+  - `moviesCreate`
+  - `moviesUpdate`
+  - `moviesDelete`
+
+Where for each collection, each attribute would be added as a field.
+
+**Examples:**
+
+```gql
+type Movie {
+  title: String!
+  year: String!
+}
+
+query movieGet($_id: String, $title: String, $year: String): Movie { # [CollectionName][ActionName]([Attributes])
+  _id
+  title
+  year
+}
+
+mutation movieCreate($title: String!, $year: String!) { # [CollectionName][ActionName]([Attributes])
+  _id
+  title
+  year
+}
+```
 
 ```graphql
 query accountGet { # [serviceName][ActionName]
-  user { # Returned Model
-    name
-    email
-  }
+  name
+  email
 }
-```
 
-**Mutation Example:**
-
-```graphql
-mutation accountSessionCreate($email: string, $password: string) { # [ServiceName][ActionName]
-  user { # Returned Model
-    name
-    email
-  }
-}
-```
-
-**Subscription Example:**
-
-```graphql
-subscription usersCreate { # [ServiceName][ActionName]
-  user { # Returned Model
-    name
-    email
-  }
+mutation accountSessionCreate($email: string, $password: string) { # [ServiceName][ActionName]([Parameters])
+  name
+  email
 }
 ```
 
 ### Async Queries
 
-We can support async query resolvers using a [Promises/A+](https://github.com/promises-aplus/promises-spec) implementation. We provide an implementation of the required interface that leverages Swoole coroutines.
+We can support async query resolvers by providing an implementation of the required `Promise` interface that leverages Swoole coroutines.
 
-References
-  - https://github.com/webonyx/graphql-php/blob/master/docs/data-fetching.md#async-php
-  - https://github.com/streamcommon/promise
+Reference: 
+- https://github.com/webonyx/graphql-php/blob/master/docs/data-fetching.md#async-php
+
+Example implementation: 
+- https://github.com/streamcommon/promise/blob/master/lib/ExtSwoolePromise.php
   
 ### Query Depth
 
@@ -311,12 +326,14 @@ https://github.com/appwrite/appwrite/compare/0.7.x...graphql?expand=1
 
 #### New API Controller or Container?
 
-For single container:
-- The GraphQL API should be a separate concern and do one job well.
-- Having a separate container gives users an easier way to turn off the functionality
+For new container:
+- The GraphQL API could scale independently of the REST API
+- Users have an easier way to choose if particular API's are available
+- Eliminates
   
-For API controller:
-- No additional container configuration required
+For new API controller:
+- Easier integration
+- Less host resources consumed
 
 #### Ability for Utopia callback actions to execute concurrently (to support async queries) 
 
@@ -390,11 +407,28 @@ $type = new ObjectType([
 
 #### Can we load only the request related user defined collections into the schema
 
+On app init (init.php), the base GraphQL schema can be built from the Utopia routes using the namespace, method and response model labels.
+
+Because users could add custom collections at runtime, we can not preload all possible types a user could request into the base schema.
+
+One way around this limitation is loading the user defined collections at runtime, prior to passing the request to the GraphQL executor.
+
+This would introduce measurable latency to each request to the GraphQL API. To minimize that latency, we could read only collections related to the project who's ID was passed with the request.
+
+This could be done with a middleware, which would:
+
+- Read the request
+- Fetch the value of `X-Appwrite-Project` header
+- Read the collections collection for that project
+- Iterate each collections rules
+- Create a GraphQL `ObjectType` for each (storing in the type registry for caching)
+- Extend the root schema with the newly created schema
+
 #### Abuse Control
 
 - GraphQL endpoint limited to 128 requests per IP per minute
-- Environment variable to set maximum query complexity
-- Environment variable to set maximum query depth
+- Environment variable to set maximum query complexity: _APP_GRAPHQL_MAX_COMPLEXITY
+- Environment variable to set maximum query depth: _APP_GRAPHQL_MAX_DEPTH
 
 ### Subscriptions:
   - Read-only
