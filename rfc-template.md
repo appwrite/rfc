@@ -1,6 +1,6 @@
 # Utopia ACME Client <!-- What do you want to call your `awesome_feature`? -->
 
-- Implementation Owner: @Samarth-Khatri
+- Implementation Owner: [@Samarth-Khatri](https://github.com/Samarth-Khatri)
 - Start Date: 17-01-2022
 - Target Date: 17-04-2022
 - Appwrite Issue:
