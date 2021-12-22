@@ -167,6 +167,6 @@ I have had a bit of practical experience of using PostgreSQL with php in the pas
 
 ### Project Deliverables
 
-At the 3 month program the following result shall be delivered:-
+At the end of the 3 month program, following result shall be delivered:-
 
 - Properly tested and working PostgreSQL Adapter.
