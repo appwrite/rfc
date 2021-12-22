@@ -182,7 +182,7 @@ This feature can be benchmarked on the basis if the user is able to choose among
 <!-- Explain how we will benchmark the new feature. -->
 
 #### Tests (UI, Unit, E2E)
-I will be using PHP unit to test this new feature. I will be making uploads and deletion to the buckets and validate its functionality.
+I will be using PHPUnit to test this new feature. I will be making uploads and deletion to the buckets and validate its functionality.
 
 <!-- 
 Explain how we will test the new feature. 
