@@ -100,38 +100,79 @@ $signature = hash_hmac('sha256', $policy, $signingKey);
 - https://www.backblaze.com/b2/docs/s3_compatible_api.html
 - https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html
 
-### Upload a File 
-
-When uploading a file to B2, you must call `b2_get_upload_url` first to get the URL for uploading. Then, you use `b2_upload_file` on this URL to upload your file.
-Here's an implementation example.
-
-`b2_get_upload_url`  
-
- ```php
+### Creating a Bucket
+Creating a bucket  we need to pass in the account id, bucket name and type. 
+```php
+$account_id = ""; // Obtained from your B2 account page
 $api_url = ""; // From b2_authorize_account call
 $auth_token = ""; // From b2_authorize_account call
-$bucket_id = "";  // The ID of the bucket you want to upload to
+$bucket_name = ""; // 6 char min, 50 char max: letters, digits, - and _
+$bucket_type = "allPrivate"; // Either allPublic or allPrivate
 
-$session = curl_init($api_url .  "/b2api/v2/b2_get_upload_url");
+$session = curl_init($api_url .  "/b2api/v2/b2_create_bucket");
 
 // Add post fields
-$data = array("bucketId" => $bucket_id);
+$data = array("accountId" => $account_id, "bucketName" => $bucket_name, "bucketType" => $bucket_type);
 $post_fields = json_encode($data);
 curl_setopt($session, CURLOPT_POSTFIELDS, $post_fields); 
 
 // Add headers
 $headers = array();
+$headers[] = "Authorization: " . $auth_token;
 curl_setopt($session, CURLOPT_HTTPHEADER, $headers); 
+
 curl_setopt($session, CURLOPT_POST, true); // HTTP POST
 curl_setopt($session, CURLOPT_RETURNTRANSFER, true);  // Receive server response
 $server_output = curl_exec($session); // Let's do this!
 curl_close ($session); // Clean up
 echo ($server_output);
- ```
-`b2_upload_file`  
+```
+### Doc References
+- https://www.backblaze.com/b2/docs/b2_create_bucket.html
+
+### Upload a File 
+
+```http
+PUT /Key+ HTTP/1.1
+Host: Bucket.s3.amazonaws.com
+x-amz-acl: ACL
+Cache-Control: CacheControl
+Content-Disposition: ContentDisposition
+Content-Encoding: ContentEncoding
+Content-Language: ContentLanguage
+Content-Length: ContentLength
+Content-MD5: ContentMD5
+Content-Type: ContentType
+Expires: Expires
+x-amz-grant-full-control: GrantFullControl
+x-amz-grant-read: GrantRead
+x-amz-grant-read-acp: GrantReadACP
+x-amz-grant-write-acp: GrantWriteACP
+x-amz-server-side-encryption: ServerSideEncryption
+x-amz-storage-class: StorageClass
+x-amz-website-redirect-location: WebsiteRedirectLocation
+x-amz-server-side-encryption-customer-algorithm: SSECustomerAlgorithm
+x-amz-server-side-encryption-customer-key: SSECustomerKey
+x-amz-server-side-encryption-customer-key-MD5: SSECustomerKeyMD5
+x-amz-server-side-encryption-aws-kms-key-id: SSEKMSKeyId
+x-amz-server-side-encryption-context: SSEKMSEncryptionContext
+x-amz-server-side-encryption-bucket-key-enabled: BucketKeyEnabled
+x-amz-request-payer: RequestPayer
+x-amz-tagging: Tagging
+x-amz-object-lock-mode: ObjectLockMode
+x-amz-object-lock-retain-until-date: ObjectLockRetainUntilDate
+x-amz-object-lock-legal-hold: ObjectLockLegalHoldStatus
+x-amz-expected-bucket-owner: ExpectedBucketOwner
+
+Body
+```
 
 ### Doc References
 - https://www.backblaze.com/b2/docs/b2_get_upload_url.html
+- https://www.backblaze.com/b2/docs/b2_upload_file.html
+
+### Deleting a file
+
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail, keeping in mind the following:
 
