@@ -21,9 +21,9 @@ BackBlaze B2 and Linode object storage has been a go to alternative for AWS S3 a
 
 **What problem are you trying to solve?**
 
-By default, Appwrite uses a docker volume to store the user's files which restricts the user to only one choice of storage. It also makes the user's application incompatible to deploy to mordern day platforms like [Heroku](https://www.heroku.com/).
-Therefore, a need for storage adpaters to support multiple storage services is required. 
-By implementing storage adapters for backblaze and Linode , the users will now have a choice to choose from a different storage service with a freedom to deploy to mordern day platforms such as [Heroku](https://www.heroku.com/). Hence, making the platform agnostic.
+By default, Appwrite uses a docker volume to store the user's files which restricts the user to only one choice of storage. It also makes the user's application incompatible to deploy to modern day platforms like [Heroku](https://www.heroku.com/).
+Therefore, a need for storage adapters to support multiple storage services is required. 
+By implementing storage adapters for backblaze and Linode , the users will now have a choice to choose from a different storage service with a freedom to deploy to modern day platforms such as [Heroku](https://www.heroku.com/). Hence, making the platform agnostic.
 
 <!--
 What problem are you trying to solve? Explain the context or background in which this problem exists.
@@ -32,7 +32,7 @@ Please avoid discussing your proposed solution.
 
 ## Design proposal (Step 2)
 
-BackBlaze and Linode provide a S3 compatible API that can be utlilized in this implementation.
+BackBlaze and Linode provide a S3 compatible API that can be utilized in this implementation.
 
 ### Approach
 
@@ -50,7 +50,7 @@ Two new PHP files to be created :
 - src/Storage/Device/LOS.php
 - src/Storage/Device/BackBlaze.php
 
-Both of the storage implementation will be extending from the S3 adpater class. Therefore, we can utilize the already implemeted AWS V4 signatures  for authentication and other functions in the Backblaze and Linode implementation.
+Both of the storage implementation will be extending from the S3 adapter class. Therefore, we can utilize the already implemented AWS V4 signatures  for authentication and other functions in the Backblaze and Linode implementation.
 
 For LOS(Linode object storage) `..Device/LOS.php`:  
 
@@ -102,7 +102,7 @@ public function __construct(string $root, string $accessKey, string $secretKey, 
 ```
 ### Editing Other files
 
-The above implements the core functionality of the adapter. The final thing to implement would be to just set the name and description for each of the adapters. After which Updating this information amongs docs / other files will conclude it.
+The above implements the core functionality of the adapter. The final thing to implement would be to just set the name and description for each of the adapters. After which Updating this information among docs / other files will conclude it.
 
 Below are some of the docs/files I will be editing: 
 
@@ -169,7 +169,7 @@ There won't be any need for new supporting Libraries.
 Do we break any API or SDK backward compatibility?
 If possible, explain what actions we can take to avoid that.
 -->
-Since the implementations extends from the S3 adapter class, if there is some changes in the S3 file , especially new API calls that might not be supported by the S3 compatible API provided by BackBlaze and Linode then there is a chance for my implementations to not function.
+Since the implementations extends from the S3 adapter class, if there are some changes in the S3 file , especially new API calls that might not be supported by the S3 compatible API provided by BackBlaze and Linode then there is a chance for my implementations to not function. In such a case, the code can be modified with alternatives.
 ### Reliability (Tests & Benchmarks)
 
 #### Scaling
@@ -258,8 +258,7 @@ Write your answer below.
 
 [future-possibilities]: #future-possibilities
 
-- Since the S3 Adapter has been setup for appwrite, I can continue to implement other S3 compatabile APIs among different Cloud Storage Providers during my tenure, This gives the user plenty of options to choose from.
-
+- Since the S3 Adapter has been setup for appwrite, I can continue to implement other S3 compatible APIs among different Cloud Storage Providers during my tenure, this gives the user plenty of options to choose from.
 <!-- This is also a good place to "dump ideas" if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
