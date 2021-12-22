@@ -32,8 +32,106 @@ Please avoid discussing your proposed solution.
 
 ## Design proposal (Step 2)
 
-[design-proposal]: #design-proposal
+BackBlaze provides a S3 compatible API that can be utlilized in this implementation.
 
+### Authentication
+
+Add BackBlaze adapter that extends `S3` and its required functions in [utopia-php/storage](https://github.com/utopia-php/storage) library. A new file `BackBlaze.php` to be added to the Device folder.
+
+For authehtication we need to generae AWS v4 signatures. The below code is a same as of the [s3 storage support rfc](https://github.com/appwrite/rfc/blob/main/009-s3-storage-support.md) as they both utilize v4 signatures. I have just mentioned it here as reference. Since this code is already implemented I will be utilizing this by extending the Class BackBlaze from Class S3. 
+
+**Code syntax**:
+```
+class Backblaze extends S3{
+/*
+Implementation
+*/
+}
+
+```
+### How to generate v4 signatures (referenced)
+We will use `private` ACL so that the files are only accessible via Appwrite.
+
+```php
+$accessKeyId = 'YOUR_ACCESS_KEY_ID';
+$secretKey = 'YOUR_SECRET_KEY';
+$bucket = 'YOUR_BUCKET_NAME';
+$region = 'BUCKET_AMAZON_REGION'; // us-west-2, us-east-1, etc
+$acl = 'ACCESS_CONTROL_LIST'; // private, public-read, etc
+
+// VARIABLES
+// These are used throughout the request.
+$longDate = gmdate('Ymd\THis\Z');
+$shortDate = gmdate('Ymd');
+$credential = $accessKeyId . '/' . $shortDate . '/' . $region . '/s3/aws4_request';
+
+// POST POLICY
+// Amazon requires a base64-encoded POST policy written in JSON.
+// This tells Amazon what is acceptable for this request. For
+// simplicity, we set the expiration date to always be 24H in 
+// the future. The two "starts-with" fields are used to restrict
+// the content of "key" and "Content-Type", which are specified
+// later in the POST fields. Again for simplicity, we use blank
+// values ('') to not put any restrictions on those two fields.
+$policy = base64_encode(json_encode([
+    'expiration' => gmdate('Y-m-d\TH:i:s\Z', time() + 86400),
+    'conditions' => [
+        ['acl' => $acl],
+        ['bucket' => $bucket],
+        ['starts-with', '$Content-Type', ''],
+        ['starts-with', '$key', ''],
+        ['x-amz-algorithm' => 'AWS4-HMAC-SHA256'],
+        ['x-amz-credential' => $credential],
+        ['x-amz-date' => $longDate]
+    ]
+]));
+
+// SIGNATURE
+// A base64-encoded HMAC hashed signature with your secret key.
+// This is used so Amazon can verify your request, and will be
+// passed along in a POST field later.
+$signingKey = hash_hmac('sha256', $shortDate, 'AWS4' . $secretKey, true);
+$signingKey = hash_hmac('sha256', $region, $signingKey, true);
+$signingKey = hash_hmac('sha256', 's3', $signingKey, true);
+$signingKey = hash_hmac('sha256', 'aws4_request', $signingKey, true);
+$signature = hash_hmac('sha256', $policy, $signingKey);
+```
+### Doc References
+- https://www.backblaze.com/b2/docs/s3_compatible_api.html
+- https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html
+
+### Upload a File 
+
+When uploading a file to B2, you must call `b2_get_upload_url` first to get the URL for uploading. Then, you use `b2_upload_file` on this URL to upload your file.
+Here's an implementation example.
+
+`b2_get_upload_url`  
+
+ ```php
+$api_url = ""; // From b2_authorize_account call
+$auth_token = ""; // From b2_authorize_account call
+$bucket_id = "";  // The ID of the bucket you want to upload to
+
+$session = curl_init($api_url .  "/b2api/v2/b2_get_upload_url");
+
+// Add post fields
+$data = array("bucketId" => $bucket_id);
+$post_fields = json_encode($data);
+curl_setopt($session, CURLOPT_POSTFIELDS, $post_fields); 
+
+// Add headers
+$headers = array();
+curl_setopt($session, CURLOPT_HTTPHEADER, $headers); 
+curl_setopt($session, CURLOPT_POST, true); // HTTP POST
+curl_setopt($session, CURLOPT_RETURNTRANSFER, true);  // Receive server response
+$server_output = curl_exec($session); // Let's do this!
+curl_close ($session); // Clean up
+echo ($server_output);
+ ```
+`b2_upload_file`  
+
+### Doc References
+- https://www.backblaze.com/b2/docs/b2_get_upload_url.html
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail, keeping in mind the following:
 
