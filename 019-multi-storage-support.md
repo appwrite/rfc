@@ -5,7 +5,7 @@
 - Target Date: 07/04/2022
 - Appwrite Issue: NA
 - LinkedIn : [Everly Precia Suresh](https://www.linkedin.com/in/everly-precia-suresh-196bba1b7/)
-- Resume/CV : [View Here]()
+- Resume/CV : [View Here](https://drive.google.com/file/d/15lYvZ1KfB4JRoT0Y_FIioxkL5EdW6x8S/view?usp=sharing)
 
 ## Summary
 As part of the ongoing progress of implementing multiple storage support to make appwrite agnostic, I propose to implement a BackBlaze and Linode Object storage adapter.
