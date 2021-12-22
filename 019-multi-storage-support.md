@@ -1,4 +1,4 @@
-# BackBlaze Storage Support <!-- What do you want to call your `awesome_feature`? -->
+# Multi Storage Support (BackBlaze and Linode Object Storage)<!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: [@everly-gif](https://github.com/everly-gif)
 - Start Date: 22/12/2021
@@ -8,8 +8,8 @@
 - Resume/CV : [View Here]()
 
 ## Summary
-As part of the ongoing progress of implementing multiple storage support to make appwrite agnostic, I propose to implement a BackBlaze storage adapter.
-BackBlaze B2 has been a go to alternative for AWS S3, among users. By implementing this adapter, the user will now be able to choose to store their files in Backblaze B2.
+As part of the ongoing progress of implementing multiple storage support to make appwrite agnostic, I propose to implement a BackBlaze and Linode Object storage adapter.
+BackBlaze B2 and Linode object storage has been a go to alternative for AWS S3 among users. By implementing these adapters, the user will now be able to choose to store their files in Backblaze B2 or Linode Object Storage.
 
 [summary]: #summary 
 
@@ -21,9 +21,9 @@ BackBlaze B2 has been a go to alternative for AWS S3, among users. By implementi
 
 **What problem are you trying to solve?**
 
-By default, Appwrite uses a docker volume to store the user's files which restricts the user to only one choice of storage.
+By default, Appwrite uses a docker volume to store the user's files which restricts the user to only one choice of storage. It also makes the user's application incompatible to deploy to mordern day platforms like [Heroku](https://www.heroku.com/).
 Therefore, a need for storage adpaters to support multiple storage services is required. 
-By implementing a backblaze storage adapter , the users will now have a choice to choose from a different storage service making the platform agnostic.
+By implementing storage adapters for backblaze and Linode , the users will now have a choice to choose from a different storage service with a freedom to deploy to mordern day platforms such as [Heroku](https://www.heroku.com/). Hence, making the platform agnostic.
 
 <!--
 What problem are you trying to solve? Explain the context or background in which this problem exists.
@@ -32,146 +32,54 @@ Please avoid discussing your proposed solution.
 
 ## Design proposal (Step 2)
 
-BackBlaze provides a S3 compatible API that can be utlilized in this implementation.
+BackBlaze and Linode provide a S3 compatible API that can be utlilized in this implementation.
 
-### Authentication
+### Approach
 
-Add BackBlaze adapter that extends `S3` and its required functions in [utopia-php/storage](https://github.com/utopia-php/storage) library. A new file `BackBlaze.php` to be added to the Device folder.
+I would divide the implementation of storage adapters into the following steps, by implementing these functions one can effectively implement storage adapters.
 
-For authehtication we need to generae AWS v4 signatures. The below code is a same as of the [s3 storage support rfc](https://github.com/appwrite/rfc/blob/main/009-s3-storage-support.md) as they both utilize v4 signatures. I have just mentioned it here as reference. Since this code is already implemented I will be utilizing this by extending the Class BackBlaze from Class S3. 
+- **Authentication**: Providing account/bucket/file access.
+- **Bucket Management**: Creating and managing the buckets that hold files.
+- **Upload**: Sending files to the cloud.
+- **Download**: Retrieving files from the cloud.
+- **List**: Data checking/selection/comparison.
 
-**Code syntax**:
-```
-class Backblaze extends S3{
-/*
+### Implementation and Dependencies
+
+Two new PHP files to be created :  
+- src/Storage/Device/LOS.php
+- src/Storage/Device/BackBlaze.php
+
+Both of the storage implementation will be extending from the S3 adpater class. Therefore, we can utilize the already implemeted AWS V4 signatures for authentication in the Backblaze and Linode implementation.
+
+For LOS(Linode object storage) `..Device/LOS.php`:  
+
+```php
+namespace Utopia\Storage\Device;
+
+use Utopia\Storage\Device\S3;
+
+class LOS extends S3
+{
+/* 
 Implementation
 */
 }
-
 ```
-### How to generate v4 signatures (referenced)
-We will use `private` ACL so that the files are only accessible via Appwrite.
+For BackBlaze `..Device/BackBlaze.php`: 
 
 ```php
-$accessKeyId = 'YOUR_ACCESS_KEY_ID';
-$secretKey = 'YOUR_SECRET_KEY';
-$bucket = 'YOUR_BUCKET_NAME';
-$region = 'BUCKET_AMAZON_REGION'; // us-west-2, us-east-1, etc
-$acl = 'ACCESS_CONTROL_LIST'; // private, public-read, etc
+namespace Utopia\Storage\Device;
 
-// VARIABLES
-// These are used throughout the request.
-$longDate = gmdate('Ymd\THis\Z');
-$shortDate = gmdate('Ymd');
-$credential = $accessKeyId . '/' . $shortDate . '/' . $region . '/s3/aws4_request';
+use Utopia\Storage\Device\S3;
 
-// POST POLICY
-// Amazon requires a base64-encoded POST policy written in JSON.
-// This tells Amazon what is acceptable for this request. For
-// simplicity, we set the expiration date to always be 24H in 
-// the future. The two "starts-with" fields are used to restrict
-// the content of "key" and "Content-Type", which are specified
-// later in the POST fields. Again for simplicity, we use blank
-// values ('') to not put any restrictions on those two fields.
-$policy = base64_encode(json_encode([
-    'expiration' => gmdate('Y-m-d\TH:i:s\Z', time() + 86400),
-    'conditions' => [
-        ['acl' => $acl],
-        ['bucket' => $bucket],
-        ['starts-with', '$Content-Type', ''],
-        ['starts-with', '$key', ''],
-        ['x-amz-algorithm' => 'AWS4-HMAC-SHA256'],
-        ['x-amz-credential' => $credential],
-        ['x-amz-date' => $longDate]
-    ]
-]));
-
-// SIGNATURE
-// A base64-encoded HMAC hashed signature with your secret key.
-// This is used so Amazon can verify your request, and will be
-// passed along in a POST field later.
-$signingKey = hash_hmac('sha256', $shortDate, 'AWS4' . $secretKey, true);
-$signingKey = hash_hmac('sha256', $region, $signingKey, true);
-$signingKey = hash_hmac('sha256', 's3', $signingKey, true);
-$signingKey = hash_hmac('sha256', 'aws4_request', $signingKey, true);
-$signature = hash_hmac('sha256', $policy, $signingKey);
+class BackBlaze extends S3
+{
+/* 
+Implementation
+*/
+}
 ```
-### Doc References
-- https://www.backblaze.com/b2/docs/s3_compatible_api.html
-- https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html
-
-### Creating a Bucket
-Creating a bucket  we need to pass in the account id, bucket name and type. 
-```php
-$account_id = ""; // Obtained from your B2 account page
-$api_url = ""; // From b2_authorize_account call
-$auth_token = ""; // From b2_authorize_account call
-$bucket_name = ""; // 6 char min, 50 char max: letters, digits, - and _
-$bucket_type = "allPrivate"; // Either allPublic or allPrivate
-
-$session = curl_init($api_url .  "/b2api/v2/b2_create_bucket");
-
-// Add post fields
-$data = array("accountId" => $account_id, "bucketName" => $bucket_name, "bucketType" => $bucket_type);
-$post_fields = json_encode($data);
-curl_setopt($session, CURLOPT_POSTFIELDS, $post_fields); 
-
-// Add headers
-$headers = array();
-$headers[] = "Authorization: " . $auth_token;
-curl_setopt($session, CURLOPT_HTTPHEADER, $headers); 
-
-curl_setopt($session, CURLOPT_POST, true); // HTTP POST
-curl_setopt($session, CURLOPT_RETURNTRANSFER, true);  // Receive server response
-$server_output = curl_exec($session); // Let's do this!
-curl_close ($session); // Clean up
-echo ($server_output);
-```
-### Doc References
-- https://www.backblaze.com/b2/docs/b2_create_bucket.html
-
-### Upload a File 
-
-```http
-PUT /Key+ HTTP/1.1
-Host: Bucket.s3.amazonaws.com
-x-amz-acl: ACL
-Cache-Control: CacheControl
-Content-Disposition: ContentDisposition
-Content-Encoding: ContentEncoding
-Content-Language: ContentLanguage
-Content-Length: ContentLength
-Content-MD5: ContentMD5
-Content-Type: ContentType
-Expires: Expires
-x-amz-grant-full-control: GrantFullControl
-x-amz-grant-read: GrantRead
-x-amz-grant-read-acp: GrantReadACP
-x-amz-grant-write-acp: GrantWriteACP
-x-amz-server-side-encryption: ServerSideEncryption
-x-amz-storage-class: StorageClass
-x-amz-website-redirect-location: WebsiteRedirectLocation
-x-amz-server-side-encryption-customer-algorithm: SSECustomerAlgorithm
-x-amz-server-side-encryption-customer-key: SSECustomerKey
-x-amz-server-side-encryption-customer-key-MD5: SSECustomerKeyMD5
-x-amz-server-side-encryption-aws-kms-key-id: SSEKMSKeyId
-x-amz-server-side-encryption-context: SSEKMSEncryptionContext
-x-amz-server-side-encryption-bucket-key-enabled: BucketKeyEnabled
-x-amz-request-payer: RequestPayer
-x-amz-tagging: Tagging
-x-amz-object-lock-mode: ObjectLockMode
-x-amz-object-lock-retain-until-date: ObjectLockRetainUntilDate
-x-amz-object-lock-legal-hold: ObjectLockLegalHoldStatus
-x-amz-expected-bucket-owner: ExpectedBucketOwner
-
-Body
-```
-
-### Doc References
-- https://www.backblaze.com/b2/docs/b2_get_upload_url.html
-- https://www.backblaze.com/b2/docs/b2_upload_file.html
-
-### Deleting a file
 
 <!--
 This is the technical portion of the RFC. Explain the design in sufficient detail, keeping in mind the following:
