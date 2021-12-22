@@ -202,7 +202,7 @@ For LOS : https://www.linode.com/docs/api/object-storage
 For BackBlaze: https://www.backblaze.com/b2/docs/s3_compatible_api.html
 #### 4. What **demo applications** can help us demonstrate this feature APIs and capabilities?
 The Merged PR for Digital Ocean Spaces Adapter is a great reference itself : https://github.com/utopia-php/storage/pull/5
-#### 4. More Resource that helped me understand adapters:
+#### 5. More Resource that helped me understand adapters:
 - https://blog.cloudflare.com/backblaze-b2-and-the-s3-compatible-api-on-cloudflare/
 - https://www.backblaze.com/blog/whats-the-diff-backblaze-s3-compatible-api-vs-b2-native-api/
 - https://help.backblaze.com/hc/en-us/articles/360047815993-Does-the-B2-S3-Compatible-API-support-Pre-Signed-URLs
