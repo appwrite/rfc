@@ -1,7 +1,7 @@
 # Multi Storage Support (BackBlaze and Linode Object Storage)<!-- What do you want to call your `awesome_feature`? -->
 
 - Implementation Owner: [@everly-gif](https://github.com/everly-gif)
-- Start Date: 22/12/2021
+- Start Date: 07/01/2022
 - Target Date: 07/04/2022
 - Appwrite Issue: NA
 - LinkedIn : [Everly Precia Suresh](https://www.linkedin.com/in/everly-precia-suresh-196bba1b7/)
