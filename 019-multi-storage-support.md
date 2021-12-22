@@ -201,7 +201,7 @@ There won't be any need to update the contribution guide. But updating the Readm
 For LOS : https://www.linode.com/docs/api/object-storage  
 For BackBlaze: https://www.backblaze.com/b2/docs/s3_compatible_api.html
 #### 4. What **demo applications** can help us demonstrate this feature APIs and capabilities?
-NA
+The Merged PR for Digital Ocean Spaces Adapter is a great reference itself : https://github.com/utopia-php/storage/pull/5
 
 <!--
 
