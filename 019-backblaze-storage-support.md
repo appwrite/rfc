@@ -5,7 +5,7 @@
 - Target Date: 07/04/2022
 - Appwrite Issue: NA
 - LinkedIn : [Everly Precia Suresh](https://www.linkedin.com/in/everly-precia-suresh-196bba1b7/)
-- Resume/CV : [View Here](https://drive.google.com/file/d/1R5gI6tj0O8rd45j5yLl5XOX_Y6CiH7ts/view?usp=sharing)
+- Resume/CV : [View Here]()
 
 ## Summary
 As part of the ongoing progress of implementing multiple storage support to make appwrite agnostic, I propose to implement a BackBlaze storage adapter.
