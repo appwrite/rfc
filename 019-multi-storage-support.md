@@ -102,7 +102,7 @@ public function __construct(string $root, string $accessKey, string $secretKey, 
 ```
 ### Editing Other files
 
-The above implements the core functionality of the adapter. The final thing to implement would be to just be to set the name and description. After which Updating this information amongs docs / other files will conclude it.
+The above implements the core functionality of the adapter. The final thing to implement would be to just set the name and description for each of the adapters. After which Updating this information amongs docs / other files will conclude it.
 
 Below are some of the docs/files I will be editing: 
 
