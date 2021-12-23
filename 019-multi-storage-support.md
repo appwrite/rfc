@@ -8,7 +8,7 @@
 - Resume/CV : [View Here](https://drive.google.com/file/d/15lYvZ1KfB4JRoT0Y_FIioxkL5EdW6x8S/view?usp=sharing)
 
 ## Summary
-As part of the ongoing progress of implementing multiple storage support to make appwrite agnostic, I propose to implement a BackBlaze and Linode Object storage adapter.
+As part of the ongoing process of implementing multiple storage support to make appwrite agnostic, I propose to implement a BackBlaze and Linode Object storage adapter.
 BackBlaze B2 and Linode object storage has been a go to alternative for AWS S3 among users. By implementing these adapters, the user will now be able to choose to store their files in Backblaze B2 or Linode Object Storage.
 
 [summary]: #summary 
