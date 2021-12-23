@@ -23,7 +23,7 @@ BackBlaze B2 and Linode object storage has been a go to alternative for AWS S3 a
 
 By default, Appwrite uses a docker volume to store the user's files which restricts the user to only one choice of storage. It also makes the user's application incompatible to deploy to modern day platforms like [Heroku](https://www.heroku.com/).
 Therefore, a need for storage adapters to support multiple storage services is required. 
-By implementing storage adapters for backblaze and Linode , the users will now have a choice to choose from a different storage service with a freedom to deploy to modern day platforms such as [Heroku](https://www.heroku.com/). Hence, making the platform agnostic.
+By implementing storage adapters for Backblaze and Linode , the users will now have a choice to choose from a different storage service with a freedom to deploy to modern day platforms such as [Heroku](https://www.heroku.com/). Hence, making the platform agnostic.
 
 <!--
 What problem are you trying to solve? Explain the context or background in which this problem exists.
@@ -36,7 +36,7 @@ BackBlaze and Linode provide a S3 compatible API that can be utilized in this im
 
 ### Approach
 
-I would divide the implementation of storage adapters into the following steps, by implementing these functions one can effectively implement storage adapters.
+I would divide the implementation of storage adapters into the following steps. By implementing these functions one can effectively implement storage adapters.
 
 - **Authentication**: Providing account/bucket/file access.
 - **Bucket Management**: Creating and managing the buckets that hold files.
