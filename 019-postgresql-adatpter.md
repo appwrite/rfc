@@ -1,10 +1,8 @@
 # PostgreSQL Adapter <!-- What do you want to call your `awesome_feature`? -->
 
-- Implementation Owner's Github: [@KevinJ-hub](https://github.com/KevinJ-hub)
-- Implementation Owner's Resume: [KevinJoshi_Resume.pdf](https://drive.google.com/file/d/13U1FjjL2Jg5pfoUbtPgt-hBeXdS5XgRV/view?usp=sharing)
-- Implementation Owner's Linkedin: [@kevinjoshi46b](https://www.linkedin.com/in/kevinjoshi46b/)
-- Start Date: 17-01-2022
-- Target Date: 10-04-2022
+- Implementation Owner: [@KevinJ-hub](https://github.com/KevinJ-hub)
+- Start Date: 24-01-2022
+- Target Date: N/A
 - Appwrite Issue: N/A
 
 ## Summary
@@ -133,40 +131,3 @@ database
 │   └── ...
 └── ...
 ```
-
-## Extra
-
-[extra]: #extra
-
-### Why am I the best person to execute this proposal?
-
-I have had a bit of practical experience of using PostgreSQL with php in the past. (I had created a currency converter mini project while learning basics of php that you can checkout [here](https://github.com/KevinJ-hub/CurCon)) I have learned Object Oriented Php as well but never got to implement it in a project so this will be a good learning experience for me where I will be able to implement the core knowledge that I already have in a practical scenario. I am also extremely excited to contribute and be a part of appwrite which aims to provide users with all the core tools and services required for building any modern day software easily. (A one-stop solution)
-
-### Project Timeline
-
-#### **Week 1 - 2 (17-01-2022 to 30-01-2022)**
-
-- Getting some key insights from mentors and community bonding.
-- Setting up the project on my system.
-- Exploring the file structure and the flow of the system in depth.
-
-#### **Week 3 - 8 (31-01-2022 to 13-03-2022)**
-
-- Working on properly completing the PostgreSQL adapter to support all the database operations.
-
-#### **Week 9 - 10 (14-03-2022 to 27-03-2022)**
-
-- Running tests and debugging to make sure that everything works properly as it should.
-
-#### **Week 11 - 12 (28-03-2022 to 10-04-2022)**
-
-- Finalizing the project by completing any left over work
-- Completing the documentation work (if any)
-
-> **NOTE:** I am currently a third year undergraduate student so I will be having my mid-term exams in week 8 (07-03-2022 to 13-03-2022) hence, the project timeline is tentative and could be subject to change.
-
-### Project Deliverables
-
-At the end of the 3 month program, following result shall be delivered:-
-
-- Properly tested and working PostgreSQL Adapter.
