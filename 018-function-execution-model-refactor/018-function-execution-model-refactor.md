@@ -58,15 +58,15 @@ The Create Function Tag endpoint will also be updated to change the `command` pa
 Internally however the executor has 5 different endpoints.
 These endpoints are as follows:
 
-`/v1/execute` - This is the main endpoint used to execute functions. It replaces the execute() function in the functions worker instead making it a HTTP Call.
+`POST /v1/execution` - This is the main endpoint used to execute functions. It replaces the execute() function in the functions worker instead making it a HTTP Call.
 
-`/v1/cleanup/function` - This endpoint is used internally by appwrite mainly when a function is deleted. It will cleanup all runtimes and tags associated with the function.
+`DELETE /v1/runtime/:runtimeID` - This endpoint is used internally by appwrite mainly when a runtime is no longer needed. It will cleanup the runtime and remove it from the list of runtimes.
 
-`/v1/cleanup/tag` - This endpoint does the same thing as `/v1/cleanup/function` but only cleans up that one tag.
+`GET /v1/runtime/:runtimeID` - This endpoint returns the current status of a runtime.
 
-`/v1/tag` - This gets called when a tag is selected. It will build a tag and launch it's runtime ready for execution.
+`GET /v1/runtime` - This endpoint returns a list of all the runtimes currently running.
 
-`/v1/healthz` - A basic sanity check for the executor. Not currently used within appwrite but useful for debugging and testing.
+`POST /v1/runtimes` - This endpoint is used internally by appwrite to create a new runtime.
 
 #### Security
 As an added security precaustion to prevent runtimes from communicating with other runtimes each runtime is given a secret that is stored within a swoole table on the executor. This secret is also known to the runtimes themselves using the `APPWRITE_INTERNAL_RUNTIME_KEY` environment variable. This secret is passed to all requests from the executor to the runtimes using a header called `x-internal-challenge` this is verified by the runtime. If the secret is not correct a 401 will be returned and the function will not execute.
@@ -118,6 +118,8 @@ https://docs.fission.io/docs/architecture/
  - Discuss monitoring health of containers
  - Discuss horizontal scaling of containers
  - Using things such as [Amazon Firecracker](https://firecracker-microvm.github.io/)
+
+UPDATE: Most of these have been discussed and will be adressed for the functions 3.0.
 
 ### Future possibilities
 
