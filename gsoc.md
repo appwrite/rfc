@@ -14,8 +14,8 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
   - (Optional) Additional components can be created for other Appwrite services, like Database, Storage, Functions, or Realtime, but is not strictly necessary.
 - Recommended Skills: One of: Web, iOS, Android, or Flutter development.
 - Mentor(s):
-  - @abnegate
-  - @lohanidamodar
+  - [@abnegate](https://github.com/abnegate)
+  - [@lohanidamodar](https://github.com/lohanidamodar)
 - Expected project size: 175 Hours
 - Difficulty: Easy
 - Upstream Issue (URL): N/A, be creative!
@@ -24,7 +24,7 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
 - Expected Outcome: A generic S3 adaptor for Appwrite that can be connected to any S3 compatible storage service.
 - Recommended Skills: Knowledge in one of the following languages ( JavaScript, Python, C++ or Java ), S3, Docker
 - Mentor(s):
-  - @lohanidamodar
+  - [@lohanidamodar](https://github.com/lohanidamodar)
 - Expected project size: 350 Hours
 - Difficulty: Hard
 - Upstream Issue (URL): 
@@ -36,7 +36,7 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
   - All functionality of Appwrite works including Storage and Functions.
 - Recommended Skills: Knowledge in one of the following languages ( JavaScript, Python, C++ or Java ),  Docker, Kubernetes
 - Mentor(s):
-  - @christyjacob4
+  - [@christyjacob4](https://github.com/christyjacob4)
 - Expected project size: 350 Hours
 - Difficulty: Hard
 - Upstream Issue (URL):
@@ -50,8 +50,8 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
   - Allow Appwrite to be configured to use this new DB adaptor
 - Recommended Skills: SQL, Knowledge in one of the following languages ( JavaScript, Python, C++ or Java ) 
 - Mentor(s):
-  - @vermakhushboo
-  - @wess
+  - [@vermakhushboo](https://github.com/vermakhushboo)
+  - [@wess](https://github.com/wess)
 - Expected project size: 350 Hours
 - Difficulty: Hard
 - Upstream Issue (URL): N/A
@@ -61,8 +61,8 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
 - Expected Outcome: Implement the Request and Response classes as standalone libraries that can be imported into the respective runtimes and offer an improved developer experience.
 - Recommended Skills: Knowledge in one of the following languages ( JavaScript, Python, C++ or Java ) 
 - Mentor(s):
-  - @Meldiron
-  - @christyjacob4
+  - [@Meldiron](https://github.com/Meldiron)
+  - [@christyjacob4](https://github.com/christyjacob4)
 - Expected project size: 175 Hours
 - Difficulty: Medium
 - Upstream Issue (URL): N/A, get creative!
@@ -75,7 +75,7 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
   - Allow multiple of a single type of oauth provider
 - Recommended Skills: Knowledge in one of the following languages ( JavaScript, Python, C++ or Java ), OAuth2, OIDC
 - Mentor(s):
-  - @TorstenDittmann
+  - [@TorstenDittmann](https://github.com/TorstenDittmann)
 - Expected project size: 175 Hours
 - Difficulty: Medium
 - Upstream Issue (URL): 
@@ -90,8 +90,8 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
   - Create a demo application to demonstrate the usage of those APIs
 - Recommended Skills: Knowledge in one of the following languages ( JavaScript, Python, C++ or Java ) 
 - Mentor(s):
-  - @TorstenDittmann
-  - @christyjacob4
+  - [@TorstenDittmann](https://github.com/TorstenDittmann)
+  - [@christyjacob4](https://github.com/christyjacob4)
 - Expected project size: 350 Hours
 - Difficulty: Medium
 - Upstream Issue (URL): N/A
