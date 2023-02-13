@@ -7,7 +7,7 @@ Mentors listed are subject to change based on timezone, but we'll keep you updat
 
 ## Project Ideas
 ### Appwrite UI Packages
-- Description: Create UI helper libraries to help developers implement authentication, realtime, and other Appwrite integrations with less code. The UI helper library can be for Web, Flutter, iOS, or Android platforms. Some inspiration can be found from Supabase’s auth-helper,  Firebase firebase_ui_auth and Firebase UI for Web. Appwrite’s Pink design system can be used as inspiration for UI.
+- Description: Create UI helper libraries to help developers implement authentication, realtime, and other Appwrite integrations with less code. The UI helper library can be for Web, Flutter, iOS, or Android platforms. Some inspiration can be found from Firebase's `firebase_ui_auth` and Firebase UI for Web. Appwrite’s Pink design system can be used as inspiration for UI.
 - Expected Outcome: 
   - A UI helper library for one of the client platforms. 
   - The UI helper library should cover components for all authentication methods. 
