@@ -32,6 +32,7 @@ For this we will introduce various endpoints
 It will accept following parameters
 
 - **enabled** - boolean - **required** - whether or not the SMTP configuration is enabled
+- **sender** - string - SMTP sender email
 - **host** - string - SMTP server host name address
 - **port** - string - SMTP server tcp port
 - **secure** - string - SMTP secure protocol (empty or `tls`)
@@ -50,6 +51,7 @@ Project document will be updated with new attributes to support SMTP and templat
 
 - **smtp**: json - save SMTP configuration for the project will have following fields
     - **enabled** - boolean - whether or not the SMTP configuration is enabled
+    - **sender** - email of the sender
     - **host** - SMTP server host name address
     - **port** - SMTP server tcp port
     - **secure** - SMTP secure protocol (empty or `tls`)
