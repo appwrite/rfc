@@ -45,6 +45,12 @@ It will accept following parameters
 - **key** - string - template key (email.emailVerification, sms.pincode) - the key that defines what the template is for
 - **template** - json encoded string - template content, that may have `subject`, `body`, `title`, `senderName`, `senderEmail`.
 
+**GET /v1/project/:projectId/template** - endpoint to get existing templates. accepts following parameters
+- **key** - string - key to identify the template
+- **locale** - string - locale of the template
+
+If custom template doesn't exist for the given details, the default server template will be returned.
+
 ### Data Structure
 
 Project document will be updated with new attributes to support SMTP and templates configuration
