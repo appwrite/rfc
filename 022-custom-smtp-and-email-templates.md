@@ -158,7 +158,7 @@ N/A
 
 <!-- Write your answer below. -->
 
-N/A
+- May be we should also have another configuration with list of all supported template types and endpoint to retrieve them?
 
 ### Future possibilities
 
