@@ -46,7 +46,7 @@ It will accept following parameters
 - **template** - json encoded string - template content, that may have `subject`, `body`, `title`, `senderName`, `senderEmail`.
 
 **GET /v1/project/:projectId/template/:type/:locale** - endpoint to get existing templates. accepts following parameters
-- **key** - string - key to identify the template
+- **type** - string - type to identify the template
 - **locale** - string - locale of the template
 
 If custom template doesn't exist for the given details, the default server template will be returned.
@@ -68,7 +68,7 @@ Project document will be updated with new attributes to support SMTP and templat
     - **password** - SMTP server password
 
 - **templates**: json - save custom templates
-    - **key** - string - key that defines what the template is for
+    - **key** - string - key that defines what the template is for, it wil be ({type}-{locale} eg `sms.verification-en_us`, `email.resetPassword-en_us`)
         - **message** - string - template body (SMS templates will only have message)
         - **locale** - string - template locale
         - **subject** - string - subject, if email template
