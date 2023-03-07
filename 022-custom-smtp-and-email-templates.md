@@ -62,7 +62,7 @@ It will accept following parameters
 
 If custom template doesn't exist for the given details, the default server template will be returned.
 
-**DELETE /v1/project/:projectId/template/:type/:locale** - endpoint to remove custom template
+**DELETE /v1/project/:projectId/template/:type/:locale** - removes custom template
 - Remove matching custom template or throw 404 if the custom template doesn't exist
 
 **GET /v1/project/:projectId/template/:type/variables** - returns the list of supported template variables
