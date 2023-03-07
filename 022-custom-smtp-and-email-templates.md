@@ -27,55 +27,74 @@ Right now the whole Appwrite system uses a single global SMTP configuration set 
 
 For this we will introduce various endpoints
 
-**PATCH /v1/project/:projectId/smtp**       - an endpoint for updating smtp configuration for the project
+**PATCH /v1/project/:projectId/smtp**       - updates smtp configuration for the project
 
 It will accept following parameters
 
-- **enabled** - boolean - **required** - whether or not the SMTP configuration is enabled
-- **sender** - string - SMTP sender email
-- **host** - string - SMTP server host name address
-- **port** - string - SMTP server tcp port
-- **secure** - string - SMTP secure protocol (empty or `tls`)
-- **username** - string - SMTP server user name
-- **password** - string - SMTP server password
+- **enabled** : boolean - **required** - whether or not the SMTP configuration is enabled
+- **sender** : string - SMTP sender email
+- **host** : string - SMTP server host name address
+- **port** : string - SMTP server tcp port
+- **secure** : string - SMTP secure protocol (empty or `tls`)
+- **username** : string - SMTP server user name
+- **password** : string - SMTP server password
 
-**PATCH /v1/project/:projectId/template** - an endpoint to update custom templates (email/sms)
+**PATCH /v1/project/:projectId/template/sms/:type/:locale** - updates custom SMS templates
 
-- **locale** - string - required (eg: en_us) - locale of the template
-- **key** - string - template key (email.emailVerification, sms.pincode) - the key that defines what the template is for
-- **template** - json encoded string - template content, that may have `subject`, `body`, `title`, `senderName`, `senderEmail`.
+- **type** : string - required - template type
+- **locale** : string - required (eg: en_us) - locale of the template
+- **message** : string - template body
 
-**GET /v1/project/:projectId/template/:type/:locale** - endpoint to get existing templates. accepts following parameters
-- **type** - string - type to identify the template
-- **locale** - string - locale of the template
+**PATCH /v1/project/:projectId/template/email/:type/:locale** - updates custom email templates
+
+- **type** : string - required - template type
+- **locale** : string - required (eg: en_us) - locale of the template
+- **senderName** : string - required - name of the sender
+- **senderEmail** : string - email of the sender
+- **replyTo** : string - reply to email address
+- **subject** : string - email subject
+- **message** : string - email message body
+
+**GET /v1/project/:projectId/template/:type/:locale** - returns existing template
+
+- **type** : string - type to identify the template
+- **locale** : string - locale of the template
 
 If custom template doesn't exist for the given details, the default server template will be returned.
 
 **DELETE /v1/project/:projectId/template/:type/:locale** - endpoint to remove custom template
 - Remove matching custom template or throw 404 if the custom template doesn't exist
 
+**GET /v1/project/:projectId/template/:type/variables** - returns the list of supported template variables
+
 ### Data Structure
 
 Project document will be updated with new attributes to support SMTP and templates configuration
 
 - **smtp**: json - save SMTP configuration for the project will have following fields
-    - **enabled** - boolean - whether or not the SMTP configuration is enabled
-    - **sender** - email of the sender
-    - **host** - SMTP server host name address
-    - **port** - SMTP server tcp port
-    - **secure** - SMTP secure protocol (empty or `tls`)
-    - **username** - SMTP server user name
-    - **password** - SMTP server password
+    - **enabled** : boolean - whether or not the SMTP configuration is enabled
+    - **sender** : string - email of the sender
+    - **host** : string - SMTP server host name address
+    - **port** : string - SMTP server tcp port
+    - **secure** : string - SMTP secure protocol (empty or `tls`)
+    - **username** : string - SMTP server user name
+    - **password** : string - SMTP server password
 
-- **templates**: json - save custom templates
+- **templates**: json - save custom templates (both SMS and email)
     - **key** - string - key that defines what the template is for, it wil be ({type}-{locale} eg `sms.verification-en_us`, `email.resetPassword-en_us`)
-        - **message** - string - template body (SMS templates will only have message)
-        - **locale** - string - template locale
-        - **subject** - string - subject, if email template
-        - **senderName** - string - sender name
-        - **senderEmail** - string - email of the sender
-        - **replyTo** - string - email reply to
+        - **message** : string - template body (SMS templates will only have message)
+        - **locale** : string - template locale
+        - **subject** : string - subject, if email template
+        - **senderName** : string - sender name
+        - **senderEmail** : string - email of the sender
+        - **replyTo** : string - email reply to
 
+New configuration for supported template variables.
+
+- **templateVariables** : array
+    - **type** : array - template type
+        - **name** : string - name of the variable
+        - **description** : string - description of the variable
 
 ### UI
 
@@ -139,7 +158,7 @@ N/A
 
 <!-- Write your answer below. -->
 
-- Data structure for Template variables
+N/A
 
 ### Future possibilities
 
