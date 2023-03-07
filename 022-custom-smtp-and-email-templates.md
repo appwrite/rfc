@@ -45,11 +45,14 @@ It will accept following parameters
 - **key** - string - template key (email.emailVerification, sms.pincode) - the key that defines what the template is for
 - **template** - json encoded string - template content, that may have `subject`, `body`, `title`, `senderName`, `senderEmail`.
 
-**GET /v1/project/:projectId/template** - endpoint to get existing templates. accepts following parameters
+**GET /v1/project/:projectId/template/:type/:locale** - endpoint to get existing templates. accepts following parameters
 - **key** - string - key to identify the template
 - **locale** - string - locale of the template
 
 If custom template doesn't exist for the given details, the default server template will be returned.
+
+**DELETE /v1/project/:projectId/template/:type/:locale** - endpoint to remove custom template
+- Remove matching custom template or throw 404 if the custom template doesn't exist
 
 ### Data Structure
 
@@ -136,7 +139,7 @@ N/A
 
 <!-- Write your answer below. -->
 
-N/A
+- Data structure for Template variables
 
 ### Future possibilities
 
