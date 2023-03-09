@@ -87,10 +87,10 @@ Project document will be updated with new attributes to support SMTP and templat
         - **senderEmail** : string - email of the sender
         - **replyTo** : string - email reply to
 
-New configuration for supported template variables.
+Console Project should include constants regarding supported templates and template variables
 
-- **templateVariables** : array
-    - **type** : array - template type
+- **templateVariables** : object
+    - **type** : object - template type (email.verification, email.reset, sms.verification)
         - **name** : string - name of the variable
         - **description** : string - description of the variable
 
@@ -157,7 +157,6 @@ N/A
 
 <!-- Write your answer below. -->
 
-- May be we should also have another configuration with list of all supported template types and endpoint to retrieve them?
 
 ### Future possibilities
 
