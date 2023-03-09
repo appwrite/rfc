@@ -27,7 +27,7 @@ Right now the whole Appwrite system uses a single global SMTP configuration set 
 
 For this we will introduce various endpoints
 
-**PATCH /v1/project/:projectId/smtp**       - updates smtp configuration for the project
+**PATCH /v1/projects/:projectId/smtp**       - updates smtp configuration for the project
 
 It will accept following parameters
 
@@ -39,13 +39,13 @@ It will accept following parameters
 - **username** : string - SMTP server user name
 - **password** : string - SMTP server password
 
-**PATCH /v1/project/:projectId/template/sms/:type/:locale** - updates custom SMS templates
+**PATCH /v1/projects/:projectId/template/sms/:type/:locale** - updates custom SMS templates
 
 - **type** : string - required - template type
 - **locale** : string - required (eg: en_us) - locale of the template
 - **message** : string - template body
 
-**PATCH /v1/project/:projectId/template/email/:type/:locale** - updates custom email templates
+**PATCH /v1/projects/:projectId/template/email/:type/:locale** - updates custom email templates
 
 - **type** : string - required - template type
 - **locale** : string - required (eg: en_us) - locale of the template
@@ -55,14 +55,14 @@ It will accept following parameters
 - **subject** : string - email subject
 - **message** : string - email message body
 
-**GET /v1/project/:projectId/template/:type/:locale** - returns existing template
+**GET /v1/projects/:projectId/template/:type/:locale** - returns existing template
 
 - **type** : string - type to identify the template
 - **locale** : string - locale of the template
 
 If custom template doesn't exist for the given details, the default server template will be returned.
 
-**DELETE /v1/project/:projectId/template/:type/:locale** - removes custom template
+**DELETE /v1/project/:projectId/templates/:type/:locale** - removes custom template
 - Remove matching custom template or throw 404 if the custom template doesn't exist
 
 ### Data Structure
