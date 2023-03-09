@@ -65,8 +65,6 @@ If custom template doesn't exist for the given details, the default server templ
 **DELETE /v1/project/:projectId/template/:type/:locale** - removes custom template
 - Remove matching custom template or throw 404 if the custom template doesn't exist
 
-**GET /v1/project/:projectId/template/:type/variables** - returns the list of supported template variables
-
 ### Data Structure
 
 Project document will be updated with new attributes to support SMTP and templates configuration
@@ -99,6 +97,7 @@ New configuration for supported template variables.
 ### UI
 
 We will need new section under Authentication called **Email & SMS** where user will be able to add these template and SMTP configuration
+UI should also include the documentation for supported template variables for each template.
 
 ### Supporting Libraries
 
@@ -126,7 +125,7 @@ We don't need separate benchmark for this.
 ### Documentation & Content
 
 - SMTP setup documentation should be updated to reflect project level configuration support
-- New documentation regarding custom email and sms tempates should be added
+- New documentation regarding custom email and sms tempates should be added.
 
 ### Prior art
 
