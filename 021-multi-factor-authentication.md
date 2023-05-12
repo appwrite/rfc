@@ -3,7 +3,9 @@
 - Implementation Owner: @TorstenDittmann
 - Start Date: 12-06-2023
 - Target Date: 01-07-2023
-- Appwrite Issue: [#5240](https://github.com/appwrite/appwrite/issues/5240)
+- Appwrite Issue:
+  - [#2725](https://github.com/appwrite/appwrite/issues/2752)
+  - [#5240](https://github.com/appwrite/appwrite/issues/5240)
 
 ## Summary
 
