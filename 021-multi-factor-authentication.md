@@ -50,8 +50,8 @@ I propose the following endpoints for MFA implementation:
 - `PUT:    /v1/account/mfa/totp` verifies added TOTP authenticator
 - `DELETE: /v1/account/mfa/totp` removes TOTP authenticator from account
 - `GET:    /v1/account/mfa/providers`: returns a list of available MFA providers
-- `POST:   /v1/account/mfa/challenge`: initiates an MFA challenge with the provider of choice and returns a challenge token
-- `PUT:    /v1/account/mfa/challenge`: verifies an MFA challenge and generates a session
+- `POST:   /v1/account/mfa/challenge`: initiates a MFA challenge with the provider of choice and returns a challenge
+- `PUT:    /v1/account/mfa/challenge`: verifies a MFA challenge and generates a session
 
 #### User Service
 - `PATCH:  /v1/user/mfa`: enables/disables disables MFA for the user
