@@ -45,18 +45,18 @@ The exception will contain the informations needed to create and verify a challe
 I propose the following endpoints for MFA implementation:
 
 #### Account Service
-`PATCH:  /v1/account/mfa` enables/disables MFA for the account
-`POST:   /v1/account/mfa/totp` adds TOTP authenticator to account
-`PUT:    /v1/account/mfa/totp` verifies added TOTP authenticator
-`DELETE: /v1/account/mfa/totp` removes TOTP authenticator from account
-`GET:    /v1/account/mfa/providers`: returns a list of available MFA providers
-`POST:   /v1/account/mfa/challenge`: initiates an MFA challenge with the provider of choice and returns a challenge token
-`PUT:    /v1/account/mfa/challenge`: verifies an MFA challenge and generates a session
+- `PATCH:  /v1/account/mfa` enables/disables MFA for the account
+- `POST:   /v1/account/mfa/totp` adds TOTP authenticator to account
+- `PUT:    /v1/account/mfa/totp` verifies added TOTP authenticator
+- `DELETE: /v1/account/mfa/totp` removes TOTP authenticator from account
+- `GET:    /v1/account/mfa/providers`: returns a list of available MFA providers
+- `POST:   /v1/account/mfa/challenge`: initiates an MFA challenge with the provider of choice and returns a challenge token
+- `PUT:    /v1/account/mfa/challenge`: verifies an MFA challenge and generates a session
 
 #### User Service
-`PATCH:  /v1/user/mfa`: enables/disables disables MFA for the user
-`GET:    /v1/user/mfa/providers`: returns a list of available MFA providers
-`DELETE: /v1/user/mfa/totp`: removes authenticator from user
+- `PATCH:  /v1/user/mfa`: enables/disables disables MFA for the user
+- `GET:    /v1/user/mfa/providers`: returns a list of available MFA providers
+- `DELETE: /v1/user/mfa/totp`: removes authenticator from user
 
 Obviously all crucial/sensitive endpoints will be covered by rate limits.
 
