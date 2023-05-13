@@ -72,8 +72,8 @@ For my proposal I need to add a new internal collection called `challenges` with
 Additionally we need to add new properties to the `user` collection:
 - `mfa` boolean to whether MFA is enabled or not
 - `totp` boolean to whether a TOTP device is active
-- `totp_secret` the secret key to be used with a TOTP authentication app
-- `totp_backup` array of backup codes that can each used once
+- `totpSecret` the secret key to be used with a TOTP authentication app
+- `totpBackup` array of backup codes that can each used once
 
 ### Supporting Libraries
 
