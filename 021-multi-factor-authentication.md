@@ -90,6 +90,11 @@ Following libraries can be used as dependency or inspiration:
 - https://github.com/Spomky-Labs/otphp
 - https://github.com/lfkeitel/php-totp
 
+### Algorithms
+
+- https://en.wikipedia.org/wiki/Time-based_one-time_password
+- https://en.wikipedia.org/wiki/HMAC-based_one-time_password
+
 ### Breaking Changes
 
 No breaking changes will be introduced on the API. But a few data structure changes will have to be migrated.
