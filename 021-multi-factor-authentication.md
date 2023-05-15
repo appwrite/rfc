@@ -48,9 +48,9 @@ I propose the following endpoints for MFA implementation:
 
 #### Account Service
 - `PATCH:  /v1/account/mfa` enables/disables MFA for the account
-- `POST:   /v1/account/mfa/totp` adds TOTP authenticator to account
-- `PUT:    /v1/account/mfa/totp` verifies added TOTP authenticator
-- `DELETE: /v1/account/mfa/totp` removes TOTP authenticator from account
+- `POST:   /v1/account/mfa/:provider` adds TOTP/HOTP authenticator to account
+- `PUT:    /v1/account/mfa/:provider` verifies added TOTP/HOTP authenticator
+- `DELETE: /v1/account/mfa/:provider` removes TOTP/HOTP authenticator from account
 - `GET:    /v1/account/mfa/providers`: returns a list of available MFA providers
 - `POST:   /v1/account/mfa/challenge`: initiates a MFA challenge with the provider of choice and returns a challenge
 - `PUT:    /v1/account/mfa/challenge`: verifies a MFA challenge and generates a session
@@ -58,7 +58,12 @@ I propose the following endpoints for MFA implementation:
 #### User Service
 - `PATCH:  /v1/user/mfa`: enables/disables disables MFA for the user
 - `GET:    /v1/user/mfa/providers`: returns a list of available MFA providers
-- `DELETE: /v1/user/mfa/totp`: removes authenticator from user
+- `DELETE: /v1/user/mfa/totp`: removes TOTP authenticator from user
+- `DELETE: /v1/user/mfa/hotp`: removes HOTP authenticator from user
+
+#### Project Service
+- `PATCH:  /v1/projects/:projectId/mfa`: enables/disables disables MFA for the project
+- `PATCH:  /v1/projects/:projectId/mfa/:provider` enable/disable available providers to be used for MFA
 
 Obviously all crucial/sensitive endpoints will be covered by rate limits.
 
@@ -66,14 +71,17 @@ Obviously all crucial/sensitive endpoints will be covered by rate limits.
 
 For my proposal I need to add a new internal collection called `challenges` with following data structure (excluding default `$` attributes):
 - `token` secret to be used for identification, similiar to the `secret` of the tokens collections
-- `provider` the provider used for the challenge (TOTP, SMS, E-Mail, etc)
-- `session` the type of session that has triggered the creation of the challenge
+- `provider` the provider used for the challenge (TOTP, HOTP, SMS, E-Mail, etc)
+- `session` the session that will be created when the challenge is completed
 
 Additionally we need to add new properties to the `user` collection:
 - `mfa` boolean to whether MFA is enabled or not
 - `totp` boolean to whether a TOTP device is active
 - `totpSecret` the secret key to be used with a TOTP authentication app
 - `totpBackup` array of backup codes that can each used once
+- `hotp` boolean to whether a HOTP device is active
+- `hotpSecret` the secret key to be used with a HOTP authentication app
+- `hotpBackup` array of backup codes that can each used once
 
 ### Supporting Libraries
 
@@ -121,7 +129,6 @@ Additionally, this feature is planned in a way - that we can extend the MFA to b
 
 [unresolved-questions]: #unresolved-questions
 
-- A project wide setting that MFA needs to be used
 - A team wide setting that MFA is required
 - We might wanna think about adding additional roles for users with MFA
 
