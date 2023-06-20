@@ -27,7 +27,7 @@ Please avoid discussing your proposed solution.
 
 Currently only way to access private files in Appwrite storage is by using a user session. However it's painful for image previews that we want to display on our applications. Also there are no safe ways to share file with external users or applications without making is completely public.
 
-That is why we want to introduce file tokens. A file toke will be linked to files and manage it's own permissions over the resource as what kind of access the token will have to the file.
+That is why we want to introduce file tokens. A file toke will be linked to files and manage it's own permissions over the resource as what kind of access the token will have to the file. Token can be passed as a header or request get parameter.
 
 ## Design proposal (Step 2)
 
@@ -66,13 +66,13 @@ For example:
 **DELETE /v1/coffee ** - an endpoint for deleting coffee.
 -->
 
-We will introduce a new `Tokens` service, that will allow us to manage tokens.
+Tokens will be a part of storage service
 
-**POST /v1/tokens** -           create token
-**PUT /v1/tokens** -            update token
-**GET /v1/tokens** -            List token
-**GET /v1/tokens/:tokenId** -   Get token
-**DELETE /v1/tokens** -         delete token
+**POST /v1/storage/buckets/:bucketId/files/:fileId/tokens** -           create token
+**PUT /v1/storage/buckets/:bucketId/files/:fileId/tokens** -            update token
+**GET /v1/storage/buckets/:bucketId/files/:fileId/tokens** -            List token
+**GET /v1/storage/buckets/:bucketId/files/:fileId/tokens/:tokenId** -   Get token
+**DELETE /v1/storage/buckets/:bucketId/files/:fileId/tokens/:tokenId** -         delete token
 
 
 ### Data Structure
@@ -110,6 +110,7 @@ Do we break any API or SDK backward compatibility?
 If possible, explain what actions we can take to avoid that.
 -->
 
+This shouldn't break any existing features
 
 ### Reliability (Tests & Benchmarks)
 
@@ -147,6 +148,10 @@ Please answer the following questions:
 
 -->
 
+We need to update storage documentation. Specially on the file preview, view and downloads.
+
+* It might be a good idea to create a separate guide, file tokens that provides guide on previewing, viewing and downloading files using the tokens
+
 ### Prior art
 
 [prior-art]: #prior-art
@@ -182,3 +187,6 @@ Write your answer below.
 <!-- This is also a good place to "dump ideas" if they are out of scope for the RFC you are writing but otherwise related. -->
 
 <!-- Write your answer below. -->
+
+* Use token for other resources
+* More granular permission control to allow read/create/update/delete permissions to make something like google docs possible
