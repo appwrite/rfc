@@ -93,6 +93,8 @@ We need to introduce new collection to save tokens.
   - permissions - array string
   - expiryDate - date time
 
+We will also need a token validator, that will validate that the token is not expired and has access to the resources.
+
 ### Supporting Libraries
 
 <!--
@@ -172,6 +174,8 @@ If there is no prior art, that is fine - your ideas are interesting to us, wheth
 Write your answer below.
 -->
 
+- File tokens are used by many similar services to provide file access.
+
 ### Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
@@ -179,6 +183,9 @@ Write your answer below.
 <!-- What parts of the design do you expect to resolve through the RFC process before this gets merged? -->
 
 <!-- Write your answer below. -->
+
+1. Token data structure to support different resources
+2. Token permission (read, write, update, delete), right now we only provide read permission
 
 ### Future possibilities
 
