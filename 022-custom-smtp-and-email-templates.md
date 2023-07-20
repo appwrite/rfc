@@ -39,6 +39,8 @@ It will accept following parameters
 - **username** : string - SMTP server user name
 - **password** : string - SMTP server password
 
+SMTP configuration will be validated by creating a PHP mailer with the given credentials.
+
 **PATCH /v1/projects/:projectId/template/sms/:type/:locale** - updates custom SMS templates
 
 - **type** : string - required - template type
