@@ -52,7 +52,7 @@ const sessionCookie = parse(cookies).find((cookie) =>
 const sessionToken = sessionCookie?.value;
 ```
 
-The SDK for flutter has a similiar problem, but bypasses it by adding and interceptor to the Client requests. The interceptor sets cookies (in the apps 'cookie jar') when receiving set-cookie responses, and retrieves the cookie when making requests. For server side SDKs, this is not possible, as there isn't an equivalent method persistent storage.
+> SDK for Flutter has a similiar problem, but bypasses it by adding an 'interceptor' to requests. With any response containing a `set-cookie` header, the interceptor stores the cookies within a Flutter implementation of cookie storage. Before making any request, the session cookie is retrieved from storage and added to the request headers.
 
 **Problem #2: Accessing OAuth2 sessions**
 
@@ -69,11 +69,12 @@ The current oauth2 flow looks something like this:
 
 This is incompatible with SSR applications, because the session cookie is set on the Appwrite domain, and not the SSR domain.
 
-Interestingly, there is an undocumented workaround for this. If the developer sets the success parameter to `{SSR_DOMAIN}/auth/oauth2/success` the Appwrite API will include the session cookie as a query parameter in the redirect URL. [Source here](https://github.com/appwrite/appwrite/blob/3f3d518f3664bcab281ee00b45dd2f2d387ffc72/app/controllers/api/account.php#L870). This method is vunerable to session spying attacks, as the session token is exposed in the URL, and could be used to hijack the session.
+> There is an undocumented workaround for SSR. To use it, when creating an OAuth2 session, set success parameter is set to `{SSR_DOMAIN}/auth/oauth2/success`. Now, Appwrite will append the session secret as a query parameter when redirecting to this URL. You can find the source code for this [here](https://github.com/appwrite/appwrite/blob/3f3d518f3664bcab281ee00b45dd2f2d387ffc72/app/controllers/api/account.php#L870).
+> Although this workaround has good developer experience, it is not secure. The session secret is exposed in the URL, and can be intercepted.
 
 **Problem #3: Using session tokens with the SDK**
 
-Now, you've got a session token, you want to make authenticated requests. For example, getting the user's account details. To set a session token on the server-side, we have to use the `X-Fallback-Cookies` header
+After acquiring a session token, you want to make authenticated requests. For example, getting the user's account details. Currently, to set a session token on the server-side, we have to set the `X-Fallback-Cookies` header.
 
 ```js
 import { Client, Account } from "appwrite";
@@ -89,8 +90,10 @@ const serialisedCookies = JSON.stringify({
 client.headers["X-Fallback-Cookies"] = serialisedCookies;
 
 const account = new Account(client);
-const currentUser = account.get();
+const currentUser = await account.get();
 ```
+
+This is not intuitive, and requires the developer to understanding details of Appwrite that don't need to be exposed.
 
 ## Design proposal (Step 2)
 
@@ -154,7 +157,7 @@ The SSR application must set up the success page to call the exchange endpoint. 
 
 **Problem #3: Solution A - setSession helper method**
 
-A new SDK helper method, called `setSession`, to set the session token of future requests.
+A new SDK helper method, called `setSession`, `setToken`, `setSecret`, or `setSessionSecret` to set the session token of future requests.
 
 ```js
 import { Client, Account } from "appwrite";
@@ -166,27 +169,8 @@ client.setProject("PROJECT_ID");
 client.setSession(sessionToken);
 
 const account = new Account(client);
-const currentUser = account.get();
+const currentUser = await account.get();
 ```
-
-<!--
-This is the technical portion of the RFC. Explain the design in sufficient detail, keeping in mind the following:
-
-- Its interaction with other parts of the system is clear
-- It is reasonably clear how the contribution would be implemented
-- Dependencies on libraries, tools, projects, or work that isn't yet complete
-- New API routes that need to be created or modifications to the existing routes (if needed)
-- Any breaking changes and ways in which we can ensure backward compatibility.
-- Use Cases
-- Goals
-- Deliverables
-- Changes to documentation
-- Ways to scale the solution
-
-Ensure that you include examples and code snippets to allow the community to understand the proposed solution. **It would be best if the examples use naming conventions that you intend to use during the actual implementation to suggest changes early on during the development.**
-
-Write your answer below.
--->
 
 ### New API Endpoints
 
@@ -255,6 +239,10 @@ Session object.
 **Problem #3**
 
 3.1. Should the helper method be available in Server Side SDKs? How do we seperate requests that are authenticated with a session token, and requests that are authenticated with an API key?
+
+**General**
+
+4.1. Incorporating some of these SSR changes reduces the distinction between the Server Side and Client Side SDKs. Which SDKs would be recommended for SSR applications?
 
 ### Future possibilities
 
