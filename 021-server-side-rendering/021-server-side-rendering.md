@@ -56,20 +56,22 @@ const sessionToken = sessionCookie?.value;
 
 **Problem #2: Accessing OAuth2 sessions**
 
-The current oauth2 flow looks something like this:
+Here's a visualisation of the current OAuth2 flow:
 
 ![CSR OAuth2 Flow Sequence Diagram](csr-oauth-flow.png)
 
-1. Browser makes a GET request to the Appwrite API.
-2. Appwrite API redirects the browser to the OAuth2 provider.
-3. User authenticates with the OAuth2 provider.
-4. OAuth2 provider redirects the browser back to the Appwrite API.
-5. Appwrite API sets the session cookie on the Appwrite domain.
-6. Appwrite API redirects the browser back to the client application.
+Step by step:
+
+1. Client makes a 'Create OAuth2 Session' request to the Appwrite,containing the provider, and a success authentication redirect URL.
+2. Appwrite returns a URL for a page to authenticate with the OAuth2 provider.
+3. User is redirected to the authentication URL, and authenticates with the OAuth2 provider.
+4. OAuth2 provider redirects the browser back to Appwrite.
+5. Appwrite sets the session cookie on the Appwrite domain, and redirects the browser to the success URL.
 
 This is incompatible with SSR applications, because the session cookie is set on the Appwrite domain, and not the SSR domain.
 
-> There is an undocumented workaround for SSR. To use it, when creating an OAuth2 session, set success parameter is set to `{SSR_DOMAIN}/auth/oauth2/success`. Now, Appwrite will append the session secret as a query parameter when redirecting to this URL. You can find the source code for this [here](https://github.com/appwrite/appwrite/blob/3f3d518f3664bcab281ee00b45dd2f2d387ffc72/app/controllers/api/account.php#L870).
+> There is an undocumented workaround for SSR. To use it, when creating an OAuth2 session, set success parameter is set to `{SSR_DOMAIN}/auth/oauth2/success`. 
+> Now, Appwrite will append the session secret as a query parameter when redirecting to this URL. You can find the source code for this [here](https://github.com/appwrite/appwrite/blob/3f3d518f3664bcab281ee00b45dd2f2d387ffc72/app/controllers/api/account.php#L870).
 > Although this workaround has good developer experience, it is not secure. The session secret is exposed in the URL, and can be intercepted.
 
 **Problem #3: Using session tokens with the SDK**
@@ -138,19 +140,22 @@ const sessionToken = parse(session.headers["set-cookie"]).find((cookie) =>
 **Problem #2: Solution A - Temporary OAuth2 token exchange for session**
 
 - Modify the oauth2 flow to include a temporary token in the final redirect.
-- Implement a new endpoint, or extend the existing functionality of the magic URL endpoint, to exchange the temporary token for a session token.
+- Add a new endpoint, to exchange the temporary token for a session token.
+
+Here's a visualisation of the new flow:
 
 ![SSR OAuth2 Flow Sequence Diagram](ssr-oauth-flow.png)
 
-1. Browser makes a GET request to the SSR application.
-2. SSR application makes a GET request to the Appwrite API.
-3. Appwrite API redirects the SSR application to the OAuth2 provider.
-4. The SSR application redirects the client to the OAuth2 provider.
-5. User authenticates with the OAuth2 provider.
-6. OAuth2 provider redirects the browser back to the Appwrite API.
-7. Appwrite API sets the session cookie on the Appwrite domain.
-8. Appwrite API redirects the browser back to the client application. **Now, the redirect URL includes a userId & temporary token.** e.g. `myssrapp.com/oauth2/success?userId=loks0n&token=TEMPORARY_TOKEN`
-9. The SSR application makes a POST request to the Appwrite API to exchange the temporary token for a session token.
+Step by step:
+
+1. Client makes a 'Create OAuth2 Session' request to the Server, containing the user specified provider.
+2. Server makes a 'Create OAuth2 Session' request to Appwrite, containing the provider, and a success authentication redirect URL.
+3. Appwrite returns a URL for a page to authenticate with the OAuth2 provider.
+4. Server returns the authentication URL to the Client.
+5. User is redirected to the authentication URL, and authenticates with the OAuth2 provider.
+6. OAuth2 provider redirects the browser back to Appwrite.
+7. Appwrite sets the session cookie on the Appwrite domain, and redirects the browser to the success URL, **which now includes a userId & temporary token.** e.g. `myssrapp.com/oauth2/success?userId=387asdf7rh42346&token=adfh38khjasd83j`
+8. Server exchanges the temporary token for a session token, using the new exchange endpoint, and sets the session cookie on the Server domain.
 
 The SSR application must set up the success page to call the exchange endpoint. The page can then set session cookie on the SSR domain.
 `
