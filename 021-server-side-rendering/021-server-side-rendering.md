@@ -27,9 +27,8 @@ SSR is popular for a number of reasons:
 
 **Problem #1: Accessing basic sessions**
 
-To authenticate using anonymous sessions, email-password sessions and magic URL sessions, the Appwrite SDKs make a POST request to the relevant endpoint. The response body contains the session ID, but not the
-
-The SDK currently obscures the session cookie value with the [call method](https://github.com/appwrite/sdk-for-node/blob/aaea14a36d5b7daac859eaa8dc44d2253fbcbcef/lib/client.js#L120C86-L120C86) which only returns the response body.
+Basic sessions, such as anonymous sessions, email-password sessions and magic URL sessions, are not accessible from SSR applications using the SDK.
+When a client uses the SDK to make a POST request to Appwrite, the SDK obscures the session cookie value with the [call method](https://github.com/appwrite/sdk-for-node/blob/aaea14a36d5b7daac859eaa8dc44d2253fbcbcef/lib/client.js#L120C86-L120C86) and only returns the response body.
 
 A popular hacky workaround for this involves making a manual fetch request, bypassing the SDK and parsing the cookie from the response headers.
 
