@@ -16,7 +16,7 @@ Appwrite Auth is currently tailored towards client side rendered (CSR) applicati
 
 **What problem are you trying to solve?**
 
-Many popular web frameworks, such as Next.js, Nuxt.jsm and SvelteKit, support and recommend SSR, by default. When developers attempt to use Appwrite Auth with these frameworks, they run into issues with the current implementation.
+Many popular web frameworks, such as Next.js, Nuxt.js and SvelteKit, support and recommend SSR, by default. When developers attempt to use Appwrite Auth with these frameworks, they run into issues with the current implementation.
 
 SSR is popular for a number of reasons:
 
