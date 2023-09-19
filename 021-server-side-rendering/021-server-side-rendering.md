@@ -181,6 +181,28 @@ const account = new Account(client);
 const currentUser = await account.get();
 ```
 
+### Issue #4: Rate limiting
+
+Many Appwrite endpoints are rate-limited by IP address to prevent abuse. For example, the Create Account endpoint is limited to 10 requests per minute. Server-side rendered applications will be making requests from the same IP address. This means that if multiple users are using the application at the same time, they will be sharing the same rate limit.
+
+#### Proposed Solution A
+
+Allow developers to use `setKey` and `setSession` in combination. In this case, Appwrite should will use the session token for authorization, but disable rate limiting for the request. This solution only works for Server Side SDKs, as the client-side SDKs do not have the `setKey` method.
+
+```js
+import { Client, Account } from "node-appwrite";
+
+const client = new Client();
+
+client.setEndpoint("https://cloud.appwrite.io/v1");
+client.setProject("PROJECT_ID");
+client.setKey("API_KEY");
+client.setSession("SESSION_SECRET");
+```
+
+#### Proposed Solution B
+
+Use the existing 'Platforms' configuration. Developers should be able to create a new 'Server' type platform, and which will disable rate limiting for requests made from that platform. Pontentially not secure, as the hostname can be spoofed.
 
 ### Documentation & Content
 
@@ -219,20 +241,27 @@ const currentUser = await account.get();
 
 2.2. Do we need to add a new endpoint to exchange the temporary token for a session token? Can we reuse the existing magic URL exchange endpoint?
 
-**Problem #3**
-
-3.1. What should happen if a developer uses `setSession` and `setKey` in the same request? Should the SDK throw an error, or should the `setSession` method override the `setKey` method?
-
 **General**
 
 4.1. Some of these changes reduce the distinction between the Server and Client Side SDKs. Which SDKs would be recommended for SSR applications?
-
 
 ### Future possibilities
 
 [future-possibilities]: #future-possibilities
 
-**Cookie helper methods for SSR frameworks**
+**OAuth2 exchange endpoint pre-built for popular frameworks**
+
+The OAuth2 exchange endpoint can be pre-built for popular SSR frameworks, such as Next.js, Nuxt.js, SvelteKit, and Remix.
+
+For example, in Next.js, developers could import an `oauth2ExchangeEndpoint` function from the Appwrite SDK, and use it in the success page.
+
+```js
+import { createOAuth2ExchangeEndpoint } from "appwrite/nextjs";
+
+export const GET = createOAuth2ExchangeEndpoint('my_cookie_name');
+```
+
+**Cookie helper methods for popular frameworks**
 
 On the web, SSR applications will need to set cookies under the SSR domain, but the cookie returned by Appwrite is set under the Appwrite domain.
 
