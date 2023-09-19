@@ -4,6 +4,7 @@
 - Start Date: 31-08-2023
 - Target Date: Unknown
 
+
 ## Summary
 
 [summary]: #summary
@@ -25,20 +26,23 @@ SSR is popular for a number of reasons:
 - It improves accessibility by ensuring that the page is usable even if JavaScript is disabled
 - It prevents flash of unauthenticated content.
 
+
 ## Design proposal (Step 2)
 
 [design-proposal]: #design-proposal
 
-### Issue #1: Accessing basic sessions
+### Issue #1: Accessing sessions
 
-Basic sessions, such as anonymous sessions, email-password sessions and magic URL sessions, are not accessible from SSR applications using the SDK.
-When a client uses the SDK to make a POST request to Appwrite, the SDK obscures the session cookie value with the [call method](https://github.com/appwrite/sdk-for-node/blob/aaea14a36d5b7daac859eaa8dc44d2253fbcbcef/lib/client.js#L120C86-L120C86) and only returns the response body.
+When using Appwrite basic authentication methods, such as anonymous sessions, email-password sessions, and magic URL sessions, the session secret is not accessible using the SDK.
 
-A popular hacky workaround for this involves making a manual fetch request, bypassing the SDK and parsing the cookie from the response headers.
+The SDK obscures the session cookie value with the [call method](https://github.com/appwrite/sdk-for-node/blob/aaea14a36d5b7daac859eaa8dc44d2253fbcbcef/lib/client.js#L120C86-L120C86) and only returns the response body. For client-side applications, this is sufficient, because the `set-cookie` header is read by the browser, and the cookie is automatically stored in the browser's cookie storage.
+
+A popular workaround for this is to make a manual request, bypassing the SDK and parsing the cookie from the response headers.
 
 ```js
 import { parse } from "set-cookie-parser";
 
+// Make a manual request to create an anonymous session
 const response = await fetch(
   `https://cloud.appwrite.io/v1/account/sessions/anonymous`,
   {
@@ -49,14 +53,15 @@ const response = await fetch(
   }
 );
 
+// Parse the session cookie from the response headers
 const cookies = response.headers.get("set-cookie") || "";
 const sessionCookie = parse(cookies).find((cookie) =>
   cookie.name.startsWith("a_session")
 );
-const sessionToken = sessionCookie?.value;
+const sessionSecret = sessionCookie?.value;
 ```
 
-> SDK for Flutter has a similiar problem, but bypasses it by adding an 'interceptor' to requests. With any response containing a `set-cookie` header, the interceptor stores the cookies within a Flutter implementation of cookie storage. Before making any request, the session cookie is retrieved from storage and added to the request headers.
+> SDK for Flutter bypasses this problem by adding an 'interceptor' to requests. With any response containing a `set-cookie` header, the interceptor stores the cookies within a Flutter implementation of cookie storage. Before making any request, the session cookie is retrieved from storage and added to the request headers.
 
 #### Proposed Solution
 
@@ -76,11 +81,6 @@ const session = await account.createAnonymousSession();
 const sessionSecret = session.secret;
 ```
 
-**Session Object Additions**
-
-| Name   | Type   | Description    |
-| ------ | ------ | -------------- |
-| secret | String | Session token. |
 
 ### Issue #2: Accessing OAuth2 sessions
 
@@ -90,7 +90,7 @@ Here's a visualisation of the current OAuth2 flow:
 
 Step by step:
 
-1. Client makes a 'Create OAuth2 Session' request to the Appwrite,containing the provider, and a success authentication redirect URL.
+1. Client makes a 'Create OAuth2 Session' request to the Appwrite, containing the provider, and a success authentication redirect URL.
 2. Appwrite returns a URL for a page to authenticate with the OAuth2 provider.
 3. User is redirected to the authentication URL, and authenticates with the OAuth2 provider.
 4. OAuth2 provider redirects the browser back to Appwrite.
@@ -104,6 +104,7 @@ This is incompatible with SSR applications, because the session cookie is set on
 
 #### Proposed Solution
 
+- Add the Create OAuth2 session endpoints to the Server SDKs.
 - Modify the oauth2 flow to include a temporary token in the final redirect.
 - Add a new endpoint, to exchange the temporary token for a session token.
 
@@ -139,6 +140,7 @@ The SSR application must set up the success page to call the exchange endpoint. 
 
 Session object.
 
+
 #### Issue #3: Using session tokens
 
 After acquiring a session token, you want to make authenticated requests. For example, getting the user's account details. Currently, to set a session token on the server-side, we have to set the `X-Fallback-Cookies` header.
@@ -151,7 +153,7 @@ client.setEndpoint("https://cloud.appwrite.io/v1");
 client.setProject("PROJECT_ID");
 
 const serialisedCookies = JSON.stringify({
-  a_session_PROJECT_ID: sessionToken,
+  a_session_PROJECT_ID: sessionSecret,
 });
 
 client.headers["X-Fallback-Cookies"] = serialisedCookies;
@@ -173,11 +175,12 @@ const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1");
 client.setProject("PROJECT_ID");
 
-client.setSession(sessionToken);
+client.setSession(session);
 
 const account = new Account(client);
 const currentUser = await account.get();
 ```
+
 
 ### Documentation & Content
 
@@ -212,19 +215,18 @@ const currentUser = await account.get();
 
 **Problem #2**
 
-2.1. Should we remove the undocumented workaround?
+2.1. Should we remove the undocumented OAuth2 SSR workaround?
 
 2.2. Do we need to add a new endpoint to exchange the temporary token for a session token? Can we reuse the existing magic URL exchange endpoint?
 
-2.3. The Create OAuth2 Session endpoints are not included with Server Side SDKs. Should we include them? If so, server side apps need the Location header to forward to the user. How should we make this accessible from the SDK?
-
 **Problem #3**
 
-3.1. Should the helper method be available in Server Side SDKs? How do we seperate requests that are authenticated with a session token, and requests that are authenticated with an API key?
+3.1. What should happen if a developer uses `setSession` and `setKey` in the same request? Should the SDK throw an error, or should the `setSession` method override the `setKey` method?
 
 **General**
 
-4.1. Incorporating some of these SSR changes reduces the distinction between the Server Side and Client Side SDKs. Which SDKs would be recommended for SSR applications?
+4.1. Some of these changes reduce the distinction between the Server and Client Side SDKs. Which SDKs would be recommended for SSR applications?
+
 
 ### Future possibilities
 
