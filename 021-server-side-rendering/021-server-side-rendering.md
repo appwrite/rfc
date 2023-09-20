@@ -204,6 +204,50 @@ client.setSession("SESSION_SECRET");
 
 Use the existing 'Platforms' configuration. Developers should be able to create a new 'Server' type platform, and which will disable rate limiting for requests made from that platform. Pontentially not secure, as the hostname can be spoofed.
 
+### Issue #5: Web SDK File Uploads
+
+The Web SDK only accepts a `File` object when uploading files. This is not compatible with SSR frameworks, as the `File` object is only available in the browser. 
+
+There is a workaround for this, which involves importing the `File` polyfill from the `formdata-node` package, and converting the blob to an array buffer.
+
+```js
+import fetch from 'node-fetch';
+import { FormData, File } from 'formdata-node';
+
+export const uploadFile = async (blob: Blob) => {
+	const path = `/storage/buckets/${BUCKET_ID}/files`;
+	const uri = new URL(ENDPOINT + path);
+
+	const formData = new FormData();
+	const file = new File([await blob.arrayBuffer()], blob.name);
+	formData.set('file', file);
+	formData.set('fileId', ID.unique());
+
+	const res = await fetch(uri.toString(), {
+		method: 'post',
+		headers: {
+			...client.headers,
+			'x-appwrite-project': PROJECT_ID,
+		},
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		body: formData as any,
+	});
+
+	console.log(res);
+
+	return res;
+};
+```
+
+#### Proposed Solution
+
+Match the existing Node SDK which accepts an InputFile helper object.
+
+```js
+storage.createFile('[BUCKET_ID]', '[FILE_ID]', InputFile.fromBlob(blob, 'file.jpg'));
+```
+
+
 ### Documentation & Content
 
 #### What **docs** would support this feature?
@@ -253,7 +297,43 @@ Use the existing 'Platforms' configuration. Developers should be able to create 
 
 The OAuth2 exchange endpoint can be pre-built for popular SSR frameworks, such as Next.js, Nuxt.js, SvelteKit, and Remix.
 
-For example, in Next.js, developers could import an `oauth2ExchangeEndpoint` function from the Appwrite SDK, and use it in the success page.
+For example, in Next.js, the code would currently look like this:
+
+```js
+import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { Client, Account } from 'appwrite'
+ 
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+
+  const userId = searchParams.get('userId')
+  const token = searchParams.get('token')
+
+  const client = new Client()
+  client.setEndpoint('https://cloud.appwrite.io/v1')
+  client.setProject('PROJECT_ID')
+
+  const account = new Account(client)
+  const session = await account.exchangeTokenForSession(userId, token)
+
+  return NextResponse.redirect('/', {
+    headers: {
+      'Set-Cookie': cookieList.set({
+        name: 'my_cookie_name',
+        value: session.secret,
+        path: '/',
+        sameSite: 'none',
+        secure: true,
+        httpOnly: true,
+        maxAge: session.expire,
+      }),
+    },
+  })
+}
+```
+
+With a prebuilt endpoint, developers could import an `oauth2ExchangeEndpoint` function from the Appwrite SDK, and use it in an API route:
 
 ```js
 import { createOAuth2ExchangeEndpoint } from "appwrite/nextjs";
