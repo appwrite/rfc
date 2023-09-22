@@ -183,6 +183,8 @@ Many Appwrite endpoints are rate-limited by IP address to prevent abuse. Server-
 
 Problematic endpoints:
 
+The following endpoints have, a. an abuse-limit set, and either b. are accessible to guest role, or c. do not have userId in the abuse-key.
+
 | Endpoint                      | Service   | Abuse Key                                           | Notes                                 |
 | ----------------------------- | --------- | --------------------------------------------------- | ------------------------------------- |
 | Create OAuth2 Session         | Account   | `ip:{ip}`                                           | userId not available                  |
