@@ -4,7 +4,6 @@
 - Start Date: 31-08-2023
 - Target Date: Unknown
 
-
 ## Summary
 
 [summary]: #summary
@@ -25,7 +24,6 @@ SSR is popular for a number of reasons:
 - It improves performance by reducing the time to first render, and reducing the amount of JavaScript required to render the page
 - It improves accessibility by ensuring that the page is usable even if JavaScript is disabled
 - It prevents flash of unauthenticated content.
-
 
 ## Design proposal (Step 2)
 
@@ -81,7 +79,6 @@ const session = await account.createAnonymousSession();
 const sessionSecret = session.secret;
 ```
 
-
 ### Issue #2: Accessing OAuth2 sessions
 
 Here's a visualisation of the current OAuth2 flow:
@@ -98,7 +95,7 @@ Step by step:
 
 This is incompatible with SSR applications, because the session cookie is set on the Appwrite domain, and not the SSR domain.
 
-> There is an undocumented workaround for SSR. To use it, when creating an OAuth2 session, set success parameter is set to `{SSR_DOMAIN}/auth/oauth2/success`. 
+> There is an undocumented workaround for SSR. To use it, when creating an OAuth2 session, set success parameter is set to `{SSR_DOMAIN}/auth/oauth2/success`.
 > Now, Appwrite will append the session secret as a query parameter when redirecting to this URL. You can find the source code for this [here](https://github.com/appwrite/appwrite/blob/3f3d518f3664bcab281ee00b45dd2f2d387ffc72/app/controllers/api/account.php#L870).
 > Although this workaround has good developer experience, it is not secure. The session secret is exposed in the URL, and can be intercepted.
 
@@ -139,7 +136,6 @@ The SSR application must set up the success page to call the exchange endpoint. 
 **Response**
 
 Session object.
-
 
 #### Issue #3: Using session tokens
 
@@ -183,7 +179,34 @@ const currentUser = await account.get();
 
 ### Issue #4: Rate limiting
 
-Many Appwrite endpoints are rate-limited by IP address to prevent abuse. For example, the Create Account endpoint is limited to 10 requests per minute. Server-side rendered applications will be making requests from the same IP address. This means that if multiple users are using the application at the same time, they will be sharing the same rate limit.
+Many Appwrite endpoints are rate-limited by IP address to prevent abuse. Server-side rendered applications will be making requests from the same IP address. This means that if multiple users are using the application at the same time, they will be sharing the same rate limit.
+
+Problematic endpoints:
+
+| Endpoint                 | Service   | Current Abuse Key                                   | Notes                                 |
+| ------------------------ | --------- | --------------------------------------------------- | ------------------------------------- |
+| Create Account           | Account   | `url:{url},ip:{ip}`                                 |                                       |
+| Create OAuth2 Session    | Account   | `ip:{ip}`                                           |                                       |
+| List Identities          | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Delete Identity          | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Create Magic URL Session | Account   | `url:{url},ip:{ip}`                                 |                                       |
+| Create Anonymous Session | Account   | `ip:{ip}`                                           |                                       |
+| Get Account              | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Get Account Preferences  | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| List Sessions            | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| List Logs                | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Get Session              | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Update Name, Pass, Email | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Update Preferences       | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Update Status            | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Delete Session(s)        | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| Update OAuth2 Session    | Account   | `url:{url},ip:{ip}`                                 | Easy solution: add userId             |
+| **Every Endpoint**       | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
+| Create Document          | Databases | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
+| List Documents           | Databases | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
+| Get Document             | Databases | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
+| Update Document          | Databases | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
+| Delete Document          | Databases | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
 
 #### Proposed Solution A
 
@@ -206,7 +229,7 @@ Use the existing 'Platforms' configuration. Developers should be able to create 
 
 ### Issue #5: Web SDK File Uploads
 
-The Web SDK only accepts a `File` object when uploading files. This is not compatible with SSR frameworks, as the `File` object is only available in the browser. 
+The Web SDK only accepts a `File` object when uploading files. This is not compatible with SSR frameworks, as the `File` object is only available in the browser.
 
 There is a workaround for this, which involves importing the `File` polyfill from the `formdata-node` package, and converting the blob to an array buffer.
 
@@ -244,9 +267,12 @@ export const uploadFile = async (blob: Blob) => {
 Match the existing Node SDK which accepts an InputFile helper object.
 
 ```js
-storage.createFile('[BUCKET_ID]', '[FILE_ID]', InputFile.fromBlob(blob, 'file.jpg'));
+storage.createFile(
+  "[BUCKET_ID]",
+  "[FILE_ID]",
+  InputFile.fromBlob(blob, "file.jpg")
+);
 ```
-
 
 ### Documentation & Content
 
@@ -300,36 +326,36 @@ The OAuth2 exchange endpoint can be pre-built for popular SSR frameworks, such a
 For example, in Next.js, the code would currently look like this:
 
 ```js
-import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { Client, Account } from 'appwrite'
- 
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { Client, Account } from "appwrite";
+
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
+  const { searchParams } = new URL(request.url);
 
-  const userId = searchParams.get('userId')
-  const token = searchParams.get('token')
+  const userId = searchParams.get("userId");
+  const token = searchParams.get("token");
 
-  const client = new Client()
-  client.setEndpoint('https://cloud.appwrite.io/v1')
-  client.setProject('PROJECT_ID')
+  const client = new Client();
+  client.setEndpoint("https://cloud.appwrite.io/v1");
+  client.setProject("PROJECT_ID");
 
-  const account = new Account(client)
-  const session = await account.exchangeTokenForSession(userId, token)
+  const account = new Account(client);
+  const session = await account.exchangeTokenForSession(userId, token);
 
-  return NextResponse.redirect('/', {
+  return NextResponse.redirect("/", {
     headers: {
-      'Set-Cookie': cookieList.set({
-        name: 'my_cookie_name',
+      "Set-Cookie": cookieList.set({
+        name: "my_cookie_name",
         value: session.secret,
-        path: '/',
-        sameSite: 'none',
+        path: "/",
+        sameSite: "none",
         secure: true,
         httpOnly: true,
         maxAge: session.expire,
       }),
     },
-  })
+  });
 }
 ```
 
@@ -338,7 +364,7 @@ With a prebuilt endpoint, developers could import an `oauth2ExchangeEndpoint` fu
 ```js
 import { createOAuth2ExchangeEndpoint } from "appwrite/nextjs";
 
-export const GET = createOAuth2ExchangeEndpoint('my_cookie_name');
+export const GET = createOAuth2ExchangeEndpoint("my_cookie_name");
 ```
 
 **Cookie helper methods for popular frameworks**
