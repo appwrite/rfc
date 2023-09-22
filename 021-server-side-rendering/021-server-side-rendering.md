@@ -185,66 +185,18 @@ Problematic endpoints:
 
 | Endpoint                      | Service   | Abuse Key                                           | Notes                                 |
 | ----------------------------- | --------- | --------------------------------------------------- | ------------------------------------- |
-| Create Account                | Account   | `url:{url},ip:{ip}`                                 | userId not available                  |
 | Create OAuth2 Session         | Account   | `ip:{ip}`                                           | userId not available                  |
-| List Identities               | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Delete Identity               | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
 | Create Magic URL Session      | Account   | `url:{url},ip:{ip}`                                 | userId not available                  |
 | Create Anonymous Session      | Account   | `ip:{ip}`                                           | userId not available                  |
-| Get Account                   | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get Account Preferences       | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| List Sessions                 | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| List Logs                     | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get Session                   | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Update Name, Pass, Email      | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Update Preferences            | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Update Status                 | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
 | Delete Session(s)             | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
 | Update OAuth2 Session         | Account   | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get Credit Card Icon          | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get Browser Icon              | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get Country Flag              | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get Image from URL            | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get Favicon                   | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get QR Code                   | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get Initials                  | Avatars   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
 | Create Document               | Databases | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
-| List Documents                | Databases | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get Document                  | Databases | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
 | Update Document               | Databases | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
 | Delete Document               | Databases | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
-| Create Execution              | Functions | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List Executions               | Functions | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get Execution                 | Functions | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get User Locale               | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List Locale Codes             | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List Countries                | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List EU Countries             | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List Country Phone Codes      | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List Continents               | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List Currencies               | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| List Languages                | Locale    | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
 | Create File                   | Storage   | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
-| List Files                    | Storage   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get File                      | Storage   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get File Preview              | Storage   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get File for Download         | Storage   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
-| Get File for View             | Storage   | `url:{url},ip:{ip}`                                 | userId not enough: what about guests? |
 | Update File                   | Storage   | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
 | Delete File                   | Storage   | `ip:{ip},method:{method},url:{url},userId:{userId}` | userId not enough: what about guests? |
-| Create Team                   | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| List Teams                    | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get Team                      | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get Team Preferences          | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Update Team Name              | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Update Team Preferences       | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Delete Team                   | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
 | Create Team Membership        | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| List Team Memberships         | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Get Team Membership           | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Update Team Membership        | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Update Team Membership Status | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
-| Delete Team Membership        | Teams     | `url:{url},ip:{ip}`                                 | ✓ Easy solution: add userId           |
 
 #### Proposed Solution
 
