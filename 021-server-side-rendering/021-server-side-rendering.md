@@ -104,6 +104,7 @@ This is incompatible with SSR applications, because the session cookie is set on
 - Add the Create OAuth2 session endpoints to the Server SDKs.
 - Modify the oauth2 flow to include a temporary token in the final redirect.
 - Add a new endpoint, to exchange the temporary token for a session token.
+- Deprecate the undocumented workaround, with a view to removing it in the future.
 
 Here's a visualisation of the new flow:
 
@@ -111,20 +112,22 @@ Here's a visualisation of the new flow:
 
 Step by step:
 
-1. Client makes a 'Create OAuth2 Session' request to the Server, containing the user specified provider.
-2. Server makes a 'Create OAuth2 Session' request to Appwrite, containing the provider, and a success authentication redirect URL.
-3. Appwrite returns a URL for a page to authenticate with the OAuth2 provider.
-4. Server returns the authentication URL to the Client.
-5. User is redirected to the authentication URL, and authenticates with the OAuth2 provider.
-6. OAuth2 provider redirects the browser back to Appwrite.
-7. Appwrite sets the session cookie on the Appwrite domain, and redirects the browser to the success URL, **which now includes a userId & temporary token.** e.g. `myssrapp.com/oauth2/success?userId=387asdf7rh42346&token=adfh38khjasd83j`
-8. Server exchanges the temporary token for a session token, using the new exchange endpoint, and sets the session cookie on the Server domain.
+1. Client makes a 'Create OAuth2 Session' request to the Appwrite, containing the user specified provider.
+2. Appwrite returns a URL for a page to authenticate with the OAuth2 provider.
+3. Server returns the authentication URL to the Client.
+4. User is redirected to the authentication URL, and authenticates with the OAuth2 provider.
+5. OAuth2 provider redirects the browser back to Appwrite.
+6. Appwrite sets the session cookie on the Appwrite domain, and redirects the browser to the success URL, **which now includes a userId & temporary token.** e.g. `myssrapp.com/oauth2/success?userId=387asdf7rh42346&token=adfh38khjasd83j`
+7. Server exchanges the temporary token for a session token, using the new exchange endpoint, and sets the session cookie on the Server domain.
 
 The SSR application must set up the success page to call the exchange endpoint. The page can then set session cookie on the SSR domain.
 
 ##### New Exchange Token Endpoint
 
-**PUT /v1/account/sessions/oauth/exchange** - Exchange a temporary OAuth2 token for a session token.
+**PUT /v1/account/sessions/token** - Exchange a temporary token for a session token.
+
+This endpoint can replace the existing `Update magic URL` and `Update phone session` endpoints.
+To keep backwards compatibility, we can alias the existing endpoints to this new endpoint.
 
 **Request**
 
@@ -162,7 +165,7 @@ This is not intuitive, and requires the developer to understanding details of Ap
 
 #### Proposed Solution
 
-A new SDK helper method, called `setSession`, `setToken`, `setSecret`, or `setSessionSecret` to set the session token of future requests.
+A new SDK helper method, called `setSession`, `setToken`, `setSecret`, or `setSessionSecret` to set the session token of future requests. Behind the scenes, this will set a new `X-Appwrite-Session` header.
 
 ```js
 import { Client, Account } from "appwrite";
@@ -202,7 +205,9 @@ The following endpoints have, a. an abuse-limit set, and either b. are accessibl
 
 #### Proposed Solution
 
-Allow developers to use `setKey` and `setSession` in combination. In this case, Appwrite should will use the session token for authorization, but disable rate limiting for the request. This solution only works for Server Side SDKs, as the client-side SDKs do not have the `setKey` method.
+Allow developers to use `setKey` and `setSession` in combination. In this case, Appwrite should will use the session token for authorization, but disable rate limiting for the request. 
+
+This solution only works for Server Side SDKs, as the client-side SDKs do not have the `setKey` method. Developers will be able to use the client-side SDKs for SSR, but will be affected by rate limiting.
 
 ```js
 import { Client, Account } from "node-appwrite";
@@ -213,53 +218,6 @@ client.setEndpoint("https://cloud.appwrite.io/v1");
 client.setProject("PROJECT_ID");
 client.setKey("API_KEY");
 client.setSession("SESSION_SECRET");
-```
-
-### Issue #5: Web SDK File Uploads
-
-The Web SDK only accepts a `File` object when uploading files. This is not compatible with SSR frameworks, as the `File` object is only available in the browser.
-
-There is a workaround for this, which involves importing the `File` polyfill from the `formdata-node` package, and converting the blob to an array buffer.
-
-```js
-import fetch from 'node-fetch';
-import { FormData, File } from 'formdata-node';
-
-export const uploadFile = async (blob: Blob) => {
-	const path = `/storage/buckets/${BUCKET_ID}/files`;
-	const uri = new URL(ENDPOINT + path);
-
-	const formData = new FormData();
-	const file = new File([await blob.arrayBuffer()], blob.name);
-	formData.set('file', file);
-	formData.set('fileId', ID.unique());
-
-	const res = await fetch(uri.toString(), {
-		method: 'post',
-		headers: {
-			...client.headers,
-			'x-appwrite-project': PROJECT_ID,
-		},
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		body: formData as any,
-	});
-
-	console.log(res);
-
-	return res;
-};
-```
-
-#### Proposed Solution
-
-Match the existing Node SDK which accepts an InputFile helper object.
-
-```js
-storage.createFile(
-  "[BUCKET_ID]",
-  "[FILE_ID]",
-  InputFile.fromBlob(blob, "file.jpg")
-);
 ```
 
 ### Documentation & Content
@@ -294,8 +252,6 @@ storage.createFile(
 [unresolved-questions]: #unresolved-questions
 
 **Problem #2**
-
-2.1. Should we remove the undocumented OAuth2 SSR workaround?
 
 2.2. Do we need to add a new endpoint to exchange the temporary token for a session token? Can we reuse the existing magic URL exchange endpoint?
 
@@ -337,7 +293,7 @@ export async function GET(request: Request) {
         name: "my_cookie_name",
         value: session.secret,
         path: "/",
-        sameSite: "none",
+        sameSite: "strict",
         secure: true,
         httpOnly: true,
         maxAge: session.expire,
@@ -380,7 +336,7 @@ cookieList.set({
 });
 ```
 
-We can provide a helper method for popular SSR frameworks to set the cookie in the response.
+In the future, we can also provide a helper method for popular SSR frameworks to set the cookie in the response.
 
 ```js
 import { cookies } from "next/headers";
