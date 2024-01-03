@@ -86,12 +86,15 @@ Appwrite conventions. Try and stay as consistent with existing patterns as much 
 
 We need to introduce new collection to save tokens.
 
-**tokens**
-  - bucketId - String
-  - fileId - String
+**resourceTokens**
+  - resourceId - String
+  - resourceInternalId - String
+  - resourceType = String
   - secret - String
-  - permissions - array string
+  - secretHash - String (md5 hash of secret for query)
   - expiryDate - date time
+
+> Note: Resource ID / InternalId will need a structure to incorporate the parent resource as well. For example when resource is file we need both bucketId and fileId. We can use `:` as a separator to keep the resource Id in single field. So for the tokens for file the resource Id will be `bucketId:fileId` and similarly for a document it will be `databaseId:collectionId:documentId`
 
 We will also need a token validator, that will validate that the token is not expired and has access to the resources.
 
@@ -184,8 +187,7 @@ Write your answer below.
 
 <!-- Write your answer below. -->
 
-1. Token data structure to support different resources
-2. Token permission (read, write, update, delete), right now we only provide read permission
+1. Token permission (read, write, update, delete), right now we only provide read permission
 
 ### Future possibilities
 
