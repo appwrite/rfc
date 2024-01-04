@@ -91,12 +91,15 @@ We need to introduce new collection to save tokens.
   - resourceInternalId - String
   - resourceType = String
   - secret - String
-  - secretHash - String (md5 hash of secret for query)
   - expiryDate - date time
 
 > Note: Resource ID / InternalId will need a structure to incorporate the parent resource as well. For example when resource is file we need both bucketId and fileId. We can use `:` as a separator to keep the resource Id in single field. So for the tokens for file the resource Id will be `bucketId:fileId` and similarly for a document it will be `databaseId:collectionId:documentId`
 
 We will also need a token validator, that will validate that the token is not expired and has access to the resources.
+
+### New Resource
+
+We will add a `token` resource to App, that will get token from request, validate it and return the details if valid. The returned details will contain the actual details of the resource based on resourceId and type breakdown.
 
 ### Supporting Libraries
 
@@ -106,7 +109,7 @@ Please describe the new library's potential API?
 Avoid using 3rd party libraries when possible, if required - explain why.
 -->
 
-This particular feature doesn't require any supporting libraries.
+We will be using JWT to create token that has the payload `tokenId`, `resourceId`, `resourceType` and `expiryDate`
 
 ### Breaking Changes
 
