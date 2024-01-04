@@ -86,7 +86,7 @@ Appwrite conventions. Try and stay as consistent with existing patterns as much 
 
 We need to introduce new collection to save tokens.
 
-**resourceTokens**
+**resource_tokens**
   - resourceId - String
   - resourceInternalId - String
   - resourceType = String
