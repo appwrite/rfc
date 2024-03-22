@@ -74,6 +74,10 @@ The new endpoints will trigger standard events that will be used for listening t
 - The maintenance worker will need to clean all present documents that have expired. We should have a specific grace period that will allow us also to show people who just recently went offline. So if the presence is valid for 5 minutes, we will delete it after 5+ X minutes. X will be decided later. 
 - Usage service should count how many people were online at a specific time. 
 
+### Enable / Disable
+
+As with every Appwrite service, we should provide an option in the console to enable or disable it as it may not be needed for every use case.
+
 ###  Supporting Libraries
 <!-- Do we need new libraries for this feature? Mention which, define the file structure and different interfaces -->
 
