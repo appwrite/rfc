@@ -45,7 +45,7 @@ Create a presence. Set the user presence status, expiry (minutes/date - TBD), an
 
 ```GET /v1/presences```
 
-List all presences, on client side this will show only presneces I have permission to view. On server it will show all presences on the server. This endpoint will support queries and pagination like any other list endpoint on Appwrite.
+List all presences, on client side this will show only presneces I have permission to view. On server it will show all presences. This endpoint will support queries and pagination like any other list endpoint on Appwrite.
 
 ```GET /v1/presences/:id```
 
