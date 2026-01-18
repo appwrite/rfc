@@ -90,45 +90,64 @@ Structure of the typed sdk will be as follows:
 
 ```text
 generated/
-├── appwrite.databases.ts
-├── appwrite.auth.ts
-├── appwrite.storage.ts
-├── appwrite.functions.ts
-├── appwrite.buckets.ts
-├── appwrite.messaging.ts
-├── appwrite.teams.ts
-├── appwrite.types.ts
-├── appwrite.ts
+└── appwrite/
+    ├── databases.ts
+    ├── types.ts
+    └── index.ts
 ```
+
+The generator auto-detects which Appwrite SDK is being used by checking `package.json` dependencies:
+- `node-appwrite` - Server SDK (supports bulk methods)
+- `appwrite` - Client SDK
+- `react-native-appwrite` - React Native SDK
+- `@appwrite.io/console` - Console SDK (supports bulk methods)
+- `npm:node-appwrite` - Deno (supports bulk methods)
 
 Usage -
 
 ```typescript
-import { databases } from './generated/appwrite';
+import { Client } from 'node-appwrite';
+import { createDatabases } from './generated/appwrite';
 
-const db = databases.from('test-db'); // <-- typed out database options the user has
+const client = new Client()
+  .setEndpoint('https://cloud.appwrite.io/v1')
+  .setProject('your-project-id');
 
+const databases = createDatabases(client);
+const db = databases.from('test-db'); // <-- typed database options
+
+// Basic CRUD operations
 await db.users.create({ username: 'testuser' });
 await db.users.get('6968e1d100160eb1a115');
 await db.users.update('6968e1d100160eb1a115', { username: 'testuser2' });
 await db.users.delete('6968e1d100160eb1a115');
-await db.users.list({ limit: 10, offset: 0 });
-await db.users.listWithTotal({ limit: 10, offset: 0 });
 
+// Type-safe queries with QueryBuilder
+await db.users.list({
+  queries: (q) => [
+    q.equal('username', 'testuser'),
+    q.greaterThan('createdAt', '2026-01-01'),
+    q.limit(10),
+    q.offset(0),
+  ]
+});
 
-await db.users.createMany([{ username: 'testuser3' }, { username: 'testuser4' }]);
-await db.users.updateMany([{ id: '6968e1d100160eb1a115', username: 'testuser2' }, { id: '6968e1d100160eb1a116', username: 'testuser3' }]);
+// Bulk operations (available with node-appwrite, npm:node-appwrite, @appwrite.io/console)
+await db.users.createMany([
+  { data: { username: 'testuser3' } },
+  { data: { username: 'testuser4' } }
+]);
+await db.users.updateMany([
+  { rowId: '6968e1d100160eb1a115', data: { username: 'testuser2' } },
+  { rowId: '6968e1d100160eb1a116', data: { username: 'testuser3' } }
+]);
 await db.users.deleteMany(['6968e1d100160eb1a115', '6968e1d100160eb1a116']);
 
-await db.users.upsert('6968e1d100160eb1a115', { username: 'testuser2' });
-```
-
-The command will auto detect if server sdk is being used or not (with ability to manually select either), and generate server side methods too -
-
-```typescript
-await db.create({ id: 'books', name: 'Books' });
-await db.update('books', { name: 'Books Table' });
-await db.delete('books');
+// Optional parameters
+await db.users.create(
+  { username: 'testuser' },
+  { rowId: 'custom-id', permissions: [Permission.read(Role.any())], transactionId: 'tx-123' }
+);
 ```
 
 ### Supporting Libraries
