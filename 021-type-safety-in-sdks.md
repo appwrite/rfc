@@ -103,6 +103,29 @@ The generator auto-detects which Appwrite SDK is being used by checking `package
 - `@appwrite.io/console` - Console SDK (supports bulk methods)
 - `npm:node-appwrite` - Deno (supports bulk methods)
 
+### Multi-Language Support
+
+The `appwrite generate` command will support multiple languages beyond TypeScript:
+- **Phase 1**: TypeScript/JavaScript (Node.js, Browser, React Native, Deno)
+- **Phase 2**: Dart/Flutter, Python, Swift, Kotlin
+
+Language detection via config files (`pubspec.yaml`, `requirements.txt`, etc.), explicit `--language` flag, or project structure analysis. Each language will have idiomatic generator templates.
+
+### CLI and SDK Bundling
+
+Exploring bundling strategies to improve DX:
+- **Hybrid Approach (Recommended)**: CLI remains standalone; SDK packages include lightweight generator utilities. CLI uses SDK type definitions for validation.
+- **Alternatives**: CLI as SDK dependency, standalone with integration hooks, or monorepo workspace support.
+
+### Enhanced Type Safety
+
+The generated code will include:
+- Type-safe column names in queries (autocomplete for valid column keys)
+- Type-safe relationship traversal (typed foreign key lookups)
+- Type-safe enum/select column values (literal types for allowed values)
+- Type-safe permissions (typed permission strings with validation)
+- Type-safe query builder with field-specific filter methods
+
 Usage -
 
 ```typescript
@@ -172,6 +195,10 @@ No new libraries required, uses existing:
 ### Breaking Changes
 
 No breaking changes. Existing type safety works as it is. Users who want the type-safe version can opt in by using the new command.
+
+### Deprecations
+
+The `appwrite types` command will be deprecated in favor of `appwrite generate`. The new command provides a more comprehensive solution with full type-safe SDK generation, not just type definitions. Migration path: `appwrite types` → `appwrite generate --types-only` (if needed) or full `appwrite generate`.
 
 ### Reliability (Tests & Benchmarks)
 
